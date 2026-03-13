@@ -5,17 +5,29 @@ import pdfplumber
 BOOKS_JSON = os.path.join(os.path.dirname(__file__), 'books.json')
 SONGS_JSON = os.path.join(os.path.dirname(__file__), 'songs.json')
 
+# Standard TOC patterns (dot-leader style)
 SIMPLE_RE   = re.compile(r'^([A-Z\'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$')
 PAREN_RE    = re.compile(r'^(.+?)\s+\(([^)]{3,40})\)\s*[\.·•\s\-]{2,}(\d{1,4})\s*$')
 TAB_RE      = re.compile(r'^([^\t]{3,60})\t([^\t]*)\t(\d{1,4})\s*$')
 DASH_END_RE = re.compile(r'\s[-\u2013]\s([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)+)\s*$')
 LOOSE_RE    = re.compile(r'^([A-Z\'"][A-Za-z\s\'\-\(\),\.&!?]{2,60?}?)\s{2,}(\d{1,4})\s*$')
 
+# Fakebook style: "42 Song Title — Performer Name"
+# Matches entries where page number leads, separated by em-dash
+FAKEBOOK_RE = re.compile(
+    r'(\d{1,4})\s+'                          # page number
+    r'([A-Z][A-Za-z\s\',\.\(\)&!?/]{2,60?}?)' # title
+    r'\s*[—–\-]{1,2}\s*'                     # dash separator
+    r'([A-Za-z][^\d\n]{3,60}?)'              # performer
+    r'(?=\s*\d{1,4}\s+[A-Z]|\s*$)',          # lookahead: next entry or end
+    re.MULTILINE
+)
+
 SKIP = {'page','contents','index','section','chapter','introduction',
         'foreword','appendix','preface','table of contents','song list'}
 
 def clean(t):
-    return re.sub(r'\s+', ' ', t.strip().rstrip('.,;:\u2013-')).strip()
+    return re.sub(r'\s+', ' ', t.strip().rstrip('.,;:\u2013-/')).strip()
 
 def split_composer(title):
     m = re.search(r'\(([A-Z][a-zA-Z\s.\-\'&,]{3,40})\)\s*$', title)
@@ -27,6 +39,7 @@ def split_composer(title):
     return title, None
 
 def parse_line(line, loose=False):
+    """Parse a single line using dot-leader / tab / loose patterns."""
     line = line.strip()
     if len(line) < 4:
         return None
@@ -52,6 +65,25 @@ def parse_line(line, loose=False):
         return None
     return {'title': title, 'composer': composer, 'page': page}
 
+def parse_fakebook_text(text):
+    """
+    Parse OCR text where entries look like:
+      42 Autumn Leaves — Joseph Kosma
+      31 A Felicidade — Antonio Carlos Jobim
+    Multiple entries may appear on the same line (two-column layout).
+    """
+    songs = []
+    for m in FAKEBOOK_RE.finditer(text):
+        page     = int(m.group(1))
+        title    = clean(m.group(2))
+        composer = clean(m.group(3))
+        if len(title) < 3 or title.lower() in SKIP:
+            continue
+        if page == 0 or page > 9999:
+            continue
+        songs.append({'title': title, 'composer': composer or None, 'page': page})
+    return songs
+
 def has_text(pdf):
     sample = min(10, len(pdf.pages))
     return sum(1 for i in range(sample) if len((pdf.pages[i].extract_text() or '').strip()) > 20) >= 2
@@ -68,25 +100,20 @@ def get_candidates(pdf):
             for j in range(i, min(i+12, total)):
                 cands.add(j)
             break
-    # DEBUG: limit to first 10 candidate pages only
-    return sorted(list(cands))[:10]
+    return sorted(list(cands))
 
-def ocr_page(page):
+def ocr_page_text(page):
+    """Return raw OCR text string for a page."""
     try:
         import pytesseract
         img = page.to_image(resolution=200).original
-        text = pytesseract.image_to_string(img, config='--psm 6')
-        lines = [l.strip() for l in text.split('\n') if l.strip()]
-        return lines
+        return pytesseract.image_to_string(img, config='--psm 6')
     except Exception as e:
-        print(f"     OCR error on page: {e}")
-        return []
+        print(f"     OCR error: {e}")
+        return ''
 
-def get_lines(page, use_ocr):
-    if use_ocr:
-        lines = ocr_page(page)
-        print(f"     RAW OCR: {lines[:8]}")  # DEBUG
-        return lines
+def get_lines(page):
+    """Extract lines from a text-layer page."""
     try:
         rows = page.extract_text_lines(layout=True, strip_whitespace=True)
         if rows:
@@ -98,20 +125,41 @@ def get_lines(page, use_ocr):
 def index_pdf(filepath, book_title):
     print(f"  Parsing: {book_title}")
     songs, seen = [], set()
+
+    def add(song):
+        if not song:
+            return
+        key = (song['title'].lower(), song['page'])
+        if key not in seen:
+            seen.add(key)
+            songs.append(song)
+
     with pdfplumber.open(filepath) as pdf:
-        total = len(pdf.pages)
+        total   = len(pdf.pages)
         use_ocr = not has_text(pdf)
+
         if use_ocr:
             print(f"     No text layer - using OCR...")
-        for i in get_candidates(pdf):
-            print(f"     Scanning page {i+1}...")
-            for line in get_lines(pdf.pages[i], use_ocr):
-                song = parse_line(line, loose=use_ocr)
-                if song:
-                    key = (song['title'].lower(), song['page'])
-                    if key not in seen:
-                        seen.add(key)
-                        songs.append(song)
+
+        for idx, i in enumerate(get_candidates(pdf)):
+            if use_ocr:
+                if idx % 5 == 0:
+                    print(f"     OCR: page {i+1}/{total}...")
+                raw_text = ocr_page_text(pdf.pages[i])
+
+                # Try fakebook format first (page-number-first entries)
+                fakebook_hits = parse_fakebook_text(raw_text)
+                if fakebook_hits:
+                    for s in fakebook_hits:
+                        add(s)
+                else:
+                    # Fall back to line-by-line loose matching
+                    for line in raw_text.split('\n'):
+                        add(parse_line(line, loose=True))
+            else:
+                for line in get_lines(pdf.pages[i]):
+                    add(parse_line(line, loose=False))
+
     print(f"     Done: {len(songs)} songs ({total} pages)")
     return songs, total
 
