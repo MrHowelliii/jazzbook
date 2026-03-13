@@ -64,10 +64,16 @@ def ocr_page(page):
         return ''
 
 # Common OCR letter→digit confusions at end of lines
+# Note: B is NOT mapped to 8 because Tesseract often reads two-digit numbers
+# like 50,51,52 as BO,BL,BR which would become wrong if B→8
 DIGIT_MAP = {
-    'O':'0','o':'0','I':'1','l':'1','i':'1','Z':'2','z':'2',
-    'S':'5','s':'5','G':'6','g':'6','B':'8','b':'8','D':'0',
-    'T':'7','t':'7','q':'9','Q':'9'
+    'O':'0','o':'0',
+    'I':'1','l':'1',
+    'Z':'2','z':'2',
+    'S':'5','s':'5',
+    'G':'6','g':'6',
+    'T':'7','t':'7',
+    'q':'9','Q':'9',
 }
 
 def fix_ocr_digits(text):
@@ -94,7 +100,7 @@ def ocr_page_split_columns(page, idx=None):
         img = ImageEnhance.Sharpness(img).enhance(2.0)
 
         w, h = img.size
-        mid = w // 2
+        mid = int(w * 0.53)  # slightly past center to avoid gutter shadow
         left_col  = img.crop((0,   0, mid, h))
         right_col = img.crop((mid, 0, w,   h))
 
