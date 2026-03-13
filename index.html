@@ -233,13 +233,14 @@
       margin: 0 -0.6rem;
       border-radius: 2px;
       animation: fadeUp 0.18s ease both;
-      cursor: default;
+      cursor: pointer;
       transition: background 0.12s;
+      text-decoration: none;
+      color: inherit;
     }
-    .result-row:hover { background: rgba(201,168,76,0.04); }
-    .result-row + .result-row {
-      border-top: 1px solid #1c1a10;
-    }
+    .result-row:hover { background: rgba(201,168,76,0.07); }
+    .result-row:hover .result-title { color: var(--gold); }
+    .result-row + .result-row { border-top: 1px solid #1c1a10; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(5px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -487,12 +488,16 @@ function doSearch() {
     const g = groups[bid];
     if (multiBook) html += `<div class="group-label">${esc(g.title)}</div>`;
     g.songs.forEach((s, i) => {
+      const pdfUrl  = s.file ? encodeURI(s.file) : '';
+      const href    = pdfUrl && s.page ? `${pdfUrl}#page=${s.page}` : pdfUrl;
+      const tag     = href ? 'a' : 'div';
+      const linkAttr = href ? `href="${href}" target="_blank" rel="noopener"` : '';
       html += `
-        <div class="result-row" style="animation-delay:${Math.min(i,20)*18}ms">
+        <${tag} class="result-row" ${linkAttr} style="animation-delay:${Math.min(i,20)*18}ms">
           <div class="result-title">${highlight(s.title, q)}</div>
           <div class="result-page"><span>page</span>${s.page||'—'}</div>
           ${s.composer ? `<div class="result-composer">${highlight(s.composer, q)}</div>` : ''}
-        </div>`;
+        </${tag}>`;
     });
   }
 
@@ -526,7 +531,7 @@ async function init() {
   for (const book of data) {
     if (book.songs) {
       for (const s of book.songs) {
-        allSongs.push({ ...s, bookId: book.id, bookTitle: book.title });
+        allSongs.push({ ...s, bookId: book.id, bookTitle: book.title, file: book.file });
       }
     }
   }
