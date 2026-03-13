@@ -10,7 +10,7 @@
     "id": "real-book-v1",
     "title": "The Real Book Vol. 1",
     "file": "books/realbook6.pdf",
-    "offset": 0,
+    "offset": -1,
     "format": "realbook"
   }
 ]
