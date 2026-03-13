@@ -13,5 +13,13 @@
     "file": "books/realbook6.pdf",
     "offset": -1,
     "format": "realbook"
+  },
+  {
+    "id": "462jazz",
+    "title": "462 Jazz Standards",
+    "file": "books/462jazzstandardsS.pdf",
+    "offset": -1,
+    "format": "songlist",
+    "index_pages": 10
   }
 ]
