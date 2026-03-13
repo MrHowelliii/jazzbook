@@ -5,7 +5,7 @@ index_books.py — Jazz Library Indexer (multi-format)
 Supported formats (set per book in books.json):
   "fakebook"  — entries like: 42 Song Title — Performer Name
   "dotleader" — entries like: Song Title .............. 42  (mixed case)
-  "realbook"  — entries like: SONG TITLE ................10 (ALL CAPS, two columns, dot flush to number)
+  "realbook"  — ALL CAPS titles, dot leaders, two columns (uses enhanced OCR)
   "auto"      — tries all parsers, uses whichever finds most songs
 """
 
@@ -20,7 +20,8 @@ SKIP = {
     'foreword', 'appendix', 'preface', 'table of contents', 'song list',
     'alphabetical index', 'songs', 'title', 'a', 'b', 'c', 'd', 'e', 'f',
     'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-    'u', 'v', 'w', 'x', 'y', 'z', 'a cont.', 'b cont.', 'c cont.',
+    'u', 'v', 'w', 'x', 'y', 'z', 'a cont', 'b cont', 'c cont', 'eb cont',
+    'cg cont', 'g cont', 'i cont',
 }
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -30,7 +31,7 @@ def clean(t):
 
 def is_skip(title):
     return (not title or len(title) < 2
-            or title.lower() in SKIP
+            or title.lower().strip('.') in SKIP
             or re.match(r'^[\d\s\W]+$', title))
 
 def has_text(pdf):
@@ -53,10 +54,16 @@ def get_candidates(pdf):
             break
     return sorted(list(cands))
 
-def ocr_page(page):
+def ocr_page(page, enhanced=False):
+    """OCR a page. enhanced=True applies contrast/sharpening for low-quality scans."""
     try:
         import pytesseract
+        from PIL import ImageEnhance
         img = page.to_image(resolution=300).original
+        if enhanced:
+            img = img.convert('L')                          # grayscale
+            img = ImageEnhance.Contrast(img).enhance(2.5)  # boost contrast
+            img = ImageEnhance.Sharpness(img).enhance(2.0) # sharpen
         return pytesseract.image_to_string(img, config='--psm 6')
     except Exception as e:
         print(f"     OCR error: {e}")
@@ -72,7 +79,7 @@ def get_text_lines(page):
     return [l.strip() for l in (page.extract_text() or '').split('\n') if l.strip()]
 
 # ── Format: fakebook ──────────────────────────────────────────────────────────
-# Entries like: 42 Song Title — Performer Name  (often two columns per line)
+# Entries like: 42 Song Title — Performer Name
 
 def parse_fakebook(full_text):
     songs = []
@@ -87,7 +94,6 @@ def parse_fakebook(full_text):
         page_num = int(m.group(1))
         if page_num == 0 or page_num > 800:
             continue
-
         start = m.start()
         end   = matches[idx + 1].start() if idx + 1 < len(matches) else len(text)
         chunk = text[start:end].strip()
@@ -105,7 +111,6 @@ def parse_fakebook(full_text):
 
         if is_skip(title):
             continue
-
         songs.append({'title': title, 'composer': composer or None, 'page': page_num})
 
     return songs
@@ -113,18 +118,10 @@ def parse_fakebook(full_text):
 # ── Format: dotleader (mixed case) ───────────────────────────────────────────
 # Entries like: Song Title .............. 42
 
-DOTLEADER_RE = re.compile(
-    r'^([A-Z\'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$'
-)
-PAREN_RE = re.compile(
-    r'^(.+?)\s+\(([^)]{3,40})\)\s*[\.·•\s\-]{2,}(\d{1,4})\s*$'
-)
-TAB_RE = re.compile(
-    r'^([^\t]{3,60})\t([^\t]*)\t(\d{1,4})\s*$'
-)
-DASH_COMPOSER_RE = re.compile(
-    r'\s[-–]\s([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)+)\s*$'
-)
+DOTLEADER_RE     = re.compile(r'^([A-Z\'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$')
+PAREN_RE         = re.compile(r'^(.+?)\s+\(([^)]{3,40})\)\s*[\.·•\s\-]{2,}(\d{1,4})\s*$')
+TAB_RE           = re.compile(r'^([^\t]{3,60})\t([^\t]*)\t(\d{1,4})\s*$')
+DASH_COMPOSER_RE = re.compile(r'\s[-–]\s([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)+)\s*$')
 
 def split_composer(title):
     m = re.search(r'\(([A-Z][a-zA-Z\s.\-\'&,]{3,40})\)\s*$', title)
@@ -139,48 +136,36 @@ def parse_dotleader_line(line):
     line = line.strip()
     if len(line) < 4:
         return None
-
     m = TAB_RE.match(line)
     if m:
-        title    = clean(m.group(1))
-        composer = m.group(2).strip() or None
-        page     = int(m.group(3))
+        title = clean(m.group(1)); composer = m.group(2).strip() or None; page = int(m.group(3))
         return {'title': title, 'composer': composer, 'page': page} if not is_skip(title) else None
-
     m = PAREN_RE.match(line)
     if m:
-        title    = clean(m.group(1))
-        composer = m.group(2).strip()
-        page     = int(m.group(3))
+        title = clean(m.group(1)); composer = m.group(2).strip(); page = int(m.group(3))
         return {'title': title, 'composer': composer, 'page': page} if not is_skip(title) else None
-
     m = DOTLEADER_RE.match(line)
     if m:
         title, page = clean(m.group(1)), int(m.group(2))
         title, composer = split_composer(title)
         return {'title': title, 'composer': composer, 'page': page} if not is_skip(title) else None
-
     return None
 
 def parse_dotleader(text):
-    songs = []
-    for line in text.split('\n'):
-        song = parse_dotleader_line(line)
-        if song:
-            songs.append(song)
-    return songs
+    return [s for s in (parse_dotleader_line(l) for l in text.split('\n')) if s]
 
 # ── Format: realbook ─────────────────────────────────────────────────────────
-# ALL CAPS titles, dot leaders flush to number, two columns per line
-# e.g.: AFRICAN FLOWER .............................10   BLUE BOSSA.......50
+# ALL CAPS, dot leaders (often OCR'd as ooo/ccc/eee), two columns per line
+# Strategy: find ALL CAPS title, skip separator garbage, grab digits
 
-# Matches: ALL CAPS TITLE ....10  anywhere in a string (handles two columns)
-# Also handles OCR-garbled dots like: oo, 00, o.oo, .o. etc.
+# Match ALL CAPS title then separator garbage then page number
+# Separator: anything that is NOT (start of new CAPS title or digit sequence)
 REALBOOK_ENTRY_RE = re.compile(
-    r'([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)\s*'  # ALL CAPS title
-    r'[\.o0]{2,}'                                    # dot leaders (or OCR garbage: oo, 00, .o.)
-    r'\s*(\d{1,3})'                                  # page number
-    r'(?=\s|$)'                                      # end of entry
+    r'([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)'  # ALL CAPS title (non-greedy)
+    r'\s*[^A-Z\n]{2,50}?'                         # separator: garbage dots/ooo/ccc
+    r'(\d{1,3})'                                   # page number
+    r'(?=\s+[A-Z]|\s*$|\s*—)',                    # next entry starts or end of line
+    re.MULTILINE
 )
 
 def parse_realbook(full_text):
@@ -189,23 +174,33 @@ def parse_realbook(full_text):
         line = line.strip()
         if not line:
             continue
-        # Find all entries on this line (handles two-column layout)
+        # Skip obvious non-index lines
+        if len(line) < 5:
+            continue
+        # Must have some uppercase to be an index line
+        uppers = sum(1 for c in line if c.isupper())
+        if uppers < 3:
+            continue
+
         for m in REALBOOK_ENTRY_RE.finditer(line):
             title    = clean(m.group(1))
             page_num = int(m.group(2))
-            if is_skip(title) or page_num == 0 or page_num > 800:
+
+            if is_skip(title) or page_num == 0 or page_num > 600:
                 continue
-            # Must be mostly uppercase to distinguish from dotleader format
+
+            # Title must be mostly uppercase
             letters = re.sub(r'[^A-Za-z]', '', title)
-            if letters and sum(1 for c in letters if c.isupper()) / len(letters) < 0.7:
+            if not letters or sum(1 for c in letters if c.isupper()) / len(letters) < 0.6:
                 continue
+
             songs.append({'title': title, 'composer': None, 'page': page_num})
+
     return songs
 
 # ── Core indexer ──────────────────────────────────────────────────────────────
 
 def best_parse(raw, fmt):
-    """Run the right parser(s) and return song list."""
     if fmt == 'fakebook':
         return parse_fakebook(raw)
     if fmt == 'dotleader':
@@ -213,16 +208,13 @@ def best_parse(raw, fmt):
     if fmt == 'realbook':
         return parse_realbook(raw)
     # auto: try all three, return the one with most hits
-    results = [
-        parse_fakebook(raw),
-        parse_dotleader(raw),
-        parse_realbook(raw),
-    ]
+    results = [parse_fakebook(raw), parse_dotleader(raw), parse_realbook(raw)]
     return max(results, key=len)
 
 def index_pdf(filepath, book_title, fmt='auto'):
     print(f"  Parsing: {book_title} (format: {fmt})")
     songs, seen = [], set()
+    enhanced = (fmt == 'realbook')
 
     def add(song):
         if not song:
@@ -238,18 +230,16 @@ def index_pdf(filepath, book_title, fmt='auto'):
         candidates = get_candidates(pdf)
 
         if use_ocr:
-            print(f"     No text layer — using OCR...")
+            print(f"     No text layer — using OCR{'  (enhanced)' if enhanced else ''}...")
 
         for idx, i in enumerate(candidates):
             if use_ocr and idx % 5 == 0:
                 print(f"     OCR: page {i+1}/{total}...")
 
-            raw = ocr_page(pdf.pages[i]) if use_ocr else '\n'.join(get_text_lines(pdf.pages[i]))
+            raw = ocr_page(pdf.pages[i], enhanced=enhanced) if use_ocr else '\n'.join(get_text_lines(pdf.pages[i]))
 
             if not raw.strip():
                 continue
-            if idx < 8:
-                print(f"DEBUG page {i+1}:\n{raw[:400]}\n---")
 
             for s in best_parse(raw, fmt):
                 add(s)
@@ -268,7 +258,6 @@ def main():
         books = json.load(f)
 
     print(f"\nJazz Library Indexer — {len(books)} book(s)\n")
-
     output, total_songs = [], 0
 
     for book in books:
@@ -280,27 +269,21 @@ def main():
 
         if not os.path.exists(bfile):
             print(f"  Skipping '{btitle}' — not found: {bfile}")
-            output.append({
-                'id': bid, 'title': btitle, 'file': bfile,
-                'pageCount': 0, 'songs': [], 'offset': offset,
-                'error': f'Not found: {bfile}'
-            })
+            output.append({'id': bid, 'title': btitle, 'file': bfile,
+                           'pageCount': 0, 'songs': [], 'offset': offset,
+                           'error': f'Not found: {bfile}'})
             continue
 
         try:
             songs, pages = index_pdf(bfile, btitle, fmt=fmt)
-            output.append({
-                'id': bid, 'title': btitle, 'file': bfile,
-                'pageCount': pages, 'songs': songs, 'offset': offset,
-            })
+            output.append({'id': bid, 'title': btitle, 'file': bfile,
+                           'pageCount': pages, 'songs': songs, 'offset': offset})
             total_songs += len(songs)
         except Exception as e:
             print(f"  Error indexing '{btitle}': {e}", file=sys.stderr)
-            output.append({
-                'id': bid, 'title': btitle, 'file': bfile,
-                'pageCount': 0, 'songs': [], 'offset': offset,
-                'error': str(e)
-            })
+            output.append({'id': bid, 'title': btitle, 'file': bfile,
+                           'pageCount': 0, 'songs': [], 'offset': offset,
+                           'error': str(e)})
 
     with open(SONGS_JSON, 'w', encoding='utf-8') as f:
         json.dump(output, f, ensure_ascii=False, separators=(',', ':'))
