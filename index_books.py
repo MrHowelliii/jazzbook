@@ -40,8 +40,11 @@ def has_text(pdf):
                if len((pdf.pages[i].extract_text() or '').strip()) > 20)
     return hits >= 2
 
-def get_candidates(pdf):
+def get_candidates(pdf, max_index_pages=None):
     total = len(pdf.pages)
+    if max_index_pages:
+        # Only scan the specified number of pages for the index
+        return list(range(min(max_index_pages, total)))
     limit = min(max(int(total * 0.20), 5), 30)
     cands = set(range(limit))
     for i in range(int(total * 0.90), total):
@@ -64,16 +67,10 @@ def ocr_page(page):
         return ''
 
 # Common OCR letter→digit confusions at end of lines
-# Note: B is NOT mapped to 8 because Tesseract often reads two-digit numbers
-# like 50,51,52 as BO,BL,BR which would become wrong if B→8
 DIGIT_MAP = {
-    'O':'0','o':'0',
-    'I':'1','l':'1',
-    'Z':'2','z':'2',
-    'S':'5','s':'5',
-    'G':'6','g':'6',
-    'T':'7','t':'7',
-    'q':'9','Q':'9',
+    'O':'0','o':'0','I':'1','l':'1','i':'1','Z':'2','z':'2',
+    'S':'5','s':'5','G':'6','g':'6','B':'8','b':'8','D':'0',
+    'T':'7','t':'7','q':'9','Q':'9'
 }
 
 def fix_ocr_digits(text):
@@ -100,7 +97,7 @@ def ocr_page_split_columns(page, idx=None):
         img = ImageEnhance.Sharpness(img).enhance(2.0)
 
         w, h = img.size
-        mid = int(w * 0.53)  # slightly past center to avoid gutter shadow
+        mid = w // 2
         left_col  = img.crop((0,   0, mid, h))
         right_col = img.crop((mid, 0, w,   h))
 
@@ -244,7 +241,7 @@ def best_parse(raw, fmt):
     results = [parse_fakebook(raw), parse_dotleader(raw), parse_realbook(raw)]
     return max(results, key=len)
 
-def index_pdf(filepath, book_title, fmt='auto'):
+def index_pdf(filepath, book_title, fmt='auto', max_index_pages=None):
     print(f"  Parsing: {book_title} (format: {fmt})")
     songs, seen = [], set()
     use_split = (fmt == 'realbook')
@@ -260,7 +257,7 @@ def index_pdf(filepath, book_title, fmt='auto'):
     with pdfplumber.open(filepath) as pdf:
         total      = len(pdf.pages)
         use_ocr    = not has_text(pdf)
-        candidates = get_candidates(pdf)
+        candidates = get_candidates(pdf, max_index_pages=max_index_pages)
 
         if use_ocr:
             mode = 'split-column OCR' if use_split else 'OCR'
@@ -303,6 +300,7 @@ def main():
         bfile  = book['file']
         fmt    = book.get('format', 'auto')
         offset = book.get('offset', 0)
+        max_index_pages = book.get('index_pages', None)
 
         if not os.path.exists(bfile):
             print(f"  Skipping '{btitle}' — not found: {bfile}")
@@ -312,7 +310,7 @@ def main():
             continue
 
         try:
-            songs, pages = index_pdf(bfile, btitle, fmt=fmt)
+            songs, pages = index_pdf(bfile, btitle, fmt=fmt, max_index_pages=max_index_pages)
             output.append({'id': bid, 'title': btitle, 'file': bfile,
                            'pageCount': pages, 'songs': songs, 'offset': offset})
             total_songs += len(songs)
