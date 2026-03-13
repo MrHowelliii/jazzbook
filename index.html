@@ -531,7 +531,7 @@ async function init() {
   for (const book of data) {
     if (book.songs) {
       for (const s of book.songs) {
-        allSongs.push({ ...s, bookId: book.id, bookTitle: book.title, file: book.file });
+        allSongs.push({ ...s, bookId: book.id, bookTitle: book.title, file: book.file, offset: book.offset || 0 });
       }
     }
   }
