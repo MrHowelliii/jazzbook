@@ -180,32 +180,42 @@ def parse_dotleader(text):
     return [s for s in (parse_dotleader_line(l) for l in text.split('\n')) if s]
 
 # ── Format: realbook ─────────────────────────────────────────────────────────
-# After column-splitting, each line should be a single entry.
-# Title is ALL CAPS, followed by dot-leader garbage, followed by page number at end.
-# The page number is reliably the LAST 1-3 digit number on the line.
-REALBOOK_LINE_RE = re.compile(
-    r'^([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,60?}?)'  # ALL CAPS title (non-greedy)
-    r'\s+[^A-Z\n]{2,}'                             # separator: dots/garbage (not caps)
-    r'(\d{1,3})\s*$'                               # page number at END of line
-)
+# Realbook: grab ALL CAPS title from start of line, page number from end
+REALBOOK_TITLE_RE = re.compile(r'^([A-Z][A-Z0-9 \'\(\),&!?/\-]*)')
+REALBOOK_PAGE_RE  = re.compile(r'(\d{1,3})\s*$')
 
 def parse_realbook(full_text):
     songs = []
     for line in full_text.split('\n'):
         line = line.strip()
-        if not line or len(line) < 5:
+        if not line or len(line) < 6:
             continue
-        m = REALBOOK_LINE_RE.match(line)
-        if not m:
+        if not line[0].isupper():
             continue
-        title    = clean(m.group(1))
-        page_num = int(m.group(2))
-        if is_skip(title) or page_num == 0 or page_num > 600:
+
+        # Page number must be at the end of the line
+        page_match = REALBOOK_PAGE_RE.search(line)
+        if not page_match:
             continue
-        # Must be mostly uppercase
+        page_num = int(page_match.group(1))
+        if page_num == 0 or page_num > 600:
+            continue
+
+        # Title is the ALL-CAPS run at the start
+        title_match = REALBOOK_TITLE_RE.match(line)
+        if not title_match:
+            continue
+        title = clean(title_match.group(1))
+        # Strip any trailing digits that crept into the title
+        title = re.sub(r'\s*\d+\s*$', '', title).strip()
+        title = clean(title)
+
+        if is_skip(title) or len(title) < 3:
+            continue
         letters = re.sub(r'[^A-Za-z]', '', title)
         if not letters or sum(1 for c in letters if c.isupper()) / len(letters) < 0.6:
             continue
+
         songs.append({'title': title, 'composer': None, 'page': page_num})
     return songs
 
