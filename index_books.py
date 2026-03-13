@@ -4,17 +4,9 @@ index_books.py — Jazz Library Indexer (multi-format)
 
 Supported formats (set per book in books.json):
   "fakebook"  — entries like: 42 Song Title — Performer Name
-  "dotleader" — entries like: Song Title .............. 42
-  "auto"      — (default) tries both, uses whichever finds more songs
-
-Add new books to books.json like:
-  {
-    "id":     "real-book-v1",
-    "title":  "The Real Book Vol. 1",
-    "file":   "books/real-book-v1.pdf",
-    "offset": 0,
-    "format": "dotleader"
-  }
+  "dotleader" — entries like: Song Title .............. 42  (mixed case)
+  "realbook"  — entries like: SONG TITLE ................10 (ALL CAPS, two columns, dot flush to number)
+  "auto"      — tries all parsers, uses whichever finds most songs
 """
 
 import os, re, json, sys
@@ -26,7 +18,9 @@ SONGS_JSON = os.path.join(os.path.dirname(__file__), 'songs.json')
 SKIP = {
     'page', 'contents', 'index', 'section', 'chapter', 'introduction',
     'foreword', 'appendix', 'preface', 'table of contents', 'song list',
-    'alphabetical index', 'songs', 'title',
+    'alphabetical index', 'songs', 'title', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+    'u', 'v', 'w', 'x', 'y', 'z', 'a cont.', 'b cont.', 'c cont.',
 }
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -116,9 +110,8 @@ def parse_fakebook(full_text):
 
     return songs
 
-# ── Format: dotleader ─────────────────────────────────────────────────────────
+# ── Format: dotleader (mixed case) ───────────────────────────────────────────
 # Entries like: Song Title .............. 42
-# or:           Song Title (Composer) ... 42
 
 DOTLEADER_RE = re.compile(
     r'^([A-Z\'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$'
@@ -177,7 +170,51 @@ def parse_dotleader(text):
             songs.append(song)
     return songs
 
+# ── Format: realbook ─────────────────────────────────────────────────────────
+# ALL CAPS titles, dot leaders flush to number, two columns per line
+# e.g.: AFRICAN FLOWER .............................10   BLUE BOSSA.......50
+
+# Matches: ALL CAPS TITLE ....10  anywhere in a string (handles two columns)
+REALBOOK_ENTRY_RE = re.compile(
+    r'([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)\s*\.{2,}\s*(\d{1,4})(?=\s|$)'
+)
+
+def parse_realbook(full_text):
+    songs = []
+    for line in full_text.split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        # Find all entries on this line (handles two-column layout)
+        for m in REALBOOK_ENTRY_RE.finditer(line):
+            title    = clean(m.group(1))
+            page_num = int(m.group(2))
+            if is_skip(title) or page_num == 0 or page_num > 800:
+                continue
+            # Must be mostly uppercase to distinguish from dotleader format
+            letters = re.sub(r'[^A-Za-z]', '', title)
+            if letters and sum(1 for c in letters if c.isupper()) / len(letters) < 0.7:
+                continue
+            songs.append({'title': title, 'composer': None, 'page': page_num})
+    return songs
+
 # ── Core indexer ──────────────────────────────────────────────────────────────
+
+def best_parse(raw, fmt):
+    """Run the right parser(s) and return song list."""
+    if fmt == 'fakebook':
+        return parse_fakebook(raw)
+    if fmt == 'dotleader':
+        return parse_dotleader(raw)
+    if fmt == 'realbook':
+        return parse_realbook(raw)
+    # auto: try all three, return the one with most hits
+    results = [
+        parse_fakebook(raw),
+        parse_dotleader(raw),
+        parse_realbook(raw),
+    ]
+    return max(results, key=len)
 
 def index_pdf(filepath, book_title, fmt='auto'):
     print(f"  Parsing: {book_title} (format: {fmt})")
@@ -208,19 +245,8 @@ def index_pdf(filepath, book_title, fmt='auto'):
             if not raw.strip():
                 continue
 
-            if fmt == 'fakebook':
-                for s in parse_fakebook(raw):
-                    add(s)
-
-            elif fmt == 'dotleader':
-                for s in parse_dotleader(raw):
-                    add(s)
-
-            else:  # auto
-                fb = parse_fakebook(raw)
-                dl = parse_dotleader(raw)
-                for s in (fb if len(fb) >= len(dl) else dl):
-                    add(s)
+            for s in best_parse(raw, fmt):
+                add(s)
 
     print(f"     Done: {len(songs)} songs ({total} pages)")
     return songs, total
