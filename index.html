@@ -489,7 +489,8 @@ function doSearch() {
     if (multiBook) html += `<div class="group-label">${esc(g.title)}</div>`;
     g.songs.forEach((s, i) => {
       const pdfUrl  = s.file ? encodeURI(s.file) : '';
-      const href    = pdfUrl && s.page ? `${pdfUrl}#page=${s.page + (s.offset || 0)}` : pdfUrl;
+      const pageNum = s.page ? s.page + (s.offset || 0) : null;
+      const href    = pdfUrl && pageNum ? `${pdfUrl}#page=${pageNum}` : pdfUrl;
       const tag     = href ? 'a' : 'div';
       const linkAttr = href ? `href="${href}" target="_blank" rel="noopener"` : '';
       html += `
