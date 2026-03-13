@@ -3,6 +3,14 @@
     "id": "Jazz-Fakebook",
     "title": "Jazz Fakebook",
     "file": "books/jazzfake.pdf",
-    "offset": -1
+    "offset": -1,
+    "format": "fakebook"
+  },
+  {
+    "id": "real-book-v1",
+    "title": "The Real Book Vol. 1",
+    "file": "books/realbook6.pdf",
+    "offset": 0,
+    "format": "dotleader"
   }
 ]
