@@ -89,8 +89,7 @@ def ocr_page_split_columns(page, idx=None):
         right_text = pytesseract.image_to_string(right_col, config=cfg)
 
         if idx in (2, 3, 4):
-            print(f"LEFT COL (idx {idx}):\n{left_text[:300]}\n---")
-            print(f"RIGHT COL (idx {idx}):\n{right_text[:300]}\n---")
+            pass  # debug removed
 
         return left_text + '\n' + right_text
     except Exception as e:
@@ -181,14 +180,13 @@ def parse_dotleader(text):
     return [s for s in (parse_dotleader_line(l) for l in text.split('\n')) if s]
 
 # ── Format: realbook ─────────────────────────────────────────────────────────
-# After column-splitting, each line should be a single entry:
-# AFRICAN FLOWER ...........10
-# We match: ALL CAPS title, dot leaders, digits
-
+# After column-splitting, each line should be a single entry.
+# Title is ALL CAPS, followed by dot-leader garbage, followed by page number at end.
+# The page number is reliably the LAST 1-3 digit number on the line.
 REALBOOK_LINE_RE = re.compile(
-    r'^([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)\s*'  # ALL CAPS title
-    r'\.{2,}\s*'                                       # dot leaders
-    r'(\d{1,3})\s*$'                                   # page number
+    r'^([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,60?}?)'  # ALL CAPS title (non-greedy)
+    r'\s+[^A-Z\n]{2,}'                             # separator: dots/garbage (not caps)
+    r'(\d{1,3})\s*$'                               # page number at END of line
 )
 
 def parse_realbook(full_text):
