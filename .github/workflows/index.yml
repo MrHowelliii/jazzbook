@@ -50,6 +50,15 @@ jobs:
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
+
+        # DEBUG: print raw text from first 15 pages
+        if len(songs) == 0:
+            print("\n--- DEBUG: raw text from first 15 pages ---")
+            for i in range(min(15, total)):
+                print(f"\n=== Page {i+1} ===")
+                print(pdf.pages[i].extract_text() or "(no text)")
+            print("--- END DEBUG ---")
+            
         with:
           path: '.'
 
