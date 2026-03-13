@@ -122,6 +122,14 @@ def index_pdf(filepath, book_title):
                         songs.append(song)
 
     print(f"     ✓ {len(songs)} songs found ({total} pages)")
+    if len(songs) == 0:
+        print("\n--- DEBUG: raw text from first 10 pages ---")
+        with pdfplumber.open(filepath) as pdf2:
+            for i in range(min(10, len(pdf2.pages))):
+                print(f"\n=== Page {i+1} ===")
+                print(pdf2.pages[i].extract_text() or "(no text)")
+        print("--- END DEBUG ---")
+
     return songs, total
 
 
