@@ -53,14 +53,4 @@ jobs:
         with:
           path: '.'
 
-          # DEBUG: print raw text from first 15 pages
-        if len(songs) == 0:
-            print("\n--- DEBUG: raw text from first 15 pages ---")
-            for i in range(min(15, total)):
-                print(f"\n=== Page {i+1} ===")
-                print(pdf.pages[i].extract_text() or "(no text)")
-            print("--- END DEBUG ---")
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
