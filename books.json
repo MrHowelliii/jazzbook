@@ -4,7 +4,8 @@
     "title": "Jazz Fakebook",
     "file": "books/jazzfake.pdf",
     "offset": -1,
-    "format": "fakebook"
+    "format": "fakebook",
+    "index_pages": 8
   },
   {
     "id": "real-book-v1",
