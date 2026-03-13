@@ -55,7 +55,6 @@ def get_candidates(pdf):
     return sorted(list(cands))
 
 def ocr_page(page):
-    """Standard OCR at 300dpi."""
     try:
         import pytesseract
         img = page.to_image(resolution=300).original
@@ -64,38 +63,49 @@ def ocr_page(page):
         print(f"     OCR error: {e}")
         return ''
 
+# Common OCR letter→digit confusions at end of lines
+DIGIT_MAP = {
+    'O':'0','o':'0','I':'1','l':'1','i':'1','Z':'2','z':'2',
+    'S':'5','s':'5','G':'6','g':'6','B':'8','b':'8','D':'0',
+    'T':'7','t':'7','q':'9','Q':'9'
+}
+
+def fix_ocr_digits(text):
+    """Fix letter/digit confusions at end of each line (e.g. BI→81, BS→85)."""
+    fixed = []
+    for line in text.split('\n'):
+        m = re.search(r'([A-Za-z0-9]{1,3})\s*$', line)
+        if m:
+            tail = m.group(1)
+            converted = ''.join(DIGIT_MAP.get(c, c) for c in tail)
+            if converted.isdigit():
+                line = line[:m.start()] + converted
+        fixed.append(line)
+    return '\n'.join(fixed)
+
 def ocr_page_split_columns(page, idx=None):
-    """
-    For two-column layouts: split page image in half vertically,
-    OCR each column separately, return combined text.
-    """
+    """Split page in half, OCR each column separately."""
     try:
         import pytesseract
         from PIL import ImageEnhance
         img = page.to_image(resolution=300).original
-        # Enhance contrast for cleaner OCR
         img = img.convert('L')
         img = ImageEnhance.Contrast(img).enhance(2.0)
         img = ImageEnhance.Sharpness(img).enhance(2.0)
 
         w, h = img.size
         mid = w // 2
+        left_col  = img.crop((0,   0, mid, h))
+        right_col = img.crop((mid, 0, w,   h))
 
-        left_col  = img.crop((0,    0, mid, h))
-        right_col = img.crop((mid,  0, w,   h))
-
-        left_text  = pytesseract.image_to_string(left_col,  config='--psm 4')
-        right_text = pytesseract.image_to_string(right_col, config='--psm 4')
+        left_text   = pytesseract.image_to_string(left_col,  config='--psm 4')
+        right_text  = pytesseract.image_to_string(right_col, config='--psm 4')
         right_text2 = pytesseract.image_to_string(right_col, config='--psm 11')
 
-        # Fix letter/digit confusions in right column (worse scan quality)
         right_text  = fix_ocr_digits(right_text)
         right_text2 = fix_ocr_digits(right_text2)
 
         return left_text + '\n' + right_text + '\n' + right_text2
-
-        if idx in (2, 3, 4):
-            pass  # debug removed
     except Exception as e:
         print(f"     OCR error: {e}")
         return ''
@@ -147,7 +157,7 @@ def parse_fakebook(full_text):
 
 # ── Format: dotleader (mixed case) ───────────────────────────────────────────
 
-DOTLEADER_RE     = re.compile(r'^([A-Z\'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$')
+DOTLEADER_RE     = re.compile(r'^([A-Z\'"\u2018\u201C][^\n]{2,70}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$')
 PAREN_RE         = re.compile(r'^(.+?)\s+\(([^)]{3,40})\)\s*[\.·•\s\-]{2,}(\d{1,4})\s*$')
 TAB_RE           = re.compile(r'^([^\t]{3,60})\t([^\t]*)\t(\d{1,4})\s*$')
 DASH_COMPOSER_RE = re.compile(r'\s[-–]\s([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)+)\s*$')
@@ -184,28 +194,8 @@ def parse_dotleader(text):
     return [s for s in (parse_dotleader_line(l) for l in text.split('\n')) if s]
 
 # ── Format: realbook ─────────────────────────────────────────────────────────
-# Common OCR letter→digit confusions at end of lines
-# O→0, I/l→1, Z→2, S→5, G→6, B can be 8, D→0
-DIGIT_MAP = {'O':'0','o':'0','I':'1','l':'1','i':'1','Z':'2','z':'2',
-             'S':'5','s':'5','G':'6','g':'6','B':'8','b':'8','D':'0',
-             'T':'7','t':'7','q':'9','Q':'9'}
 
-def fix_ocr_digits(text):
-    """
-    Fix OCR letter/digit confusions at the end of each line.
-    e.g. 'BLUE IN GREEN ... BI' -> 'BLUE IN GREEN ... 81'
-    """
-    fixed = []
-    for line in text.split('\n'):
-        # Find the last word on the line (potential page number)
-        m = re.search(r'([A-Za-z0-9]{1,3})\s*$', line)
-        if m:
-            tail = m.group(1)
-            converted = ''.join(DIGIT_MAP.get(c, c) for c in tail)
-            if converted.isdigit():
-                line = line[:m.start()] + converted
-        fixed.append(line)
-    return '\n'.join(fixed)
+REALBOOK_TITLE_RE = re.compile(r'^([A-Z][A-Z0-9 \'\(\),&!?/\-]*)')
 REALBOOK_PAGE_RE  = re.compile(r'(\d{1,3})\s*$')
 
 def parse_realbook(full_text):
@@ -216,30 +206,23 @@ def parse_realbook(full_text):
             continue
         if not line[0].isupper():
             continue
-
-        # Page number must be at the end of the line
         page_match = REALBOOK_PAGE_RE.search(line)
         if not page_match:
             continue
         page_num = int(page_match.group(1))
         if page_num == 0 or page_num > 600:
             continue
-
-        # Title is the ALL-CAPS run at the start
         title_match = REALBOOK_TITLE_RE.match(line)
         if not title_match:
             continue
         title = clean(title_match.group(1))
-        # Strip any trailing digits that crept into the title
         title = re.sub(r'\s*\d+\s*$', '', title).strip()
         title = clean(title)
-
         if is_skip(title) or len(title) < 3:
             continue
         letters = re.sub(r'[^A-Za-z]', '', title)
         if not letters or sum(1 for c in letters if c.isupper()) / len(letters) < 0.6:
             continue
-
         songs.append({'title': title, 'composer': None, 'page': page_num})
     return songs
 
