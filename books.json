@@ -2,6 +2,7 @@
   {
     "id": "Jazz-Fakebook",
     "title": "Jazz Fakebook",
-    "file": "books/jazzfake.pdf"
+    "file": "books/jazzfake.pdf",
+    "offset": 1"
   }
 ]
