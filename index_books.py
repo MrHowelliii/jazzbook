@@ -1,36 +1,21 @@
 #!/usr/bin/env python3
-"""
-index_books.py — Jazz Library Indexer
-Reads books.json, parses each PDF's table of contents,
-and writes songs.json for the frontend to consume.
-"""
-
-import os
-import re
-import json
-import sys
+import os, re, json, sys
 import pdfplumber
 
 BOOKS_JSON = os.path.join(os.path.dirname(__file__), 'books.json')
 SONGS_JSON = os.path.join(os.path.dirname(__file__), 'songs.json')
 
-# ── Parsing patterns ──────────────────────────────────────────────────────────
-
 SIMPLE_RE   = re.compile(r'^([A-Z\'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$')
 PAREN_RE    = re.compile(r'^(.+?)\s+\(([^)]{3,40})\)\s*[\.·•\s\-]{2,}(\d{1,4})\s*$')
 TAB_RE      = re.compile(r'^([^\t]{3,60})\t([^\t]*)\t(\d{1,4})\s*$')
-DASH_END_RE = re.compile(r'\s[-–]\s([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)+)\s*$')
+DASH_END_RE = re.compile(r'\s[-\u2013]\s([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)+)\s*$')
+LOOSE_RE    = re.compile(r'^([A-Z\'"][A-Za-z\s\'\-\(\),\.&!?]{2,60?}?)\s{2,}(\d{1,4})\s*$')
 
-SKIP_TITLES = {
-    'page', 'contents', 'index', 'section', 'chapter',
-    'introduction', 'foreword', 'appendix', 'preface',
-    'table of contents', 'song list', 'alphabetical index',
-}
-
+SKIP = {'page','contents','index','section','chapter','introduction',
+        'foreword','appendix','preface','table of contents','song list'}
 
 def clean(t):
-    return re.sub(r'\s+', ' ', t.strip().rstrip('.,;:–-')).strip()
-
+    return re.sub(r'\s+', ' ', t.strip().rstrip('.,;:\u2013-')).strip()
 
 def split_composer(title):
     m = re.search(r'\(([A-Z][a-zA-Z\s.\-\'&,]{3,40})\)\s*$', title)
@@ -41,156 +26,114 @@ def split_composer(title):
         return title[:title.rfind(m.group(0))].strip(), m.group(1).strip()
     return title, None
 
-
-def parse_line(line):
+def parse_line(line, loose=False):
     line = line.strip()
     if len(line) < 4:
         return None
-
     title = composer = page = None
-
-    # Tab-separated
-    m = TAB_RE.match(line)
-    if m:
-        title, composer, page = clean(m.group(1)), m.group(2).strip() or None, int(m.group(3))
-
-    # "Title (Composer) ..... page"
-    if not title:
-        m = PAREN_RE.match(line)
+    for pattern, groups in [(TAB_RE, (1,2,3)), (PAREN_RE, (1,2,3)), (SIMPLE_RE, (1,None,2))]:
+        m = pattern.match(line)
         if m:
-            title, composer, page = clean(m.group(1)), m.group(2).strip(), int(m.group(3))
-
-    # Simple dot-leader
-    if not title:
-        m = SIMPLE_RE.match(line)
+            title = clean(m.group(groups[0]))
+            composer = m.group(groups[1]).strip() if groups[1] else None
+            page = int(m.group(groups[2]))
+            if pattern == SIMPLE_RE:
+                title, composer = split_composer(title)
+            break
+    if not title and loose:
+        m = LOOSE_RE.match(line)
         if m:
             title, page = clean(m.group(1)), int(m.group(2))
             title, composer = split_composer(title)
-
-    if not title or len(title) < 3:
+    if not title or len(title) < 3 or title.lower() in SKIP or re.match(r'^\d+$', title):
         return None
-    if title.lower() in SKIP_TITLES:
-        return None
-    if re.match(r'^\d+$', title):
-        return None
-
     return {'title': title, 'composer': composer, 'page': page}
 
+def has_text(pdf):
+    sample = min(10, len(pdf.pages))
+    return sum(1 for i in range(sample) if len((pdf.pages[i].extract_text() or '').strip()) > 20) >= 2
 
-def extract_lines_from_page(page):
-    """Group text items by Y position to reconstruct lines."""
-    content = page.extract_text_lines(layout=True, strip_whitespace=True)
-    if content:
-        return [l.get('text', '').strip() for l in content]
-    # Fallback: raw extract_text
-    text = page.extract_text() or ''
-    return text.split('\n')
+def get_candidates(pdf):
+    total = len(pdf.pages)
+    limit = min(max(int(total * 0.20), 5), 30)
+    cands = set(range(limit))
+    for i in range(int(total * 0.90), total):
+        cands.add(i)
+    for i in range(min(limit, 15)):
+        first = (pdf.pages[i].extract_text() or '').strip().split('\n')[0].lower()
+        if re.match(r'^\s*(table of\s+)?contents?\s*$|song\s+list|index\s*$', first):
+            for j in range(i, min(i+12, total)):
+                cands.add(j)
+            break
+    return sorted(cands)
 
+def ocr_page(page):
+    try:
+        import pytesseract
+        img = page.to_image(resolution=200).original
+        text = pytesseract.image_to_string(img, config='--psm 6')
+        return [l.strip() for l in text.split('\n') if l.strip()]
+    except Exception as e:
+        print(f"     OCR error on page: {e}")
+        return []
+
+def get_lines(page, use_ocr):
+    if use_ocr:
+        return ocr_page(page)
+    try:
+        rows = page.extract_text_lines(layout=True, strip_whitespace=True)
+        if rows:
+            return [r.get('text','').strip() for r in rows if r.get('text','').strip()]
+    except Exception:
+        pass
+    return [l.strip() for l in (page.extract_text() or '').split('\n') if l.strip()]
 
 def index_pdf(filepath, book_title):
-    print(f"  📖 Parsing: {book_title}")
-    songs = []
-    seen = set()
-
+    print(f"  Parsing: {book_title}")
+    songs, seen = [], set()
     with pdfplumber.open(filepath) as pdf:
         total = len(pdf.pages)
-        toc_limit = min(max(int(total * 0.20), 5), 30)
-
-        # Candidate page indices (0-based)
-        candidates = set(range(toc_limit))
-        # Also scan last 10%
-        for i in range(int(total * 0.90), total):
-            candidates.add(i)
-
-        # First pass: detect explicit Contents page
-        for i in range(min(toc_limit, 15)):
-            text = pdf.pages[i].extract_text() or ''
-            first_line = text.strip().split('\n')[0].lower()
-            if re.match(r'^\s*(table of\s+)?contents?\s*$|song\s+list|index\s*$', first_line):
-                for j in range(i, min(i + 12, total)):
-                    candidates.add(j)
-                break
-
-        for i in sorted(candidates):
-            lines = extract_lines_from_page(pdf.pages[i])
-            for line in lines:
-                song = parse_line(line)
+        use_ocr = not has_text(pdf)
+        if use_ocr:
+            print(f"     No text layer found - switching to OCR (may take several minutes)...")
+        for idx, i in enumerate(get_candidates(pdf)):
+            if use_ocr and idx % 5 == 0:
+                print(f"     OCR: scanning page {i+1} of {total}...")
+            for line in get_lines(pdf.pages[i], use_ocr):
+                song = parse_line(line, loose=use_ocr)
                 if song:
                     key = (song['title'].lower(), song['page'])
                     if key not in seen:
                         seen.add(key)
                         songs.append(song)
-
-    print(f"     ✓ {len(songs)} songs found ({total} pages)")
-    if len(songs) == 0:
-        print("\n--- DEBUG: raw text from first 10 pages ---")
-        with pdfplumber.open(filepath) as pdf2:
-            for i in range(min(10, len(pdf2.pages))):
-                print(f"\n=== Page {i+1} ===")
-                print(pdf2.pages[i].extract_text() or "(no text)")
-        print("--- END DEBUG ---")
-
+    print(f"     Done: {len(songs)} songs ({total} pages)")
     return songs, total
-
 
 def main():
     if not os.path.exists(BOOKS_JSON):
         print("ERROR: books.json not found.", file=sys.stderr)
         sys.exit(1)
-
     with open(BOOKS_JSON) as f:
         books = json.load(f)
-
-    print(f"\n🎷 Jazz Library Indexer — {len(books)} book(s)\n")
-
-    output = []
-    total_songs = 0
-
+    print(f"\nJazz Library Indexer - {len(books)} book(s)\n")
+    output, total_songs = [], 0
     for book in books:
-        book_id    = book['id']
-        book_title = book['title']
-        pdf_path   = book['file']
-
-        if not os.path.exists(pdf_path):
-            print(f"  ⚠ Skipping '{book_title}' — file not found: {pdf_path}")
-            output.append({
-                'id': book_id,
-                'title': book_title,
-                'file': pdf_path,
-                'pageCount': 0,
-                'songs': [],
-                'error': f'File not found: {pdf_path}'
-            })
+        bid, btitle, bfile = book['id'], book['title'], book['file']
+        if not os.path.exists(bfile):
+            print(f"  Skipping '{btitle}' - not found: {bfile}")
+            output.append({'id':bid,'title':btitle,'file':bfile,'pageCount':0,'songs':[],'error':f'Not found: {bfile}'})
             continue
-
         try:
-            songs, page_count = index_pdf(pdf_path, book_title)
-            output.append({
-                'id': book_id,
-                'title': book_title,
-                'file': pdf_path,
-                'pageCount': page_count,
-                'songs': songs,
-            })
+            songs, pages = index_pdf(bfile, btitle)
+            output.append({'id':bid,'title':btitle,'file':bfile,'pageCount':pages,'songs':songs})
             total_songs += len(songs)
         except Exception as e:
-            print(f"  ✗ Error indexing '{book_title}': {e}", file=sys.stderr)
-            output.append({
-                'id': book_id,
-                'title': book_title,
-                'file': pdf_path,
-                'pageCount': 0,
-                'songs': [],
-                'error': str(e)
-            })
-
+            print(f"  Error: {e}", file=sys.stderr)
+            output.append({'id':bid,'title':btitle,'file':bfile,'pageCount':0,'songs':[],'error':str(e)})
     with open(SONGS_JSON, 'w', encoding='utf-8') as f:
-        json.dump(output, f, ensure_ascii=False, separators=(',', ':'))
-
-    size_kb = os.path.getsize(SONGS_JSON) // 1024
-    print(f"\n✅ Done! {total_songs} songs across {len(books)} books.")
-    print(f"   songs.json written ({size_kb} KB)\n")
-
+        json.dump(output, f, ensure_ascii=False, separators=(',',':'))
+    print(f"\nDone! {total_songs} songs across {len(books)} books.")
+    print(f"songs.json: {os.path.getsize(SONGS_JSON)//1024} KB\n")
 
 if __name__ == '__main__':
     main()
