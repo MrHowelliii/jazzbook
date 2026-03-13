@@ -242,10 +242,10 @@ def index_pdf(filepath, book_title, fmt='auto'):
 
             raw = ocr_page(pdf.pages[i]) if use_ocr else '\n'.join(get_text_lines(pdf.pages[i]))
 
-            if idx == 0:
-                print(f"DEBUG RAW:\n{raw[:600]}")
             if not raw.strip():
                 continue
+            if idx < 8:
+                print(f"DEBUG page {i+1}:\n{raw[:400]}\n---")
 
             for s in best_parse(raw, fmt):
                 add(s)
