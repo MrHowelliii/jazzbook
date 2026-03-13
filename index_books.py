@@ -84,7 +84,7 @@ def ocr_page_split_columns(page, idx=None):
         left_col  = img.crop((0,    0, mid, h))
         right_col = img.crop((mid,  0, w,   h))
 
-        cfg = '--psm 6 -c tessedit_char_whitelist="ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz0123456789.()\',-/&!?"'
+        cfg = '--psm 4'
         left_text  = pytesseract.image_to_string(left_col,  config=cfg)
         right_text = pytesseract.image_to_string(right_col, config=cfg)
 
