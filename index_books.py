@@ -56,7 +56,7 @@ def get_candidates(pdf):
 def ocr_page(page):
     try:
         import pytesseract
-        img = page.to_image(resolution=200).original
+        img = page.to_image(resolution=300).original
         return pytesseract.image_to_string(img, config='--psm 6')
     except Exception as e:
         print(f"     OCR error: {e}")
@@ -175,8 +175,12 @@ def parse_dotleader(text):
 # e.g.: AFRICAN FLOWER .............................10   BLUE BOSSA.......50
 
 # Matches: ALL CAPS TITLE ....10  anywhere in a string (handles two columns)
+# Also handles OCR-garbled dots like: oo, 00, o.oo, .o. etc.
 REALBOOK_ENTRY_RE = re.compile(
-    r'([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)\s*\.{2,}\s*(\d{1,4})(?=\s|$)'
+    r'([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)\s*'  # ALL CAPS title
+    r'[\.o0]{2,}'                                    # dot leaders (or OCR garbage: oo, 00, .o.)
+    r'\s*(\d{1,3})'                                  # page number
+    r'(?=\s|$)'                                      # end of entry
 )
 
 def parse_realbook(full_text):
