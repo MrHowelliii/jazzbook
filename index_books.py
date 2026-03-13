@@ -173,7 +173,7 @@ def main():
             continue
         try:
             songs, pages = index_pdf(bfile, btitle)
-            output.append({'id':bid,'title':btitle,'file':bfile,'pageCount':pages,'songs':songs})
+            output.append({'id':bid,'title':btitle,'file':bfile,'pageCount':pages,'songs':songs,'offset':book.get('offset',0)})
             total_songs += len(songs)
         except Exception as e:
             print(f"  Error: {e}", file=sys.stderr)
