@@ -31,15 +31,18 @@ def parse_line(line, loose=False):
     if len(line) < 4:
         return None
     title = composer = page = None
-    for pattern, groups in [(TAB_RE, (1,2,3)), (PAREN_RE, (1,2,3)), (SIMPLE_RE, (1,None,2))]:
-        m = pattern.match(line)
+    m = TAB_RE.match(line)
+    if m:
+        title, composer, page = clean(m.group(1)), m.group(2).strip() or None, int(m.group(3))
+    if not title:
+        m = PAREN_RE.match(line)
         if m:
-            title = clean(m.group(groups[0]))
-            composer = m.group(groups[1]).strip() if groups[1] else None
-            page = int(m.group(groups[2]))
-            if pattern == SIMPLE_RE:
-                title, composer = split_composer(title)
-            break
+            title, composer, page = clean(m.group(1)), m.group(2).strip(), int(m.group(3))
+    if not title:
+        m = SIMPLE_RE.match(line)
+        if m:
+            title, page = clean(m.group(1)), int(m.group(2))
+            title, composer = split_composer(title)
     if not title and loose:
         m = LOOSE_RE.match(line)
         if m:
@@ -65,21 +68,25 @@ def get_candidates(pdf):
             for j in range(i, min(i+12, total)):
                 cands.add(j)
             break
-    return sorted(cands)
+    # DEBUG: limit to first 10 candidate pages only
+    return sorted(list(cands))[:10]
 
 def ocr_page(page):
     try:
         import pytesseract
         img = page.to_image(resolution=200).original
         text = pytesseract.image_to_string(img, config='--psm 6')
-        return [l.strip() for l in text.split('\n') if l.strip()]
+        lines = [l.strip() for l in text.split('\n') if l.strip()]
+        return lines
     except Exception as e:
         print(f"     OCR error on page: {e}")
         return []
 
 def get_lines(page, use_ocr):
     if use_ocr:
-        return ocr_page(page)
+        lines = ocr_page(page)
+        print(f"     RAW OCR: {lines[:8]}")  # DEBUG
+        return lines
     try:
         rows = page.extract_text_lines(layout=True, strip_whitespace=True)
         if rows:
@@ -95,10 +102,9 @@ def index_pdf(filepath, book_title):
         total = len(pdf.pages)
         use_ocr = not has_text(pdf)
         if use_ocr:
-            print(f"     No text layer found - switching to OCR (may take several minutes)...")
-        for idx, i in enumerate(get_candidates(pdf)):
-            if use_ocr and idx % 5 == 0:
-                print(f"     OCR: scanning page {i+1} of {total}...")
+            print(f"     No text layer - using OCR...")
+        for i in get_candidates(pdf):
+            print(f"     Scanning page {i+1}...")
             for line in get_lines(pdf.pages[i], use_ocr):
                 song = parse_line(line, loose=use_ocr)
                 if song:
