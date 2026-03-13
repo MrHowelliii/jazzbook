@@ -28,7 +28,9 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install pdfplumber
+        run: |
+          sudo apt-get install -y tesseract-ocr
+          pip install pdfplumber pytesseract pillow
 
       - name: Run indexer
         run: python index_books.py
