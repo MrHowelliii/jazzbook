@@ -64,7 +64,7 @@ def ocr_page(page):
         print(f"     OCR error: {e}")
         return ''
 
-def ocr_page_split_columns(page):
+def ocr_page_split_columns(page, idx=None):
     """
     For two-column layouts: split page image in half vertically,
     OCR each column separately, return combined text.
@@ -88,10 +88,9 @@ def ocr_page_split_columns(page):
         left_text  = pytesseract.image_to_string(left_col,  config=cfg)
         right_text = pytesseract.image_to_string(right_col, config=cfg)
 
-        import os as _os
         if idx in (2, 3, 4):
-            print(f"LEFT COL (page {i+1}, idx {idx}):\n{left_text[:300]}\n---")
-            print(f"RIGHT COL (page {i+1}, idx {idx}):\n{right_text[:300]}\n---")
+            print(f"LEFT COL (idx {idx}):\n{left_text[:300]}\n---")
+            print(f"RIGHT COL (idx {idx}):\n{right_text[:300]}\n---")
 
         return left_text + '\n' + right_text
     except Exception as e:
@@ -251,7 +250,7 @@ def index_pdf(filepath, book_title, fmt='auto'):
                 print(f"     OCR: page {i+1}/{total}...")
 
             if use_ocr:
-                raw = ocr_page_split_columns(pdf.pages[i]) if use_split else ocr_page(pdf.pages[i])
+                raw = ocr_page_split_columns(pdf.pages[i], idx=idx) if use_split else ocr_page(pdf.pages[i])
             else:
                 raw = '\n'.join(get_text_lines(pdf.pages[i]))
 
