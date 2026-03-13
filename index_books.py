@@ -196,7 +196,43 @@ def parse_dotleader_line(line):
 def parse_dotleader(text):
     return [s for s in (parse_dotleader_line(l) for l in text.split('\n')) if s]
 
-# ── Format: realbook ─────────────────────────────────────────────────────────
+# ── Format: songlist ─────────────────────────────────────────────────────────
+# Tabular list: row# | Title.pdf | page | Composer | Year
+# e.g.: 443  When You Wish Upon A Star-Eb.pdf  470  Jarline, Leigh  1940
+
+SONGLIST_RE = re.compile(
+    r'^\d+\s+'                             # row number
+    r'(.+?\.pdf)\s+'                       # title with .pdf extension
+    r'(\d{1,4})\s+'                        # page number
+    r'([A-Z][^\d\n]{3,60}?)\s+'           # composer (starts with capital)
+    r'\d{4}\s*$',                          # year
+    re.IGNORECASE
+)
+
+def parse_songlist(full_text):
+    songs = []
+    for line in full_text.split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        m = SONGLIST_RE.match(line)
+        if not m:
+            continue
+        raw_title = m.group(1)
+        page_num  = int(m.group(2))
+        composer  = clean(m.group(3).rstrip('–—-').strip())
+
+        # Clean up title: remove .pdf, normalize separators
+        title = raw_title.replace('.pdf', '').replace('-', ' ').replace('_', ' ')
+        # Remove common suffix notes like "-Eb", "-F", "-2 pages", "-Instrumental"
+        title = re.sub(r'\s*[-–]\s*(Eb|F|Bb|Ab|2\s*pages?|Instrumental|instrumental)\s*$', '', title, flags=re.IGNORECASE)
+        title = clean(title)
+
+        if is_skip(title) or len(title) < 2 or page_num == 0:
+            continue
+
+        songs.append({'title': title, 'composer': composer or None, 'page': page_num})
+    return songs
 
 REALBOOK_TITLE_RE = re.compile(r'^([A-Z][A-Z0-9 \'\(\),&!?/\-]*)')
 REALBOOK_PAGE_RE  = re.compile(r'(\d{1,3})\s*$')
@@ -238,7 +274,9 @@ def best_parse(raw, fmt):
         return parse_dotleader(raw)
     if fmt == 'realbook':
         return parse_realbook(raw)
-    results = [parse_fakebook(raw), parse_dotleader(raw), parse_realbook(raw)]
+    if fmt == 'songlist':
+        return parse_songlist(raw)
+    results = [parse_fakebook(raw), parse_dotleader(raw), parse_realbook(raw), parse_songlist(raw)]
     return max(results, key=len)
 
 def index_pdf(filepath, book_title, fmt='auto', max_index_pages=None):
