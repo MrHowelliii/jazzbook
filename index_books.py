@@ -5,7 +5,7 @@ index_books.py — Jazz Library Indexer (multi-format)
 Supported formats (set per book in books.json):
   "fakebook"  — entries like: 42 Song Title — Performer Name
   "dotleader" — entries like: Song Title .............. 42  (mixed case)
-  "realbook"  — ALL CAPS titles, dot leaders, two columns (uses enhanced OCR)
+  "realbook"  — ALL CAPS, dot leaders, two columns (splits page in half for OCR)
   "auto"      — tries all parsers, uses whichever finds most songs
 """
 
@@ -21,7 +21,7 @@ SKIP = {
     'alphabetical index', 'songs', 'title', 'a', 'b', 'c', 'd', 'e', 'f',
     'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
     'u', 'v', 'w', 'x', 'y', 'z', 'a cont', 'b cont', 'c cont', 'eb cont',
-    'cg cont', 'g cont', 'i cont',
+    'cg cont', 'g cont', 'i cont', 'd cont', 'e cont', 'f cont',
 }
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -54,17 +54,41 @@ def get_candidates(pdf):
             break
     return sorted(list(cands))
 
-def ocr_page(page, enhanced=False):
-    """OCR a page. enhanced=True applies contrast/sharpening for low-quality scans."""
+def ocr_page(page):
+    """Standard OCR at 300dpi."""
+    try:
+        import pytesseract
+        img = page.to_image(resolution=300).original
+        return pytesseract.image_to_string(img, config='--psm 6')
+    except Exception as e:
+        print(f"     OCR error: {e}")
+        return ''
+
+def ocr_page_split_columns(page):
+    """
+    For two-column layouts: split page image in half vertically,
+    OCR each column separately, return combined text.
+    """
     try:
         import pytesseract
         from PIL import ImageEnhance
         img = page.to_image(resolution=300).original
-        if enhanced:
-            img = img.convert('L')                          # grayscale
-            img = ImageEnhance.Contrast(img).enhance(2.5)  # boost contrast
-            img = ImageEnhance.Sharpness(img).enhance(2.0) # sharpen
-        return pytesseract.image_to_string(img, config='--psm 6')
+        # Enhance contrast for cleaner OCR
+        img = img.convert('L')
+        img = ImageEnhance.Contrast(img).enhance(2.0)
+        img = ImageEnhance.Sharpness(img).enhance(2.0)
+
+        w, h = img.size
+        mid = w // 2
+
+        left_col  = img.crop((0,    0, mid, h))
+        right_col = img.crop((mid,  0, w,   h))
+
+        cfg = '--psm 6 -c tessedit_char_whitelist="ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz0123456789.()\',-/&!?"'
+        left_text  = pytesseract.image_to_string(left_col,  config=cfg)
+        right_text = pytesseract.image_to_string(right_col, config=cfg)
+
+        return left_text + '\n' + right_text
     except Exception as e:
         print(f"     OCR error: {e}")
         return ''
@@ -79,7 +103,6 @@ def get_text_lines(page):
     return [l.strip() for l in (page.extract_text() or '').split('\n') if l.strip()]
 
 # ── Format: fakebook ──────────────────────────────────────────────────────────
-# Entries like: 42 Song Title — Performer Name
 
 def parse_fakebook(full_text):
     songs = []
@@ -116,7 +139,6 @@ def parse_fakebook(full_text):
     return songs
 
 # ── Format: dotleader (mixed case) ───────────────────────────────────────────
-# Entries like: Song Title .............. 42
 
 DOTLEADER_RE     = re.compile(r'^([A-Z\'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•]{3,}\s*(\d{1,4})\s*$')
 PAREN_RE         = re.compile(r'^(.+?)\s+\(([^)]{3,40})\)\s*[\.·•\s\-]{2,}(\d{1,4})\s*$')
@@ -155,47 +177,34 @@ def parse_dotleader(text):
     return [s for s in (parse_dotleader_line(l) for l in text.split('\n')) if s]
 
 # ── Format: realbook ─────────────────────────────────────────────────────────
-# ALL CAPS, dot leaders (often OCR'd as ooo/ccc/eee), two columns per line
-# Strategy: find ALL CAPS title, skip separator garbage, grab digits
+# After column-splitting, each line should be a single entry:
+# AFRICAN FLOWER ...........10
+# We match: ALL CAPS title, dot leaders, digits
 
-# Match ALL CAPS title then separator garbage then page number
-# Separator: anything that is NOT (start of new CAPS title or digit sequence)
-REALBOOK_ENTRY_RE = re.compile(
-    r'([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)'  # ALL CAPS title (non-greedy)
-    r'\s*[^A-Z\n]{2,50}?'                         # separator: garbage dots/ooo/ccc
-    r'(\d{1,3})'                                   # page number
-    r'(?=\s+[A-Z]|\s*$|\s*—)',                    # next entry starts or end of line
-    re.MULTILINE
+REALBOOK_LINE_RE = re.compile(
+    r'^([A-Z][A-Z0-9\s\'\(\),&!?/\-]{1,50?}?)\s*'  # ALL CAPS title
+    r'\.{2,}\s*'                                       # dot leaders
+    r'(\d{1,3})\s*$'                                   # page number
 )
 
 def parse_realbook(full_text):
     songs = []
     for line in full_text.split('\n'):
         line = line.strip()
-        if not line:
+        if not line or len(line) < 5:
             continue
-        # Skip obvious non-index lines
-        if len(line) < 5:
+        m = REALBOOK_LINE_RE.match(line)
+        if not m:
             continue
-        # Must have some uppercase to be an index line
-        uppers = sum(1 for c in line if c.isupper())
-        if uppers < 3:
+        title    = clean(m.group(1))
+        page_num = int(m.group(2))
+        if is_skip(title) or page_num == 0 or page_num > 600:
             continue
-
-        for m in REALBOOK_ENTRY_RE.finditer(line):
-            title    = clean(m.group(1))
-            page_num = int(m.group(2))
-
-            if is_skip(title) or page_num == 0 or page_num > 600:
-                continue
-
-            # Title must be mostly uppercase
-            letters = re.sub(r'[^A-Za-z]', '', title)
-            if not letters or sum(1 for c in letters if c.isupper()) / len(letters) < 0.6:
-                continue
-
-            songs.append({'title': title, 'composer': None, 'page': page_num})
-
+        # Must be mostly uppercase
+        letters = re.sub(r'[^A-Za-z]', '', title)
+        if not letters or sum(1 for c in letters if c.isupper()) / len(letters) < 0.6:
+            continue
+        songs.append({'title': title, 'composer': None, 'page': page_num})
     return songs
 
 # ── Core indexer ──────────────────────────────────────────────────────────────
@@ -207,14 +216,13 @@ def best_parse(raw, fmt):
         return parse_dotleader(raw)
     if fmt == 'realbook':
         return parse_realbook(raw)
-    # auto: try all three, return the one with most hits
     results = [parse_fakebook(raw), parse_dotleader(raw), parse_realbook(raw)]
     return max(results, key=len)
 
 def index_pdf(filepath, book_title, fmt='auto'):
     print(f"  Parsing: {book_title} (format: {fmt})")
     songs, seen = [], set()
-    enhanced = (fmt == 'realbook')
+    use_split = (fmt == 'realbook')
 
     def add(song):
         if not song:
@@ -230,13 +238,17 @@ def index_pdf(filepath, book_title, fmt='auto'):
         candidates = get_candidates(pdf)
 
         if use_ocr:
-            print(f"     No text layer — using OCR{'  (enhanced)' if enhanced else ''}...")
+            mode = 'split-column OCR' if use_split else 'OCR'
+            print(f"     No text layer — using {mode}...")
 
         for idx, i in enumerate(candidates):
             if use_ocr and idx % 5 == 0:
                 print(f"     OCR: page {i+1}/{total}...")
 
-            raw = ocr_page(pdf.pages[i], enhanced=enhanced) if use_ocr else '\n'.join(get_text_lines(pdf.pages[i]))
+            if use_ocr:
+                raw = ocr_page_split_columns(pdf.pages[i]) if use_split else ocr_page(pdf.pages[i])
+            else:
+                raw = '\n'.join(get_text_lines(pdf.pages[i]))
 
             if not raw.strip():
                 continue
