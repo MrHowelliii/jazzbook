@@ -75,8 +75,8 @@ def ocr_page_split_columns(page, idx=None):
         img = page.to_image(resolution=300).original
         # Enhance contrast for cleaner OCR
         img = img.convert('L')
-        img = ImageEnhance.Contrast(img).enhance(3.0)
-        img = ImageEnhance.Sharpness(img).enhance(3.0)
+        img = ImageEnhance.Contrast(img).enhance(2.0)
+        img = ImageEnhance.Sharpness(img).enhance(2.0)
 
         w, h = img.size
         mid = w // 2
@@ -84,14 +84,15 @@ def ocr_page_split_columns(page, idx=None):
         left_col  = img.crop((0,    0, mid, h))
         right_col = img.crop((mid,  0, w,   h))
 
-        cfg = '--psm 6'
-        left_text  = pytesseract.image_to_string(left_col,  config=cfg)
-        right_text = pytesseract.image_to_string(right_col, config=cfg)
+        left_text  = pytesseract.image_to_string(left_col,  config='--psm 4')
+        right_text = pytesseract.image_to_string(right_col, config='--psm 4')
+        # Second pass on right column with sparse text mode to catch missed entries
+        right_text2 = pytesseract.image_to_string(right_col, config='--psm 11')
+
+        return left_text + '\n' + right_text + '\n' + right_text2
 
         if idx in (2, 3, 4):
             pass  # debug removed
-
-        return left_text + '\n' + right_text
     except Exception as e:
         print(f"     OCR error: {e}")
         return ''
