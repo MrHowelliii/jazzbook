@@ -86,8 +86,11 @@ def ocr_page_split_columns(page, idx=None):
 
         left_text  = pytesseract.image_to_string(left_col,  config='--psm 4')
         right_text = pytesseract.image_to_string(right_col, config='--psm 4')
-        # Second pass on right column with sparse text mode to catch missed entries
         right_text2 = pytesseract.image_to_string(right_col, config='--psm 11')
+
+        # Fix letter/digit confusions in right column (worse scan quality)
+        right_text  = fix_ocr_digits(right_text)
+        right_text2 = fix_ocr_digits(right_text2)
 
         return left_text + '\n' + right_text + '\n' + right_text2
 
@@ -181,8 +184,28 @@ def parse_dotleader(text):
     return [s for s in (parse_dotleader_line(l) for l in text.split('\n')) if s]
 
 # ── Format: realbook ─────────────────────────────────────────────────────────
-# Realbook: grab ALL CAPS title from start of line, page number from end
-REALBOOK_TITLE_RE = re.compile(r'^([A-Z][A-Z0-9 \'\(\),&!?/\-]*)')
+# Common OCR letter→digit confusions at end of lines
+# O→0, I/l→1, Z→2, S→5, G→6, B can be 8, D→0
+DIGIT_MAP = {'O':'0','o':'0','I':'1','l':'1','i':'1','Z':'2','z':'2',
+             'S':'5','s':'5','G':'6','g':'6','B':'8','b':'8','D':'0',
+             'T':'7','t':'7','q':'9','Q':'9'}
+
+def fix_ocr_digits(text):
+    """
+    Fix OCR letter/digit confusions at the end of each line.
+    e.g. 'BLUE IN GREEN ... BI' -> 'BLUE IN GREEN ... 81'
+    """
+    fixed = []
+    for line in text.split('\n'):
+        # Find the last word on the line (potential page number)
+        m = re.search(r'([A-Za-z0-9]{1,3})\s*$', line)
+        if m:
+            tail = m.group(1)
+            converted = ''.join(DIGIT_MAP.get(c, c) for c in tail)
+            if converted.isdigit():
+                line = line[:m.start()] + converted
+        fixed.append(line)
+    return '\n'.join(fixed)
 REALBOOK_PAGE_RE  = re.compile(r'(\d{1,3})\s*$')
 
 def parse_realbook(full_text):
