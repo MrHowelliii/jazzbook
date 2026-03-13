@@ -6,7 +6,6 @@
   <title>Jazz Library Search</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,11 +20,9 @@
       --cream:     #f2ead8;
       --muted:     #5a5540;
       --text:      #ccc4a8;
-      --red:       #c0392b;
+      --red:       #b03020;
       --green:     #5a9e6f;
     }
-
-    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
@@ -33,25 +30,21 @@
       font-family: 'DM Mono', monospace;
       font-weight: 300;
       min-height: 100vh;
-      /* Paper grain */
       background-image:
         radial-gradient(ellipse 80% 50% at 50% -10%, #2a2410 0%, transparent 60%),
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
     }
 
-    /* ── Header ───────────────────────────────────────────────── */
+    /* ── Header ── */
     header {
-      padding: 3.5rem 2rem 2rem;
+      padding: 3.5rem 2rem 2.5rem;
       text-align: center;
       position: relative;
     }
-
-    /* Decorative staff lines behind header */
     header::before {
       content: '';
       position: absolute;
-      left: 0; right: 0;
-      top: 50%;
+      left: 0; right: 0; top: 50%;
       transform: translateY(-50%);
       height: 44px;
       background: repeating-linear-gradient(
@@ -59,333 +52,258 @@
         transparent 0, transparent 8px,
         var(--border) 8px, var(--border) 9px
       );
-      opacity: 0.5;
+      opacity: 0.45;
       pointer-events: none;
     }
-
     .header-inner {
       position: relative;
       display: inline-block;
       background: var(--bg);
       padding: 0 2.5rem;
     }
-
     .treble {
-      font-size: 5rem;
-      line-height: 0.8;
+      font-size: 4.5rem;
+      line-height: 0.85;
       color: var(--gold);
       display: block;
-      margin-bottom: 0.3rem;
-      filter: drop-shadow(0 2px 18px rgba(201,168,76,0.25));
+      margin-bottom: 0.25rem;
       animation: breathe 6s ease-in-out infinite;
     }
     @keyframes breathe {
-      0%, 100% { filter: drop-shadow(0 2px 18px rgba(201,168,76,0.2)); }
-      50%       { filter: drop-shadow(0 2px 28px rgba(201,168,76,0.45)); }
+      0%,100% { filter: drop-shadow(0 2px 16px rgba(201,168,76,0.2)); }
+      50%      { filter: drop-shadow(0 2px 28px rgba(201,168,76,0.5)); }
     }
-
     h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 6vw, 3.6rem);
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
       font-weight: 300;
       color: var(--cream);
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      line-height: 1;
     }
-    h1 em {
-      font-style: italic;
-      font-weight: 400;
-      color: var(--gold);
-    }
-
+    h1 em { font-style: italic; color: var(--gold); }
     .tagline {
-      font-size: 0.62rem;
-      letter-spacing: 0.35em;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-top: 0.6rem;
+      margin-top: 0.5rem;
     }
 
-    /* ── Index status bar ─────────────────────────────────────── */
-    #index-bar {
-      max-width: 700px;
-      margin: 1.5rem auto 0;
+    /* ── Library status strip ── */
+    #lib-strip {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 1rem;
       display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
     }
-
-    .index-row {
+    .lib-chip {
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+      transition: border-color 0.3s, color 0.3s;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.45rem 1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-size: 0.68rem;
-      letter-spacing: 0.05em;
-      transition: border-color 0.3s;
+      gap: 0.4rem;
     }
-    .index-row.done    { border-color: var(--gold-soft); }
-    .index-row.error   { border-color: #4a2020; }
-    .index-row.loading { border-color: var(--border); }
-
-    .index-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: var(--muted);
+    .lib-chip.ready { border-color: var(--gold-soft); color: var(--text); }
+    .lib-chip.error { border-color: #5a2020; color: #a05040; }
+    .lib-chip .chip-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--muted); flex-shrink: 0;
       transition: background 0.3s;
     }
-    .index-row.done    .index-dot { background: var(--gold); }
-    .index-row.error   .index-dot { background: var(--red); }
-    .index-row.loading .index-dot {
-      background: var(--amber);
-      animation: pulse 1s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .lib-chip.ready .chip-dot { background: var(--gold); }
+    .lib-chip.error .chip-dot { background: var(--red); }
 
-    .index-book-name { flex: 1; color: var(--text); }
-    .index-count { color: var(--muted); }
-    .index-count.ready { color: var(--gold-soft); }
-
-    .progress-track {
-      position: absolute;
-      bottom: 0; left: 0;
-      height: 1px;
-      width: 100%;
-      background: var(--border);
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--gold);
-      width: 0%;
-      transition: width 0.4s ease;
-    }
-    .index-row { position: relative; overflow: hidden; }
-
-    .reindex-btn {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.5rem;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: all 0.15s;
-      flex-shrink: 0;
-    }
-    .reindex-btn:hover { border-color: var(--gold-soft); color: var(--gold); }
-
-    /* ── Search ───────────────────────────────────────────────── */
+    /* ── Search box ── */
     #search-wrap {
-      max-width: 700px;
-      margin: 2.5rem auto 0;
+      max-width: 680px;
+      margin: 2rem auto 0;
       padding: 0 1rem;
     }
-
     .search-outer {
       border: 1px solid var(--border);
       border-radius: 2px;
       background: var(--surface);
-      overflow: hidden;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .search-outer:focus-within {
       border-color: var(--gold-soft);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.06);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.07);
     }
-
-    .search-inner {
-      display: flex;
-      align-items: center;
-    }
-
+    .search-inner { display: flex; align-items: center; }
     .search-glyph {
       padding: 0 1.1rem;
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.6rem;
       color: var(--gold-soft);
-      user-select: none;
       border-right: 1px solid var(--border);
-      line-height: 1;
       padding-top: 0.1rem;
+      user-select: none;
+      line-height: 1;
     }
-
     #q {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
-      padding: 0.95rem 1.1rem;
+      padding: 0.9rem 1.1rem;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-style: italic;
       font-weight: 300;
       color: var(--cream);
       caret-color: var(--gold);
     }
     #q::placeholder { color: var(--muted); }
+    #q:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .search-filters {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      flex-wrap: wrap;
+      gap: 0.35rem;
       padding: 0.5rem 1rem;
       border-top: 1px solid var(--border);
       background: var(--card);
     }
-
     .filter-label {
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-right: 0.2rem;
     }
-
     .pill {
       background: none;
       border: 1px solid var(--border);
       border-radius: 20px;
       color: var(--muted);
       font-family: 'DM Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.12em;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 0.22rem 0.65rem;
+      padding: 0.2rem 0.6rem;
       cursor: pointer;
       transition: all 0.15s;
+      white-space: nowrap;
     }
-    .pill:hover { border-color: var(--gold-soft); color: var(--text); }
-    .pill.on { background: rgba(201,168,76,0.1); border-color: var(--gold); color: var(--gold); }
+    .pill:hover  { border-color: var(--gold-soft); color: var(--text); }
+    .pill.on     { background: rgba(201,168,76,0.1); border-color: var(--gold); color: var(--gold); }
+    .pill-sep    { width: 1px; height: 12px; background: var(--border); margin: 0 0.1rem; }
 
-    .pill-divider {
-      width: 1px; height: 12px;
-      background: var(--border);
-      margin: 0 0.2rem;
-    }
-
-    /* ── Results ──────────────────────────────────────────────── */
+    /* ── Results ── */
     #results-wrap {
-      max-width: 700px;
-      margin: 1.5rem auto 4rem;
+      max-width: 680px;
+      margin: 1.5rem auto 5rem;
       padding: 0 1rem;
     }
-
     .result-meta-bar {
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 0.9rem;
-      padding-left: 0.1rem;
+      margin-bottom: 0.75rem;
     }
     .result-meta-bar strong { color: var(--gold); }
 
-    /* Divider between book groups */
     .group-label {
-      font-size: 0.58rem;
-      letter-spacing: 0.25em;
+      font-size: 0.56rem;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--gold-soft);
-      padding: 1rem 0 0.4rem;
+      padding: 1rem 0 0.35rem;
       border-top: 1px solid var(--border);
-      margin-top: 0.5rem;
+      margin-top: 0.3rem;
     }
-    .group-label:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+    .group-label:first-child { border-top: none; margin-top: 0; padding-top: 0.1rem; }
 
     .result-row {
       display: grid;
       grid-template-columns: 1fr max-content;
       align-items: baseline;
-      gap: 0.5rem 1.5rem;
-      padding: 0.65rem 0;
-      border-bottom: 1px solid #1e1c12;
-      animation: slideIn 0.18s ease both;
+      gap: 0.15rem 1.5rem;
+      padding: 0.6rem 0.6rem;
+      margin: 0 -0.6rem;
+      border-radius: 2px;
+      animation: fadeUp 0.18s ease both;
       cursor: default;
       transition: background 0.12s;
-      border-radius: 2px;
-      padding: 0.65rem 0.6rem;
-      margin: 0 -0.6rem;
     }
     .result-row:hover { background: rgba(201,168,76,0.04); }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-6px); }
-      to   { opacity: 1; transform: translateX(0); }
+    .result-row + .result-row {
+      border-top: 1px solid #1c1a10;
     }
-
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
     .result-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
-      font-weight: 400;
+      font-size: 1.1rem;
       color: var(--cream);
-      grid-column: 1;
-      grid-row: 1;
+      grid-column: 1; grid-row: 1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .result-composer {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-style: italic;
       color: var(--muted);
-      grid-column: 1;
-      grid-row: 2;
+      grid-column: 1; grid-row: 2;
     }
-
     .result-page {
-      grid-column: 2;
-      grid-row: 1 / 3;
+      grid-column: 2; grid-row: 1 / 3;
       text-align: right;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--gold-soft);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       white-space: nowrap;
     }
     .result-page span {
       display: block;
-      font-size: 0.55rem;
+      font-size: 0.52rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 0.1rem;
+      margin-bottom: 0.05rem;
     }
 
     mark {
-      background: rgba(201,168,76,0.18);
+      background: rgba(201,168,76,0.17);
       color: var(--gold);
       border-radius: 1px;
       padding: 0 1px;
     }
 
-    /* ── States ───────────────────────────────────────────────── */
+    /* ── States ── */
     .state-box {
       text-align: center;
-      padding: 3rem 1rem;
+      padding: 3.5rem 1rem;
       color: var(--muted);
     }
-    .state-box .icon {
-      font-size: 2.8rem;
-      display: block;
-      margin-bottom: 0.75rem;
-      opacity: 0.35;
-    }
-    .state-box p {
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      line-height: 1.8;
-    }
+    .state-box .icon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; opacity: 0.3; }
+    .state-box p { font-size: 0.72rem; letter-spacing: 0.07em; line-height: 2; }
     .state-box em { color: var(--gold-soft); font-style: normal; }
+
+    .error-box {
+      border: 1px solid #5a2020;
+      border-radius: 2px;
+      padding: 1rem 1.2rem;
+      font-size: 0.7rem;
+      color: #c07060;
+      line-height: 1.8;
+      letter-spacing: 0.04em;
+    }
+    .error-box strong { display: block; color: #d08070; margin-bottom: 0.3rem; }
 
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -398,397 +316,181 @@
   <div class="header-inner">
     <span class="treble">𝄞</span>
     <h1>Jazz <em>Library</em> Search</h1>
-    <p class="tagline">Search across your sheet music collection</p>
-  </div>
-
-  <div id="index-bar">
-    <!-- Populated by JS -->
+    <p class="tagline">Pre-indexed · Instant search</p>
   </div>
 </header>
+
+<div id="lib-strip"><!-- Book chips injected here --></div>
 
 <div id="search-wrap">
   <div class="search-outer">
     <div class="search-inner">
       <div class="search-glyph">𝄢</div>
-      <input type="text" id="q" placeholder="Search titles, composers…" autocomplete="off" spellcheck="false" autocorrect="off" disabled>
+      <input type="text" id="q" placeholder="Song title or composer…"
+             autocomplete="off" spellcheck="false" autocorrect="off" disabled>
     </div>
     <div class="search-filters">
-      <span class="filter-label">In</span>
-      <button class="pill on" data-f="all">All fields</button>
+      <span class="filter-label">Field</span>
+      <button class="pill on" data-f="all">All</button>
       <button class="pill" data-f="title">Title</button>
       <button class="pill" data-f="composer">Composer</button>
-      <div class="pill-divider"></div>
-      <button class="pill on" data-f="all-books" id="all-books-pill">All books</button>
-      <!-- Per-book pills inserted here -->
+      <div class="pill-sep"></div>
+      <span class="filter-label">Book</span>
+      <button class="pill on" data-f="all-books">All books</button>
+      <!-- per-book pills injected here -->
     </div>
   </div>
 </div>
 
 <div id="results-wrap">
-  <div class="state-box" id="state">
-    <span class="icon">𝄽</span>
-    <p>Indexing your library…</p>
+  <div class="state-box">
+    <span class="icon">♩</span>
+    <p>Loading index…</p>
   </div>
 </div>
 
 <script>
-// ── PDF.js setup ──────────────────────────────────────────────────────────────
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
 // ── State ─────────────────────────────────────────────────────────────────────
-let allSongs   = [];   // [{title, composer, page, bookId, bookTitle}]
-let books      = [];   // from books.json
-let fieldFilter   = 'all';
-let bookFilter    = 'all-books';
-let searchTimer   = null;
+let allSongs    = [];
+let fieldFilter = 'all';
+let bookFilter  = 'all-books';
+let timer       = null;
 
-const DB_NAME    = 'jazzlib';
-const DB_VERSION = 1;
-const STORE      = 'songs';
-const META_STORE = 'meta';
-
-// ── IndexedDB ─────────────────────────────────────────────────────────────────
-function openDB() {
-  return new Promise((res, rej) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = e => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE))
-        db.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
-      if (!db.objectStoreNames.contains(META_STORE))
-        db.createObjectStore(META_STORE);
-    };
-    req.onsuccess = e => res(e.target.result);
-    req.onerror   = e => rej(e.target.error);
-  });
-}
-
-function dbGet(db, store, key) {
-  return new Promise((res, rej) => {
-    const tx = db.transaction(store, 'readonly');
-    const req = tx.objectStore(store).get(key);
-    req.onsuccess = () => res(req.result);
-    req.onerror   = () => rej(req.error);
-  });
-}
-
-function dbPut(db, store, value, key) {
-  return new Promise((res, rej) => {
-    const tx = db.transaction(store, 'readwrite');
-    const req = key !== undefined
-      ? tx.objectStore(store).put(value, key)
-      : tx.objectStore(store).put(value);
-    req.onsuccess = () => res(req.result);
-    req.onerror   = () => rej(req.error);
-  });
-}
-
-function dbGetAll(db, store) {
-  return new Promise((res, rej) => {
-    const tx = db.transaction(store, 'readonly');
-    const req = tx.objectStore(store).getAll();
-    req.onsuccess = () => res(req.result);
-    req.onerror   = () => rej(req.error);
-  });
-}
-
-function dbClear(db, store) {
-  return new Promise((res, rej) => {
-    const tx = db.transaction(store, 'readwrite');
-    const req = tx.objectStore(store).clear();
-    req.onsuccess = () => res();
-    req.onerror   = () => rej(req.error);
-  });
-}
-
-// ── PDF Parser ────────────────────────────────────────────────────────────────
-const SIMPLE_RE   = /^([A-Z'"\u2018\u201C][^\n]{2,70?}?)\s*[\.·•·]{3,}\s*(\d{1,4})\s*$/;
-const PAREN_RE    = /^(.+?)\s+\(([^)]{3,40})\)\s*[\.·•·\s\-]{2,}(\d{1,4})\s*$/;
-const TAB_RE      = /^([^\t]{3,60})\t([^\t]*)\t(\d{1,4})\s*$/;
-const DASH_END_RE = /\s[-–]\s([A-Z][a-zA-Z]+(?:\s[A-Z][a-zA-Z]+)+)\s*$/;
-
-function cleanTitle(t) {
-  return t.trim().replace(/\s+/g, ' ').replace(/[.,;:\-–]+$/, '').trim();
-}
-
-function splitComposer(title) {
-  const mp = title.match(/\(([A-Z][a-zA-Z\s.\-'&,]{3,40})\)\s*$/);
-  if (mp) return [title.slice(0, mp.index).trim(), mp[1].trim()];
-  const md = title.match(DASH_END_RE);
-  if (md && md[1].split(' ').length >= 2)
-    return [title.slice(0, title.lastIndexOf(md[0])).trim(), md[1].trim()];
-  return [title, null];
-}
-
-function parseLine(line) {
-  line = line.trim();
-  if (line.length < 4) return null;
-
-  let title, composer, page;
-
-  // Tab-separated
-  let m = TAB_RE.exec(line);
-  if (m) { title = cleanTitle(m[1]); composer = m[2].trim() || null; page = +m[3]; }
-
-  // "Title (Composer) ..... page"
-  if (!title) {
-    m = PAREN_RE.exec(line);
-    if (m) { title = cleanTitle(m[1]); composer = m[2].trim(); page = +m[3]; }
-  }
-
-  // Simple dot-leader
-  if (!title) {
-    m = SIMPLE_RE.exec(line);
-    if (m) {
-      [title, composer] = splitComposer(cleanTitle(m[1]));
-      page = +m[2];
-    }
-  }
-
-  if (!title || title.length < 3) return null;
-
-  const skip = new Set(['page','contents','index','section','chapter',
-                        'introduction','foreword','appendix','preface',
-                        'table of contents','song list']);
-  if (skip.has(title.toLowerCase())) return null;
-  if (/^\d+$/.test(title)) return null;
-
-  return { title, composer: composer || null, page };
-}
-
-async function extractSongsFromPDF(url, onProgress) {
-  const pdf = await pdfjsLib.getDocument({ url, verbosity: 0 }).promise;
-  const total = pdf.numPages;
-  const tocLimit = Math.min(Math.max(Math.floor(total * 0.2), 5), 30);
-
-  // Gather candidate pages: first 20% + last 10%
-  const candidatePages = new Set();
-  for (let i = 1; i <= tocLimit; i++) candidatePages.add(i);
-  for (let i = Math.floor(total * 0.9); i <= total; i++) candidatePages.add(i);
-
-  const songs = [];
-  const seen  = new Set();
-
-  // First pass: find explicit "Contents" page
-  let contentStartPage = null;
-  for (let p = 1; p <= Math.min(tocLimit, 15); p++) {
-    const page = await pdf.getPage(p);
-    const content = await page.getTextContent();
-    const lines = content.items.map(i => i.str).join('\n');
-    const first = lines.trim().split('\n')[0].toLowerCase();
-    if (/^\s*(table of\s+)?contents?\s*$|song\s+list|index\s*$/.test(first)) {
-      contentStartPage = p;
-      break;
-    }
-    onProgress && onProgress(p / total);
-  }
-
-  if (contentStartPage !== null) {
-    for (let i = 0; i < 12; i++) {
-      const p = contentStartPage + i;
-      if (p > total) break;
-      candidatePages.add(p);
-    }
-  }
-
-  let pagesScanned = 0;
-  for (const p of [...candidatePages].sort((a,b) => a-b)) {
-    const page = await pdf.getPage(p);
-    const content = await page.getTextContent();
-
-    // Reconstruct lines by grouping items with similar Y positions
-    const byY = {};
-    for (const item of content.items) {
-      const y = Math.round(item.transform[5]);
-      if (!byY[y]) byY[y] = [];
-      byY[y].push(item.str);
-    }
-    const lines = Object.keys(byY)
-      .sort((a, b) => b - a)
-      .map(y => byY[y].join(' ').trim());
-
-    for (const line of lines) {
-      const song = parseLine(line);
-      if (song) {
-        const key = `${song.title.toLowerCase()}|${song.page}`;
-        if (!seen.has(key)) {
-          seen.add(key);
-          songs.push(song);
-        }
-      }
-    }
-
-    pagesScanned++;
-    onProgress && onProgress(pagesScanned / candidatePages.size);
-  }
-
-  return { songs, pageCount: total };
-}
-
-// ── UI helpers ────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const esc = s => String(s||'')
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
 function highlight(text, q) {
+  if (!q || !text) return esc(text);
   const safe = esc(text);
-  if (!q) return safe;
-  const words = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').split(/\s+/).filter(Boolean);
+  const words = q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').split(/\s+/).filter(Boolean);
   if (!words.length) return safe;
   return safe.replace(new RegExp(`(${words.join('|')})`, 'gi'), '<mark>$1</mark>');
 }
 
-function setIndexRowState(bookId, state, count, progress) {
-  const row = document.querySelector(`.index-row[data-id="${bookId}"]`);
-  if (!row) return;
-  row.className = `index-row ${state}`;
-  const countEl = row.querySelector('.index-count');
-  const fill    = row.querySelector('.progress-fill');
-  if (state === 'loading') {
-    countEl.textContent = 'Indexing…';
-    countEl.className = 'index-count';
-    if (fill) fill.style.width = `${Math.round((progress||0)*100)}%`;
-  } else if (state === 'done') {
-    countEl.textContent = `${count} songs`;
-    countEl.className = 'index-count ready';
-    if (fill) fill.style.width = '100%';
-  } else if (state === 'error') {
-    countEl.textContent = 'Error loading';
-    countEl.className = 'index-count';
-    if (fill) fill.style.width = '0%';
-  } else {
-    countEl.textContent = 'Pending…';
-    if (fill) fill.style.width = '0%';
-  }
-}
+// ── Pills ─────────────────────────────────────────────────────────────────────
+function attachPillListeners() {
+  document.querySelectorAll('.pill').forEach(p => {
+    p.addEventListener('click', () => {
+      const f = p.dataset.f;
+      const isField = ['all','title','composer'].includes(f);
+      const isBook  = f === 'all-books' || f.startsWith('book:');
 
-function buildIndexBar(books) {
-  const bar = document.getElementById('index-bar');
-  bar.innerHTML = books.map(b => `
-    <div class="index-row pending" data-id="${esc(b.id)}">
-      <div class="index-dot"></div>
-      <div class="index-book-name">${esc(b.title)}</div>
-      <div class="index-count">Pending…</div>
-      <button class="reindex-btn" data-id="${esc(b.id)}" title="Re-index this book">↺ re-index</button>
-      <div class="progress-track"><div class="progress-fill"></div></div>
-    </div>
-  `).join('');
-
-  bar.querySelectorAll('.reindex-btn').forEach(btn => {
-    btn.addEventListener('click', () => reindexBook(btn.dataset.id));
+      if (isField) {
+        document.querySelectorAll('.pill[data-f="all"],.pill[data-f="title"],.pill[data-f="composer"]')
+          .forEach(b => b.classList.remove('on'));
+        fieldFilter = f;
+      }
+      if (isBook) {
+        document.querySelectorAll('.pill[data-f="all-books"],.pill[data-f^="book:"]')
+          .forEach(b => b.classList.remove('on'));
+        bookFilter = f;
+      }
+      p.classList.add('on');
+      doSearch();
+    });
   });
 }
 
-function buildBookPills(books) {
-  const wrap = document.querySelector('.search-filters');
-  // Remove old book pills
-  wrap.querySelectorAll('.pill[data-f^="book:"]').forEach(p => p.remove());
+function addBookPills(books) {
+  const filters = document.querySelector('.search-filters');
   books.forEach(b => {
     const pill = document.createElement('button');
     pill.className = 'pill';
-    pill.dataset.f = `book:${b.id}`;
-    pill.textContent = b.title.replace(/^The\s+/i, '').replace(/Vol\.?\s*/i, 'V').slice(0, 18);
+    pill.dataset.f  = `book:${b.id}`;
+    // Shorten title for pill: strip "The", abbreviate "Vol."
+    pill.textContent = b.title
+      .replace(/^The\s+/i, '')
+      .replace(/Volume\s*/i, 'Vol. ')
+      .replace(/Vol\.\s*(\d)/, 'V$1');
+    if (pill.textContent.length > 16) pill.textContent = pill.textContent.slice(0, 15) + '…';
     pill.title = b.title;
-    wrap.appendChild(pill);
-    pill.addEventListener('click', () => handlePill(pill));
+    filters.appendChild(pill);
   });
+  attachPillListeners();
 }
 
-// ── Pill filter logic ─────────────────────────────────────────────────────────
-document.querySelectorAll('.pill[data-f]').forEach(p =>
-  p.addEventListener('click', () => handlePill(p))
-);
-
-function handlePill(pill) {
-  const f = pill.dataset.f;
-  if (f === 'all' || f === 'title' || f === 'composer') {
-    document.querySelectorAll('.pill[data-f="all"],[data-f="title"],[data-f="composer"]')
-      .forEach(p => p.classList.remove('on'));
-    pill.classList.add('on');
-    fieldFilter = f;
-  } else {
-    // Book filter
-    document.querySelectorAll('.pill[data-f="all-books"],.pill[data-f^="book:"]')
-      .forEach(p => p.classList.remove('on'));
-    pill.classList.add('on');
-    bookFilter = f;
-  }
-  doSearch();
+// ── Library chips ─────────────────────────────────────────────────────────────
+function buildLibStrip(books) {
+  const strip = document.getElementById('lib-strip');
+  strip.innerHTML = books.map(b => `
+    <div class="lib-chip${b.error ? ' error' : ' ready'}" data-id="${esc(b.id)}">
+      <div class="chip-dot"></div>
+      <span>${esc(b.title)}</span>
+      ${b.songs ? `<span style="color:var(--gold-soft)">${b.songs.length}</span>` : ''}
+      ${b.error ? '<span style="color:#a05040">error</span>' : ''}
+    </div>
+  `).join('');
 }
 
 // ── Search ────────────────────────────────────────────────────────────────────
 document.getElementById('q').addEventListener('input', () => {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(doSearch, 220);
+  clearTimeout(timer);
+  timer = setTimeout(doSearch, 180);
 });
 
 function doSearch() {
-  const q = document.getElementById('q').value.trim();
+  const q    = document.getElementById('q').value.trim();
   const wrap = document.getElementById('results-wrap');
 
   if (!q) {
     wrap.innerHTML = `
       <div class="state-box">
         <span class="icon">♩</span>
-        <p>Type a song title or composer name above.<br>
-        <em>${allSongs.length.toLocaleString()}</em> songs indexed across <em>${books.length}</em> books.</p>
+        <p><em>${allSongs.length.toLocaleString()}</em> songs ready.<br>
+        Type a title or composer name above.</p>
       </div>`;
     return;
   }
 
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const bookId = bookFilter.startsWith('book:') ? bookFilter.slice(5) : null;
 
-  let results = allSongs.filter(s => {
-    // Book filter
-    if (bookFilter !== 'all-books' && s.bookId !== bookFilter.replace('book:', '')) return false;
-
+  const results = allSongs.filter(s => {
+    if (bookId && s.bookId !== bookId) return false;
     const inTitle    = words.every(w => s.title.toLowerCase().includes(w));
     const inComposer = s.composer && words.every(w => s.composer.toLowerCase().includes(w));
-
     if (fieldFilter === 'title')    return inTitle;
     if (fieldFilter === 'composer') return inComposer;
     return inTitle || inComposer;
   });
 
-  // Sort: exact title-start matches first, then rest alphabetically
+  // Sort: title-starts-with match first, then alpha
   results.sort((a, b) => {
-    const al = a.title.toLowerCase(), bl = b.title.toLowerCase();
     const ql = q.toLowerCase();
-    const aStart = al.startsWith(ql) ? 0 : 1;
-    const bStart = bl.startsWith(ql) ? 0 : 1;
-    if (aStart !== bStart) return aStart - bStart;
-    return al.localeCompare(bl);
+    const as = a.title.toLowerCase().startsWith(ql) ? 0 : 1;
+    const bs = b.title.toLowerCase().startsWith(ql) ? 0 : 1;
+    return as !== bs ? as - bs : a.title.localeCompare(b.title);
   });
 
   if (results.length === 0) {
     wrap.innerHTML = `
       <div class="state-box">
         <span class="icon">𝄽</span>
-        <p>No results for <em>${esc(q)}</em>.<br>Try a different spelling or composer name.</p>
+        <p>No results for <em>${esc(q)}</em>.<br>Try a different spelling.</p>
       </div>`;
     return;
   }
 
   // Group by book
   const groups = {};
+  const groupOrder = [];
   for (const s of results) {
-    if (!groups[s.bookId]) groups[s.bookId] = { title: s.bookTitle, songs: [] };
+    if (!groups[s.bookId]) { groups[s.bookId] = { title: s.bookTitle, songs: [] }; groupOrder.push(s.bookId); }
     groups[s.bookId].songs.push(s);
   }
 
-  let html = `<div class="result-meta-bar"><strong>${results.length}</strong> result${results.length !== 1 ? 's' : ''} for "${esc(q)}"</div>`;
+  const multiBook = groupOrder.length > 1;
+  let html = `<div class="result-meta-bar"><strong>${results.length}</strong> result${results.length!==1?'s':''} for "${esc(q)}"</div>`;
 
-  for (const [bookId, group] of Object.entries(groups)) {
-    if (bookFilter === 'all-books' && Object.keys(groups).length > 1) {
-      html += `<div class="group-label">${esc(group.title)}</div>`;
-    }
-    group.songs.forEach((s, i) => {
+  for (const bid of groupOrder) {
+    const g = groups[bid];
+    if (multiBook) html += `<div class="group-label">${esc(g.title)}</div>`;
+    g.songs.forEach((s, i) => {
       html += `
-        <div class="result-row" style="animation-delay:${Math.min(i,15)*20}ms">
+        <div class="result-row" style="animation-delay:${Math.min(i,20)*18}ms">
           <div class="result-title">${highlight(s.title, q)}</div>
-          <div class="result-page"><span>page</span>${s.page || '—'}</div>
+          <div class="result-page"><span>page</span>${s.page||'—'}</div>
           ${s.composer ? `<div class="result-composer">${highlight(s.composer, q)}</div>` : ''}
         </div>`;
     });
@@ -797,97 +499,50 @@ function doSearch() {
   wrap.innerHTML = html;
 }
 
-// ── Indexing ──────────────────────────────────────────────────────────────────
-async function indexBook(book, db, forceReindex = false) {
-  setIndexRowState(book.id, 'loading', 0, 0);
+// ── Load songs.json ───────────────────────────────────────────────────────────
+async function init() {
+  const wrap = document.getElementById('results-wrap');
 
-  // Check cache
-  if (!forceReindex) {
-    const cached = await dbGet(db, META_STORE, `indexed:${book.id}`);
-    if (cached) {
-      const all = await dbGetAll(db, STORE);
-      const bookSongs = all.filter(s => s.bookId === book.id);
-      if (bookSongs.length > 0) {
-        setIndexRowState(book.id, 'done', bookSongs.length);
-        return bookSongs;
+  let data;
+  try {
+    const res = await fetch('songs.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    data = await res.json();
+  } catch (err) {
+    wrap.innerHTML = `
+      <div class="error-box">
+        <strong>⚠ Could not load songs.json</strong>
+        This usually means the GitHub Actions indexer hasn't run yet,
+        or songs.json hasn't been committed to the repo.<br><br>
+        Go to your repo → Actions tab → run the workflow manually,
+        or push any change to trigger it.
+        <br><br><code style="color:#7a7a7a">${esc(err.message)}</code>
+      </div>`;
+    return;
+  }
+
+  // Flatten into allSongs array
+  allSongs = [];
+  for (const book of data) {
+    if (book.songs) {
+      for (const s of book.songs) {
+        allSongs.push({ ...s, bookId: book.id, bookTitle: book.title });
       }
     }
   }
 
-  try {
-    const { songs, pageCount } = await extractSongsFromPDF(
-      book.file,
-      p => setIndexRowState(book.id, 'loading', 0, p)
-    );
+  buildLibStrip(data);
+  addBookPills(data.filter(b => !b.error));
 
-    // Save to IndexedDB
-    const tx = db.transaction(STORE, 'readwrite');
-    const store = tx.objectStore(STORE);
-
-    // Delete old entries for this book first
-    const allExisting = await dbGetAll(db, STORE);
-    const toDelete = allExisting.filter(s => s.bookId === book.id);
-    for (const s of toDelete) store.delete(s.id);
-    await new Promise(res => tx.oncomplete = res);
-
-    const tx2 = db.transaction(STORE, 'readwrite');
-    for (const s of songs) {
-      tx2.objectStore(STORE).put({ ...s, bookId: book.id, bookTitle: book.title });
-    }
-    await new Promise(res => tx2.oncomplete = res);
-
-    await dbPut(db, META_STORE, Date.now(), `indexed:${book.id}`);
-
-    setIndexRowState(book.id, 'done', songs.length);
-    return songs.map(s => ({ ...s, bookId: book.id, bookTitle: book.title }));
-
-  } catch (err) {
-    console.error(`Failed to index ${book.title}:`, err);
-    setIndexRowState(book.id, 'error', 0);
-    return [];
-  }
-}
-
-async function reindexBook(bookId) {
-  const book = books.find(b => b.id === bookId);
-  if (!book) return;
-  const db = await openDB();
-  const songs = await indexBook(book, db, true);
-  // Update allSongs
-  allSongs = allSongs.filter(s => s.bookId !== bookId).concat(songs);
-  doSearch();
-}
-
-async function init() {
-  try {
-    books = await fetch('books.json').then(r => r.json());
-  } catch(e) {
-    document.getElementById('state').innerHTML = `
-      <span class="icon">⚠</span>
-      <p>Could not load <em>books.json</em>.<br>
-      Make sure it exists next to index.html.</p>`;
-    return;
-  }
-
-  buildIndexBar(books);
-  buildBookPills(books);
-
-  const db = await openDB();
-
-  // Index all books (uses cache where available)
-  const allResults = await Promise.all(books.map(b => indexBook(b, db)));
-  allSongs = allResults.flat();
-
-  // Enable search
   const input = document.getElementById('q');
   input.disabled = false;
   input.focus();
 
-  const wrap = document.getElementById('results-wrap');
   wrap.innerHTML = `
     <div class="state-box">
       <span class="icon">♩</span>
-      <p>Ready. <em>${allSongs.length.toLocaleString()}</em> songs indexed across <em>${books.length}</em> books.</p>
+      <p><em>${allSongs.length.toLocaleString()}</em> songs across <em>${data.length}</em> books.<br>
+      Start typing to search.</p>
     </div>`;
 }
 
