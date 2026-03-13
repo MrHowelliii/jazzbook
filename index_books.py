@@ -88,6 +88,12 @@ def ocr_page_split_columns(page):
         left_text  = pytesseract.image_to_string(left_col,  config=cfg)
         right_text = pytesseract.image_to_string(right_col, config=cfg)
 
+        import os as _os
+        if _os.environ.get('DEBUG_COL') != '1':
+            _os.environ['DEBUG_COL'] = '1'
+            print(f"LEFT COL SAMPLE:\n{left_text[:400]}\n---")
+            print(f"RIGHT COL SAMPLE:\n{right_text[:400]}\n---")
+
         return left_text + '\n' + right_text
     except Exception as e:
         print(f"     OCR error: {e}")
