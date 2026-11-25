@@ -61,7 +61,10 @@
    "63": "C",
    "64": "C6"
   },
-  "title": "All Or Nothing At All"
+  "title": "All Or Nothing At All",
+  "notes": {
+   "40": "~G4/2. Eb4/4"
+  }
  },
  "Jazz-Fakebook-97": {
   "title": "Dinah",
@@ -92,7 +95,8 @@
    "27": "G"
   },
   "notes": {
-   "22": "D5/8 B4/4.~ B4/2~"
+   "22": "D5/8 B4/4.~ B4/2~",
+   "5": "D5/8 B4/4.~ B4/2~"
   },
   "bars": {
    "6": {
@@ -111,5 +115,392 @@
     ]
    }
   }
+ },
+ "Jazz-Fakebook-31": {
+  "title": "After Hours",
+  "chords": {
+   "2": "C6",
+   "3": "F9",
+   "4": "C6",
+   "5": "C7",
+   "6": "F9",
+   "8": "C6",
+   "10": "Dm7 . G7 .",
+   "11": "Dm7 . G7 .",
+   "12": "C C7/E F F#dim7",
+   "13": "C/G C#dim7 G7/D G7",
+   "14": "C7",
+   "18": "F7",
+   "20": "C7",
+   "21": ". . . C#dim7",
+   "22": "Dm7 . G7 .",
+   "23": "Dm7 . G7 .",
+   "24": "C C7/E F F#dim7",
+   "25": "C/G . Ab9 G9 . . . .",
+   "26": "C",
+   "28": "F",
+   "30": "C",
+   "31": "Dm7",
+   "32": "G7#5",
+   "33": "C G7 C C#dim7",
+   "34": "Dm7 . G7 .",
+   "35": "C",
+   "38": "C7",
+   "39": "F7",
+   "41": "C",
+   "42": ". . . C#dim7",
+   "43": "Dm7 . G7 .",
+   "44": "Dm7 . G7 .",
+   "45": "C C7/E F F#dim7",
+   "46": "C/G G7 C69 ."
+  },
+  "notes": {
+   "14": "C4/8t E4/8t G4/8t Bb4/8t C5/8t D5/8t C5/8t Bb4/8t G4/8t D#4/8t E4/8t G4/8t",
+   "34": "~G4/2. r/8 C4/8"
+  },
+  "bars": {
+   "26": {
+    "rs": true
+   },
+   "46": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-33": {
+  "title": "Across The Alley From The Alamo",
+  "chords": {
+   "2": "F",
+   "3": "Bb/F F",
+   "5": "Bb/F F",
+   "6": "C7 . Cdim C7",
+   "8": "Gm7 . C7sus C7b9",
+   "9": "F",
+   "11": "Bb/F F",
+   "12": ". . Fdim F",
+   "13": "Bb/F F",
+   "14": "C7 . Cdim C7",
+   "16": "Gm7 . C9 C7b9",
+   "17": "F6 . . F7",
+   "18": "Bb",
+   "19": "F . . F7",
+   "20": "Bb Bbm6",
+   "21": "F",
+   "22": "A7",
+   "23": "Dm",
+   "24": "G9",
+   "25": "C7",
+   "26": "F",
+   "27": "Bb/F F",
+   "29": "Bb/F F",
+   "30": "C7 . Cdim C7",
+   "32": "Gm7 . C9 C7b9",
+   "33": "F6 Abdim Gm7 C7",
+   "34": "F6"
+  },
+  "notes": {
+   "8": "G4/8 G4/4. F4/4 G4/8 A4/8~"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-34": {
+  "title": "AC-DC Current",
+  "chords": {
+   "2": "C9",
+   "4": "G6",
+   "6": "D7",
+   "8": "G6",
+   "10": ". Am7/D",
+   "11": "G6"
+  },
+  "notes": {
+   "1": "E4/4~",
+   "9": "D5/4 B4/8 D5/8~ D5/4 D4/4~"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "8": {
+    "e": [
+     1
+    ]
+   },
+   "9": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "10": {
+    "e": [
+     2
+    ]
+   },
+   "11": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-35": {
+  "title": "Ah-Leu-Cha",
+  "chords": {
+   "1": "Gm7",
+   "7": ". . C7 .",
+   "8": "F",
+   "9": ". . C7 .",
+   "10": "F",
+   "11": "Em7",
+   "12": "A7",
+   "13": "D7",
+   "15": "G7",
+   "17": "Gm7",
+   "18": "C7",
+   "19": "Gm7",
+   "25": ". . C7 .",
+   "26": "F"
+  },
+  "notes": {
+   "16": "~F5/8 E5/16t D5/16t C5/16t B4/4 r/8 E5/8 C#5/8 D5/8",
+   "17": "F5/8 E5/16t D5/16t C5/16t Bb4/8 A4/8 G4/8 F4/8 E4/8t G4/8t Bb4/8t"
+  },
+  "bars": {
+   "7": {
+    "e": [
+     1
+    ]
+   },
+   "8": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   },
+   "10": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-37": {
+  "title": "Air Mail Special",
+  "chords": {
+   "1": "Bb6",
+   "11": "Bbdim7",
+   "15": "Bbdim7 . Adim7 .",
+   "16": "Abdim7",
+   "17": "Gb9",
+   "18": "F9",
+   "19": "Bb6"
+  },
+  "bars": {
+   "7": {
+    "e": [
+     1
+    ]
+   },
+   "8": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   },
+   "10": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-37b": {
+  "title": "All About Ronnie",
+  "last": 33,
+  "chords": {
+   "2": "Eb9#11",
+   "4": "Bb6",
+   "6": "Cm7",
+   "7": "F7",
+   "8": "Bb6 . A7 AbM7",
+   "9": ". A7 Bb6 .",
+   "10": "Dm7b5 . G7 .",
+   "12": "Cm/Eb . G7/D .",
+   "13": "Cm",
+   "14": "Gm7 . C7 .",
+   "16": "Gb9#11",
+   "17": "F9",
+   "18": "Eb9#11",
+   "20": "Bb6",
+   "22": "Cm7",
+   "23": "F7 . Cm6/Eb .",
+   "24": "D7",
+   "25": "G7",
+   "26": "Cm7",
+   "27": "Ebm7",
+   "28": "Bb6/F . Dm7b5 .",
+   "29": "G7b9 . C7b5 F7",
+   "30": "Bb . C9 .",
+   "31": "F7#5",
+   "32": "Bb6 . Gb .",
+   "33": "Bb"
+  },
+  "notes": {
+   "1": "Bb3/4t D4/4t F4/4t",
+   "14": "Bb4/4t A4/4t Bb4/4t A4/4 G4/4~"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "30": {
+    "e": [
+     1
+    ]
+   },
+   "31": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "32": {
+    "e": [
+     2
+    ]
+   },
+   "33": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-41": {
+  "title": "Alright, Okay, You Win",
+  "chords": {
+   "2": "Eb . . Bb+",
+   "3": "Eb . . Bb+",
+   "4": "Eb",
+   "5": "Eb7",
+   "6": "Ab",
+   "8": "Eb",
+   "10": "Bb7",
+   "11": "Ab9",
+   "12": "Eb . Ab7 .",
+   "13": "Eb",
+   "14": "Eb6",
+   "17": "Eb",
+   "19": "Ab9",
+   "21": "Eb",
+   "22": "Bb7",
+   "23": "Eb . . Bb7",
+   "24": "Eb . . Bb+",
+   "25": "Eb",
+   "26": "Ab9",
+   "27": "Eb . Ab6 Ab9",
+   "28": "Eb",
+   "29": ". . Ab Eb",
+   "30": ". . Ab Eb",
+   "31": "Ab . Eb Ab",
+   "32": "Cb7 Eb E9b5 Eb69"
+  },
+  "notes": {
+   "26": "Bb4/4 r/4 r/8 Eb5/4 Eb5/8~"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "5": {
+    "sg": [
+     "segno"
+    ]
+   },
+   "10": {
+    "sg": [
+     "coda"
+    ]
+   },
+   "13": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "14": {
+    "e": [
+     2
+    ]
+   },
+   "25": {
+    "ds": "coda"
+   },
+   "26": {
+    "sg": [
+     "coda"
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-42b": {
+  "title": "Amapola",
+  "chords": {
+   "2": "Bb",
+   "7": "Bb/D . Dbdim7 .",
+   "8": "F7/C",
+   "9": "F7",
+   "15": ". . . F7#5",
+   "16": "Bb",
+   "22": "G7",
+   "23": "Cm . . G7",
+   "24": "Cm",
+   "25": ". . . G7",
+   "26": "Cm",
+   "27": "Ebm6",
+   "28": "Bb/D",
+   "29": "Dbdim7",
+   "30": "F7/C",
+   "31": "F7",
+   "32": "Bb"
+  },
+  "notes": {
+   "32": "D5/8 C5/8 Bb4/2.~",
+   "33": "~Bb4/4 r/4 r/2"
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }

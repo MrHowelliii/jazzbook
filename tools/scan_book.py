@@ -104,7 +104,7 @@ def chord_tok(sym):
     return root + '7'
 
 
-NOTE_RE = re.compile(r'^(r|[A-G](?:#|b)?-?\d)/(1|2|4|8|16|32)(\.?)(t?)(~?)$')
+NOTE_RE = re.compile(r'^(~?)(r|[A-G](?:#|b)?-?\d)/(1|2|4|8|16|32)(\.?)(t?)(~?)$')   # ~C5/2: tied in
 VALUE = {'1': 192, '2': 96, '4': 48, '8': 24, '16': 12, '32': 6}
 
 
@@ -137,18 +137,19 @@ def apply_override(meas, ov):
             mm = NOTE_RE.match(tok)
             if not mm:
                 raise ValueError(f'bad note {tok!r} in bar {bar}')
-            d = VALUE[mm.group(2)] * (3 if mm.group(3) else 2) // 2
-            if mm.group(4):
+            tie_in, name, val, dot, trip, tie_out = mm.groups()
+            d = VALUE[val] * (3 if dot else 2) // 2
+            if trip:
                 d = d * 2 // 3
             p = 0
-            if mm.group(1) != 'r':
-                pm = re.match(r'([A-G])(#|b)?(-?\d)', mm.group(1))
+            if name != 'r':
+                pm = re.match(r'([A-G])(#|b)?(-?\d)', name)
                 p = 12 * (int(pm.group(3)) + 1) + M.STEP_PC[pm.group(1)] + {'#': 1, 'b': -1, None: 0}[pm.group(2)]
-                if (k and t == 0 and meas[k - 1].get('tie_out') == p) or (tied == p and t > 0):
+                if tie_in or (k and t == 0 and meas[k - 1].get('tie_out') == p) or (tied == p and t > 0):
                     p += 128
             n += [t, d, p]
-            tied = (p & 127) if mm.group(5) else None
-            if mm.group(5):
+            tied = (p & 127) if tie_out else None
+            if tie_out:
                 meas[k]['tie_out'] = p & 127
             t += d
         meas[k]['n'] = n
@@ -224,6 +225,8 @@ def assemble(work, book, index, offset, overrides=None, by_index=False):
         ov = overrides.get(sid)
         if ov:
             apply_override(meas, ov)
+            if ov.get('last'):                           # bars after this one are another tune or a section
+                del meas[ov['last']:]                    # in another metre the band cannot follow
         song = M.to_song(meas, s['title'], s['composer'], book, s['page'], s['pages'])
         if ov:
             song['reviewed'] = ov.get('read', True)
