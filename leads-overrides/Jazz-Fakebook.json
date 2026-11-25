@@ -3065,5 +3065,347 @@
    "33": "C"
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-100": {
+  "title": "Don't Let The Sun Catch You Cryin'",
+  "chords": {
+   "1": "F6 . Gm7 .",
+   "2": "Fdim7 . Gm7 C7",
+   "3": "F6 . Gm7 .",
+   "4": "Gm9 . C7 .",
+   "5": "FM7 . EbM7 .",
+   "6": "FM7 . EbM7 .",
+   "7": "FM7 . EbM7 .",
+   "8": "FM7 . F6 .",
+   "9": "Bb . Bdim7 .",
+   "10": "Gm7 . Bbm6 F6",
+   "11": "F",
+   "12": ". . C7#5 .",
+   "13": "FM7 . EbM7 .",
+   "14": "FM7 . EbM7 .",
+   "15": "FM7 . EbM7 .",
+   "16": "FM7 . F6 .",
+   "17": "Bb . Bdim7 .",
+   "18": "Gm7 . Bbm6 F6",
+   "19": "F",
+   "20": "E7",
+   "21": "Am . E7 Am",
+   "22": "Am6 . A+ A7",
+   "23": "Dm7",
+   "24": "D7",
+   "25": "G9 . G7#5 .",
+   "26": "G7",
+   "27": "C7 . . Gm7",
+   "28": ". . C7#5 .",
+   "29": "FM7 . EbM7 .",
+   "30": "FM7 . EbM7 .",
+   "31": "FM7 . EbM7 .",
+   "32": "FM7 . F6 .",
+   "33": "Bb . Bdim7 .",
+   "34": "Gm7 . Bbm6 F6",
+   "35": "F . Dm7 .",
+   "36": "Gm7 . C7#5 .",
+   "37": "F",
+   "38": "Gm7 C7#5b9 F6 ."
+  },
+  "bars": {
+   "5": {
+    "rs": true
+   },
+   "35": {
+    "e": [
+     1
+    ]
+   },
+   "36": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "37": {
+    "e": [
+     2
+    ]
+   },
+   "38": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-102": {
+  "title": "Donna Lee",
+  "skip": "homr put the barlines half a bar off through most of this bebop line; needs writing out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-103": {
+  "title": "Don't Take Your Love From Me",
+  "chords": {
+   "1": "Dm7 . FM7 .",
+   "2": "Fm6",
+   "3": "CM7",
+   "5": "CM7 . B7 .",
+   "6": "EM7",
+   "7": "FM7",
+   "8": "Fm6",
+   "9": "C . D9 .",
+   "10": "Dm7 . G7 G7#5",
+   "11": "CM7 . Dm7 .",
+   "12": "Em7 . Ebdim7 .",
+   "13": "G7/D . G7 .",
+   "14": "Dm7 . G7 .",
+   "15": "Dm7",
+   "16": "G7",
+   "17": "CM7",
+   "19": "C/E",
+   "20": "Ebdim7",
+   "21": "Dm7 . A7#5 A7",
+   "22": "Dm7",
+   "23": ". . A7#5 A7",
+   "24": "Dm7b5 . G7 .",
+   "25": "CM7 . Ab7 .",
+   "26": "G7 . G7#5 .",
+   "27": "C",
+   "28": "Gm7 . C7 .",
+   "29": "FM7",
+   "30": "Bb9",
+   "31": "C",
+   "32": "Em7b5 . A7 .",
+   "33": "Dm7",
+   "34": "G7",
+   "35": "C . F Fm",
+   "36": "C"
+  },
+  "notes": {
+   "3": "G4/8 G4/4. r/8 B4/8 A4/8 B4/8"
+  },
+  "bars": {
+   "3": {
+    "e": [
+     1
+    ]
+   },
+   "4": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "5": {
+    "e": [
+     2
+    ]
+   },
+   "6": {
+    "e": [
+     2
+    ]
+   },
+   "7": {
+    "e": [
+     2
+    ]
+   },
+   "8": {
+    "e": [
+     2
+    ]
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   },
+   "10": {
+    "e": [
+     2
+    ]
+   },
+   "11": {
+    "sg": [
+     "segno"
+    ]
+   },
+   "16": {
+    "sg": [
+     "coda"
+    ]
+   },
+   "26": {
+    "ds": "coda"
+   },
+   "27": {
+    "sg": [
+     "coda"
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-103b": {
+  "title": "Down By The Riverside",
+  "bars_total": 35,
+  "chords": {
+   "2": "F",
+   "6": "Gm",
+   "7": "C7",
+   "8": "F",
+   "15": "Gm",
+   "16": "C7",
+   "17": "F",
+   "18": "Bb",
+   "20": "F",
+   "22": "C7",
+   "24": "F",
+   "25": "F7",
+   "26": "Bb",
+   "28": "F",
+   "29": "Dm7",
+   "30": "G7",
+   "32": "C7",
+   "34": "F"
+  },
+  "notes": {
+   "28": "A4/4 A4/4 A4/8 G4/4.",
+   "29": "F4/2. F4/4",
+   "30": "A4/4 G4/2 G4/4",
+   "31": "A4/2 B4/2",
+   "32": "C5/1~",
+   "33": "~C5/2. G#4/4",
+   "34": "F4/1~",
+   "35": "~F4/2. r/4"
+  },
+  "bars": {
+   "2": {
+    "sg": [
+     "segno"
+    ]
+   },
+   "7": {
+    "sg": [
+     "coda"
+    ]
+   },
+   "33": {
+    "ds": "coda"
+   },
+   "34": {
+    "sg": [
+     "coda"
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-104": {
+  "title": "Doodlin'",
+  "skip": "homr lost the first line and misread the 16th-note triplets; needs writing out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-104b": {
+  "title": "Doxy",
+  "skip": "homr misread most bars of this short tune; needs writing out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-105": {
+  "title": "The Duke",
+  "chords": {
+   "1": "CM7 . FM7 .",
+   "2": "G6 . Am7 B7b9",
+   "3": "Em7 . Am9 .",
+   "4": "Dm9 . Fm7 Bb7",
+   "5": "Eb . DbM7 .",
+   "6": "Cm7 . Bm7 .",
+   "7": "Bbm7 Eb7 AbM7 .",
+   "8": "D7 . G7 .",
+   "9": "D7 Db7b9 CM7 Gb7",
+   "10": "FM7 . E7 .",
+   "11": "D6 . CM7 .",
+   "12": "Bbm7 . Abm .",
+   "13": "Cm/G . Fm6 .",
+   "14": "Dm7b5 . Db9b5 Ab9",
+   "15": "Cm7b5 B9b5 Bbm7 .",
+   "16": "Fm7/C Bbdim7 Ab G7#9",
+   "17": "Fm9 . Db/Eb Eb/Db",
+   "18": "CM7 . FM7 .",
+   "19": "G6 . Am7 B7b9",
+   "20": "Em7 . Am9 .",
+   "21": "Dm9 . Fm9 Bb7",
+   "22": "Eb7 . DbM7 .",
+   "23": "Cm7 . Bm7 .",
+   "24": "Bbm7 Eb7 AbM7 .",
+   "25": "D7 Db7b9 CM7 ."
+  },
+  "notes": {
+   "10": "r/4t B4/4t C5/4t D5/2t E5/4t",
+   "11": "F#5/2t G5/4t E5/2",
+   "12": "r/4t C5/4t Db5/4t Eb5/2t F5/4t",
+   "13": "G5/2t Ab5/4t F5/2"
+  },
+  "bars": {
+   "8": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-105b": {
+  "title": "The Earl",
+  "chords": {
+   "1": "F6 . F#dim7 .",
+   "2": "C7/G . C7 .",
+   "3": "F6 . F#dim7 .",
+   "4": "C7/G . C7 .",
+   "5": "F E F/Eb .",
+   "6": "Bb/D . Bbm/Db .",
+   "7": "Gm7 Gm/F Gm/E Gm/D",
+   "8": "F/C C/Bb F/A C7",
+   "9": "F/C C/Bb F/A .",
+   "10": "Db6",
+   "11": "Ab/C Db Ab/Eb C7/E",
+   "12": "F6",
+   "14": "F#dim7",
+   "15": "C#dim7 Adim7 Bbm Ab/C",
+   "16": "Db . Gm7b5 .",
+   "17": "C7",
+   "18": "F6 . F#dim7 .",
+   "19": "C7/G . C7 .",
+   "20": "F6 . F#dim7 .",
+   "21": "C7/G . C7 .",
+   "22": "F E F/Eb .",
+   "23": "Bb/D . Bbm/Db .",
+   "24": "Gm7 Gm7/F Gm/E Gm/D",
+   "25": "F/C C7 F6 ."
+  },
+  "notes": {
+   "4": "G4/8t D5/8t G4/8t D4/8. D#4/16 E4/8 G4/8 A4/8 C5/8",
+   "19": "G4/8t D5/8t G4/8t D4/8. D#4/16 E4/8 G4/8 A4/8 G4/8",
+   "21": "G4/8t D5/8t G4/8t D4/8. D#4/16 E4/8 G4/8 A4/8 C5/8"
+  },
+  "bars": {
+   "8": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
