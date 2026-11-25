@@ -873,5 +873,175 @@
    "37": "Ebm . Db ."
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-49": {
+  "title": "Au Privave",
+  "chords": {
+   "1": "F7 . F#dim7 .",
+   "2": "Gm7 . C7b9 .",
+   "3": "F7",
+   "4": "Cm7 . B9 .",
+   "5": "Bb7b9",
+   "6": "Bb7",
+   "7": "F7 . Gm7 .",
+   "8": "Am7 . D7b9 .",
+   "9": "Gm7",
+   "10": "C7sus",
+   "11": "F7 . D7 .",
+   "12": "Gm7 . C7b9 .",
+   "13": "Gm7 . C7b9 ."
+  },
+  "bars": {
+   "12": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "13": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-49b": {
+  "title": "Autumn Leaves",
+  "skip": "the 462 Jazz Standards chart of Autumn Leaves plays instead",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-49c": {
+  "title": "Baby, Won't You Please Come Home",
+  "chords": {
+   "1": "G6 . F#m7 .",
+   "2": "F9 . E9 .",
+   "3": "A7 . Em7 .",
+   "4": "A7",
+   "5": "D7",
+   "6": "Em7 . Gm6/Bb .",
+   "7": "A7 . Eb7 .",
+   "8": "D9 . D7b9 .",
+   "9": "G . F#m7 .",
+   "10": "B7 . E7 .",
+   "11": "Am7 Am7/G F#m7b5 C7",
+   "12": "B7",
+   "13": "C6 . C#dim7 .",
+   "14": "G7 F7 E7 .",
+   "15": "A7 . D7 .",
+   "16": "G . A7 Ab9",
+   "17": "G B7 . E7",
+   "18": "Am7 . . D7",
+   "19": "Ab7 . G6 ."
+  },
+  "notes": {
+   "6": "G4/2. E4/8t F#4/8t G4/8t",
+   "17": "G4/4 A4/8t B4/8t G4/8t F#4/8 E4/4."
+  },
+  "bars": {
+   "16": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "17": {
+    "e": [
+     2
+    ]
+   },
+   "18": {
+    "e": [
+     2
+    ]
+   },
+   "19": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-50": {
+  "title": "Bags' Groove",
+  "read": "chords read by eye from the page (homr notes); this book writes only Am over the whole tune",
+  "chords": {
+   "2": "Am"
+  },
+  "bars": {
+   "10": {
+    "rs": true
+   },
+   "17": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "18": {
+    "e": [
+     2
+    ]
+   }
+  }
+ },
+ "Jazz-Fakebook-50b": {
+  "title": "Bags' New Groove",
+  "chords": {
+   "1": "C",
+   "5": "F9",
+   "7": "C",
+   "9": "G7",
+   "11": "C",
+   "13": "Cm7",
+   "35": "C"
+  },
+  "notes": {
+   "5": "r/8 A4/16t G4/16t Eb4/16t G4/8t A4/8t C5/8t D5/8 C5/4 r/8",
+   "30": "G5/8 F5/8 G5/8 F5/8 Eb5/4 F5/4"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-51": {
+  "title": "A Ballad",
+  "skip": "the bridge is 16th and 32nd-note runs homr misread almost bar by bar; needs the notes written out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-51b": {
+  "title": "Barbados",
+  "chords": {
+   "1": "F",
+   "2": "Gm7 . C7 .",
+   "3": "F7",
+   "4": "Cm7 . F7 .",
+   "5": "Bb7",
+   "7": "F",
+   "9": "Gm7",
+   "10": "C7b9",
+   "11": "F",
+   "12": "Gm7 . C7 ."
+  },
+  "notes": {
+   "2": "C4/4t A3/4t Bb3/4t Db4/4t A4/4t G4/4t"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-52": {
+  "title": "Ballin' The Jack",
+  "chords": {
+   "1": "G7",
+   "3": "C7",
+   "5": "F7",
+   "7": "Bb . D7 .",
+   "8": "Eb7 . D7 .",
+   "9": "G7",
+   "11": "C7",
+   "13": "Gb7",
+   "14": "Bb/F F#dim7 Gm G7",
+   "15": "Cm G Cm Cm7b5",
+   "16": "F7 . Bb ."
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
