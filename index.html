@@ -344,7 +344,7 @@
 </header>
 
 <div id="lib-strip"><!-- Book chips injected here --></div>
-<p style="text-align:center"><a style="color:var(--gold-soft)" href="practice.html">Open practice room · Add a PDF</a> · <a style="color:var(--gold-soft)" href="companion.html">Jazz Band Companion</a></p>
+<p style="text-align:center"><a style="color:var(--gold-soft)" href="practice.html">Open practice room · Add a PDF</a> · <a style="color:var(--gold-soft)" href="companion.html">Jazz Band Companion</a> · <a style="color:var(--gold-soft)" href="https://mrhowelliii.github.io/jazz-play-along/">Jazz Play-Along</a></p>
 
 <div id="search-wrap">
   <div class="search-outer">
@@ -643,12 +643,11 @@ async function init() {
 function openSong(id) {
   const L = leadsById[id];
   if (!L || !player) return;
-  if (location.hash !== '#play=' + id) history.pushState(null, '', '#play=' + encodeURIComponent(id));
-  player.open(L);
+  location.assign('https://mrhowelliii.github.io/jazz-play-along/#play=' + encodeURIComponent(id));
 }
 function route() {
   const m = location.hash.match(/^#play=(.+)$/);
-  if (m && leadsById[decodeURIComponent(m[1])]) player.open(leadsById[decodeURIComponent(m[1])]);
+  if (m && leadsById[decodeURIComponent(m[1])]) location.replace('https://mrhowelliii.github.io/jazz-play-along/' + location.hash);
   else if (player) player.close();
 }
 
@@ -656,4 +655,5 @@ init().then(() => { if (player) route(); });
 </script>
 </body>
 </html>
+
 
