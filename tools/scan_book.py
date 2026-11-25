@@ -109,7 +109,14 @@ VALUE = {'1': 192, '2': 96, '4': 48, '8': 24, '16': 12, '32': 6}
 
 
 def apply_override(meas, ov):
-    """Chords (one token per beat, '.' = none) and corrected bars from leads-overrides/<book>.json."""
+    """Chords (one token per beat, '.' = none) and corrected bars from leads-overrides/<book>.json.
+    'bars_total' adds empty bars the notes reader missed (filled by 'notes'); 'drop' removes bars it made up;
+    both use the numbering after the added bars, before any are dropped."""
+    while len(meas) < ov.get('bars_total', 0):
+        m = dict(meas[-1]); m.update(n=[], c=[], filled=0)
+        for f in ('rs', 're', 'e', 'ds', 'dc', 'fn', 'sg', 'db', 'tie_out', 'newsys'):
+            m[f] = None
+        meas.append(m)
     if 'chords' in ov:
         for m in meas:
             m['c'] = []
@@ -154,6 +161,8 @@ def apply_override(meas, ov):
             t += d
         meas[k]['n'] = n
         meas[k]['filled'] = t
+    for k in sorted(ov.get('drop', []), reverse=True):
+        del meas[k - 1]
 
 
 _SYS = {}
@@ -229,7 +238,7 @@ def assemble(work, book, index, offset, overrides=None, by_index=False):
                 del meas[ov['last']:]                    # in another metre the band cannot follow
         song = M.to_song(meas, s['title'], s['composer'], book, s['page'], s['pages'])
         if ov:
-            song['reviewed'] = ov.get('read', True)
+            song['reviewed'] = False if ov.get('skip') else ov.get('read', True)
             song['problems'] = [p for p in song['problems'] if not p.startswith('only ') and 'placed by position' not in p]
             if ov.get('title'):
                 song['title'] = ov['title']
