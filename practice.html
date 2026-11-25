@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice room · Jazzbook</title>
+<style>
+*{box-sizing:border-box}body{margin:auto;max-width:1100px;padding:22px;background:#171b1b;color:#f6eedb;font:16px system-ui}a{color:#d8b97b}h1{font:42px Georgia;margin:18px 0}section{background:#242a29;border-radius:12px;padding:16px;margin:12px 0}.controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap}label{display:grid;gap:4px;font-size:14px}button,select,input,textarea{font:inherit;border-radius:5px;padding:8px;border:1px solid #747874}button{cursor:pointer;background:#eddbb1;color:#202723}button:disabled{opacity:.5}input[type=number]{width:80px}textarea{width:100%;min-height:84px}canvas{display:block;background:white;max-width:100%;height:auto;margin:12px auto}#beat{font:24px Georgia;color:#f2d39b}small{display:block;margin:8px 0;color:#ddd}
+</style>
+<a href="./">← Jazzbook library</a><h1 id="title">Practice room</h1>
+<section><div class="controls"><label>Library book<select id="books"><option value="">Choose a book</option></select></label><label>Open another PDF<input id="upload" type="file" accept="application/pdf,.pdf"></label><label>PDF page<input id="page" type="number" min="1" value="1"></label><button id="show">Show page</button></div>
+<canvas id="score" hidden></canvas><button id="scan" disabled>Add chords from page</button><p id="status" role="status">Choose a PDF or enter a chart below.</p></section>
+<section><label>Chord chart<textarea id="chart" placeholder="Dm7 | G7 | Cmaj7 | Cmaj7"></textarea></label><small>Use | between bars. Chords within a bar share its beats equally. Write repeats in playing order. Reviewed charts save on this browser.</small>
+<div class="controls"><label>Tempo<input id="tempo" type="number" min="35" max="320" value="120"></label><label>Feel<select id="feel"><option>Swing</option><option>Bossa</option></select></label><label>Meter<select id="meter"><option value="4">4/4</option><option value="3">3/4</option></select></label><label><span>Loop</span><input id="loop" type="checkbox" checked></label><button id="play">Play</button><button id="stop" disabled>Stop</button><output id="beat" aria-live="off"></output></div></section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<script>
+const el=id=>document.getElementById(id), params=new URLSearchParams(location.search);
+const libraryBase=location.protocol==='file:'?'https://raw.githubusercontent.com/MrHowelliii/jazzbook/main/':new URL('.',location.href).href;
+const tones={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+function chord(raw){
+ const s=raw.replace(/♭/g,'b').replace(/♯/g,'#').replace(/Δ/g,'maj').replace(/−/g,'-');
+ const m=/^([A-G])([b#]?)(maj7|maj9|M7|m7b5|ø7?|dim7?|o7?|aug|\+|sus4?|m9|m7|m6|min7|min|m|-7?|7|9|13|6|add9)?(?:\/([A-G])([b#]?))?$/.exec(s);
+ if(!m)return null;
+ const pitch=(n,a)=>tones[n]+(a==='#'?1:a==='b'?-1:0);
+ const root=pitch(m[1],m[2]),q=m[3]||'',half=/^(ø|m7b5)/.test(q),dim=/^(dim|o)/.test(q);
+ const intervals=[0,q.startsWith('sus')?5:half||dim||/^(m(?!aj)|-)/.test(q)?3:4,half||dim?6:/^(aug|\+)/.test(q)?8:7];
+ if(/^(maj|M7)/.test(q))intervals.push(11);else if(/6$/.test(q))intervals.push(9);else if(dim&&q.endsWith('7'))intervals.push(9);else if(half||/7|9|13/.test(q)&&q!=='add9')intervals.push(10);
+ if(/9/.test(q))intervals.push(14);if(q==='13')intervals.push(21);
+ return {raw,root,bass:m[4]?pitch(m[4],m[5]):root,intervals};
+}
+let doc,source='',version=0,scanVersion=0,ctx,timer,bus;
+const key=()=>JSON.stringify(['jazzbook-chart',source,el('page').value,el('title').textContent]);
+function stop(){clearInterval(timer);timer=null;if(bus){bus.disconnect();bus=null}el('play').disabled=false;el('stop').disabled=true;el('beat').textContent=''}
+function invalidate(){stop();version++;scanVersion++;el('scan').disabled=true}
+async function render(){
+ invalidate();const v=version;el('score').hidden=true;if(!doc)return;
+ const n=Math.max(1,Math.min(doc.numPages,Math.floor(+el('page').value)||1));el('page').value=n;
+ try{el('chart').value=localStorage.getItem(key())||''}catch{el('chart').value=''}
+ const p=await doc.getPage(n),vp=p.getViewport({scale:Math.min(2,1500/p.getViewport({scale:1}).width)}),c=document.createElement('canvas');
+ c.width=vp.width;c.height=vp.height;await p.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+ if(v!==version)return;c.id='score';el('score').replaceWith(c);el('scan').disabled=false;el('status').textContent='Page '+n+' of '+doc.numPages;
+}
+async function openBook(input,id,page,title){
+ invalidate();const v=version;doc=null;source=id;el('score').hidden=true;el('chart').value='';el('title').textContent=title;el('status').textContent='Opening PDF…';
+ try{pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ const loaded=await pdfjsLib.getDocument(typeof input==='string'?{url:input,isEvalSupported:false}:{data:input,isEvalSupported:false}).promise;if(v!==version){loaded.destroy();return}doc=loaded;el('page').value=page;await render()}catch(e){if(!doc&&v!==version)return;el('status').textContent='Could not open page: '+e.message}
+}
+function bookSelected(n=1,title){const o=el('books').selectedOptions[0];if(o.value)openBook(new URL(o.value,libraryBase).href,o.value,n,title||o.textContent)}
+fetch(new URL('books.json',libraryBase)).then(r=>r.json()).then(books=>{for(const b of books)el('books').add(new Option(b.title,b.file));
+ el('books').value=params.get('file')||'';bookSelected(+params.get('page')||1,params.get('title'))}).catch(()=>el('status').textContent='Library unavailable. Open a PDF from your device.');
+el('books').onchange=()=>bookSelected();
+el('upload').onchange=async e=>{const f=e.target.files[0];if(f){el('books').value='';openBook(new Uint8Array(await f.arrayBuffer()),[f.name,f.size,f.lastModified].join('/'),1,f.name)}};
+el('show').onclick=()=>render().catch(e=>el('status').textContent=e.message);
+el('page').onchange=el('show').onclick;
+function draft(lines){return lines.flatMap(line=>line.split(/\s+/).map(t=>t.trim()).filter(t=>chord(t))).join(' | ')}
+el('scan').onclick=async()=>{const v=++scanVersion;el('scan').disabled=true;el('status').textContent='Reading chord symbols…';
+ try{const p=await doc.getPage(+el('page').value),content=await p.getTextContent();let result=draft(content.items.map(i=>i.str));
+ if(!result){if(v!==scanVersion)return;el('status').textContent='Recognizing printed chords on this scan…';const out=await Tesseract.recognize(el('score'),'eng');result=draft(out.data.text.split('\n'))}
+ if(v!==scanVersion)return;if(result){if(el('chart').value.trim()){el('chart').value+=' | '+result}else el('chart').value=result;save()}
+ el('status').textContent=result?'Draft added. Check symbols, bar lines and repeats against the score. Each detected symbol starts a bar.':'No readable chord symbols. Type the chords from the score below.'}catch(e){if(v===scanVersion)el('status').textContent='Recognition failed. Enter chords manually. '+e.message}finally{if(v===scanVersion)el('scan').disabled=false}};
+function save(){try{localStorage.setItem(key(),el('chart').value)}catch{el('status').textContent='Browser storage unavailable.'}}
+el('chart').oninput=()=>{stop();save()};
+function note(midi,t,len,type,vol){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=440*2**((midi-69)/12);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+len);o.connect(g);g.connect(bus);o.start(t);o.stop(t+len+.01)}
+el('play').onclick=async()=>{const bars=el('chart').value.trim().split('|').map(b=>b.trim().split(/\s+/).map(chord));
+ const bad=bars.findIndex(b=>b.includes(null));if(bad>=0){el('beat').textContent='Check chord spelling in bar '+(bad+1);return}
+ if(!el('tempo').reportValidity()||!+el('tempo').value)return;
+ el('play').disabled=true;
+ try{ctx ||= new (window.AudioContext||window.webkitAudioContext)();await ctx.resume();bus=ctx.createGain();bus.connect(ctx.destination);
+ let tick=0,next=ctx.currentTime+.04;const beats=+el('meter').value;
+ function schedule(){while(next<ctx.currentTime+.10){const bar=Math.floor(tick/beats),b=tick%beats;if(bar>=bars.length&&!el('loop').checked){if(ctx.currentTime>=next)stop();return}
+ const list=bars[bar%bars.length],dur=60/Math.max(35,Math.min(320,+el('tempo').value||120)),swing=el('feel').value==='Swing';
+ for(let i=0;i<list.length;i++){const start=i*beats/list.length;if(start>=b&&start<b+1){const c=list[i],t=next+(start-b)*dur;for(const n of c.intervals)note(60+c.root+n,t,Math.min(.8,beats/list.length*dur),'triangle',.045)}}
+ const c=list[Math.floor(b*list.length/beats)];note(36+c.bass+(b%2?7:0),next,dur*.8,'triangle',.17);note(92,next,.035,'square',.014);if(swing?b%2===1:b%2===0)note(88,next+dur*(swing?2/3:.5),.035,'square',.011);
+ el('beat').textContent='Bar '+(bar%bars.length+1)+' · '+(b+1)+' · '+c.raw;tick++;next+=dur}}
+ el('stop').disabled=false;timer=setInterval(schedule,25);schedule()}catch(e){stop();el('beat').textContent=e.message}};
+el('stop').onclick=stop;window.addEventListener('pagehide',stop);
+</script></html>
