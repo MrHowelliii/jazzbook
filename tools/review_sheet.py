@@ -18,7 +18,7 @@ import mxl_lead as M
 import scan_layout as L
 
 
-def song_lines(work, page):
+def song_lines(work, page, nth=0):
     """[(layout, staff, [bar numbers], edges)] for the song(s) whose title is on `page`, following its pages."""
     lays = {int(f[7:10]): json.load(open(os.path.join(work, f))) for f in os.listdir(work) if f.startswith('layout-')}
     out, bar, started = [], 0, False
@@ -30,18 +30,15 @@ def song_lines(work, page):
             if pc['title'] and started:
                 return out
             if pc['title'] and p == page:
+                if nth > 0:
+                    nth -= 1
+                    continue
                 started = True
             if not started:
                 continue
-            xml = os.path.join(work, pc['image'][:-4] + '.musicxml')
-            ms = M.measures(M.load(xml)) if os.path.exists(xml) else []
-            systems, cur = [], []
-            for m in ms:
-                if m['newsys'] and cur:
-                    systems.append(cur); cur = []
-                cur.append(m)
-            if cur:
-                systems.append(cur)
+            import scan_book as B
+            systems = B.page_systems(work, p) or []
+            systems = [systems[k] for k in pc['staves'] if k < len(systems)]
             for k, sysm in zip(pc['staves'], systems):
                 st = lay['staves'][k]
                 n = len(sysm)

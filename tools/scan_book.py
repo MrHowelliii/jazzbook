@@ -51,13 +51,8 @@ def _layout_page(pdf, page, work, out):
         group = [k for k, st in enumerate(sts) if (y if y >= 0 else 0) < st['top'] < y_end]
         if not group:
             continue
-        top = max(0, int(sts[group[0]]['top'] - sts[group[0]]['sp'] * 7))
-        bot = min(img.height, int(sts[group[-1]]['bot'] + sts[group[-1]]['sp'] * 6))
-        if bot - top < 50:
-            continue
-        name = f'piece-{page:03d}-{len(pieces)}.png'
-        img.crop((0, top, img.width, bot)).save(os.path.join(work, name))
-        pieces.append({'title': t['text'] if t else None, 'staves': group, 'image': name, 'y': top})
+        pieces.append({'title': t['text'] if t else None, 'staves': group})
+    img.save(os.path.join(work, f'page-{page:03d}.png'))      # homr reads the whole (straightened) page
     json.dump({'page': page, 'width': img.width, 'height': img.height, 'staves': sts, 'titles': titles, 'pieces': pieces},
               open(out, 'w'))
     return out
@@ -160,6 +155,27 @@ def apply_override(meas, ov):
         meas[k]['filled'] = t
 
 
+_SYS = {}
+
+
+def page_systems(work, page):
+    """homr's bars of one page, grouped by line of music (None when homr read nothing)."""
+    if page not in _SYS:
+        xml = os.path.join(work, f'page-{page:03d}.musicxml')
+        if not os.path.exists(xml):
+            _SYS[page] = None
+        else:
+            systems, cur = [], []
+            for m in M.measures(M.load(xml)):
+                if m['newsys'] and cur:
+                    systems.append(cur); cur = []
+                cur.append(m)
+            if cur:
+                systems.append(cur)
+            _SYS[page] = systems
+    return _SYS[page]
+
+
 def assemble(work, book, index, offset, overrides=None):
     overrides = overrides or {}
     pages = sorted(f for f in os.listdir(work) if f.startswith('layout-'))
@@ -169,8 +185,9 @@ def assemble(work, book, index, offset, overrides=None):
         for pc in lay.get('pieces', []):
             if pc['title']:
                 hit = match_title(pc['title'], index)
+                nth = sum(1 for x in songs if x['page'] == lay['page'])
                 cur = {'title': hit['title'] if hit else pc['title'].title(), 'composer': hit.get('composer') if hit else None,
-                       'page': lay['page'], 'pages': [], 'parts': []}
+                       'page': lay['page'], 'pages': [], 'parts': [], 'sid': f"{book}-{lay['page']}" + 'bcdef'[nth - 1:nth]}
                 songs.append(cur)
             if cur is None:
                 continue
@@ -181,31 +198,20 @@ def assemble(work, book, index, offset, overrides=None):
     for s in songs:
         meas, problems = [], []
         for lay, pc in s['parts']:
-            xml = os.path.join(work, pc['image'][:-4] + '.musicxml')
-            if not os.path.exists(xml):
+            systems = page_systems(work, lay['page'])
+            if systems is None:
                 problems.append(f"page {lay['page']}: no notes read"); continue
-            ms = M.measures(M.load(xml))
-            # homr's systems -> the staves found on the page
-            systems, curs = [], []
-            for m in ms:
-                if m['newsys'] and curs:
-                    systems.append(curs); curs = []
-                curs.append(m)
-            if curs:
-                systems.append(curs)
-            staves = [lay['staves'][k] for k in pc['staves']]
-            if len(systems) != len(staves):
-                problems.append(f"page {lay['page']}: {len(systems)} lines of music read, {len(staves)} staves found")
-            for sysm, st in zip(systems, staves):
-                place_chords(sysm, st, lay['page'], problems)
-                meas += sysm
-            for sysm in systems[len(staves):]:
-                for m in sysm:
-                    m['box'] = None
+            if len(systems) != len(lay['staves']):
+                problems.append(f"page {lay['page']}: {len(systems)} lines of music read, {len(lay['staves'])} staves found")
+            for k in pc['staves']:
+                if k >= len(systems):
+                    continue
+                sysm = [dict(m) for m in systems[k]]
+                place_chords(sysm, lay['staves'][k], lay['page'], problems)
                 meas += sysm
         if not meas:
             continue
-        sid = f"{book}-{s['page']}"
+        sid = s['sid']
         ov = overrides.get(sid)
         if ov:
             apply_override(meas, ov)
@@ -217,6 +223,7 @@ def assemble(work, book, index, offset, overrides=None):
                 song['title'] = ov['title']
         for b, m in zip(song['bars'], meas):
             b['box'] = m.get('box')
+        song['id'] = sid
         song['problems'] = problems + song['problems']
         if ov:                                           # chords read by eye: their placement is not a problem
             song['problems'] = [p for p in song['problems'] if 'placed by position' not in p and not p.startswith('only ')]
@@ -282,7 +289,7 @@ if __name__ == '__main__':
             for i, f in enumerate(ex.map(layout_page, [(a.pdf, p, a.work) for p in range(a.first, last + 1)])):
                 print('layout', f, flush=True)
     if '2' in a.phase:
-        imgs = sorted(os.path.join(a.work, f) for f in os.listdir(a.work) if f.startswith('piece-') and f.endswith('.png'))
+        imgs = sorted(os.path.join(a.work, f) for f in os.listdir(a.work) if f.startswith('page-') and f.endswith('.png'))
         with ProcessPoolExecutor(a.homr_jobs) as ex:
             for f in ex.map(homr_piece, imgs):
                 print('homr', f, flush=True)

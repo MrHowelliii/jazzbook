@@ -38,15 +38,9 @@ def deskew(img):
     return img.rotate(ang, resample=Image.BICUBIC, fillcolor=255) if ang else img
 
 
-def staves(ink):
-    """ink: bool array (dark). Returns staves [{top, bot, sp, x0, x1, lines}] sorted by y."""
-    h, w = ink.shape
-    band = ink[:, int(w * 0.08):int(w * 0.92)]
-    rowfrac = band.mean(axis=1)
-    # a slightly tilted line spreads over 2-3 rows: also look at each row OR its neighbours
-    spread = (band[:-2] | band[1:-1] | band[2:]).mean(axis=1)
-    rowfrac = np.maximum(rowfrac, np.concatenate([[0], spread, [0]]) * 0.8)
-    cand = np.where(rowfrac > 0.3)[0]
+def _groups(rowfrac, thr=0.3):
+    """5-line groups in one row profile: [(lines)]."""
+    cand = np.where(rowfrac > thr)[0]
     lines, run = [], []
     for y in cand:
         if run and y - run[-1] > 1:
@@ -59,24 +53,54 @@ def staves(ink):
         g = lines[i:i + 5]
         gaps = np.diff(g)
         if gaps.max() - gaps.min() <= max(2.5, gaps.mean() * 0.25) and 6 < gaps.mean() < 40:
-            top, bot = g[0], g[4]
-            # horizontal extent: columns where at least 3 of the 5 lines are dark (gaps of broken lines bridged)
-            cov = np.zeros(w)
-            for y in g:
-                yy = int(round(y)); cov += ink[max(0, yy - 3):yy + 4, :].any(axis=0)
-            cols = np.where(cov >= 3)[0]
-            runs, s0 = [], cols[0] if len(cols) else 0
-            for a, b in zip(cols, cols[1:]):
-                if b - a > gaps.mean() * 3:
-                    runs.append((s0, a)); s0 = b
-            if len(cols):
-                runs.append((s0, cols[-1]))
-            x0, x1 = max(runs, key=lambda r: r[1] - r[0]) if runs else (0, w)
-            out.append({'top': float(top), 'bot': float(bot), 'sp': float(gaps.mean()), 'x0': int(x0), 'x1': int(x1),
-                        'lines': [float(v) for v in g]})
-            i += 5
+            out.append(g); i += 5
         else:
             i += 1
+    return out
+
+
+def staves(ink):
+    """ink: bool array (dark). Returns staves [{top, bot, sp, x0, x1, lines}] sorted by y. Lines are found in five
+    vertical strips separately (a warped scan is straight locally) and a staff is kept when two strips agree."""
+    h, w = ink.shape
+    cands = []
+    for k in range(5):
+        xa, xb = int(w * (0.1 + 0.16 * k)), int(w * (0.1 + 0.16 * (k + 1)))
+        band = ink[:, xa:xb]
+        rowfrac = band.mean(axis=1)
+        spread = (band[:-2] | band[1:-1] | band[2:]).mean(axis=1)
+        rowfrac = np.maximum(rowfrac, np.concatenate([[0], spread, [0]]) * 0.8)
+        for g in _groups(rowfrac, 0.4):
+            cands.append((k, g))
+    cands.sort(key=lambda c: c[1][0])
+    clusters = []
+    for k, g in cands:
+        sp = (g[4] - g[0]) / 4
+        if clusters and abs(clusters[-1][-1][1][0] - g[0]) < sp * 2.5:
+            clusters[-1].append((k, g))
+        else:
+            clusters.append([(k, g)])
+    out = []
+    for cl in clusters:
+        if len({k for k, _ in cl}) < 2:
+            continue
+        g = list(np.median(np.array([g for _, g in cl]), axis=0))
+        gaps = np.diff(g)
+        # horizontal extent: columns where at least 3 of the 5 lines are dark (tilt and gaps tolerated)
+        cov = np.zeros(w)
+        r = max(3, int(gaps.mean() * 0.4))
+        for y in g:
+            yy = int(round(y)); cov += ink[max(0, yy - r):yy + r + 1, :].any(axis=0)
+        cols = np.where(cov >= 4)[0]
+        runs, s0 = [], cols[0] if len(cols) else 0
+        for a_, b_ in zip(cols, cols[1:]):
+            if b_ - a_ > gaps.mean() * 3:
+                runs.append((s0, a_)); s0 = b_
+        if len(cols):
+            runs.append((s0, cols[-1]))
+        x0, x1 = max(runs, key=lambda q: q[1] - q[0]) if runs else (0, w)
+        out.append({'top': float(g[0]), 'bot': float(g[4]), 'sp': float(gaps.mean()), 'x0': int(x0), 'x1': int(x1),
+                    'lines': [float(v) for v in g]})
     return out
 
 
