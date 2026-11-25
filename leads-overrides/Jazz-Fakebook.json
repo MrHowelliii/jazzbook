@@ -2441,5 +2441,329 @@
    "10": "B4/2. D5/4"
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-83": {
+  "title": "Cheryl",
+  "chords": {
+   "2": "C7",
+   "4": "Gm7 . . C7",
+   "5": "C7",
+   "6": "F7",
+   "8": "C7",
+   "9": "Em7b5 . A7 .",
+   "10": "Dm7",
+   "11": "G7",
+   "12": "C7",
+   "13": "Dm7 . G7 ."
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-83b": {
+  "title": "Choo Choo Ch' Boogie",
+  "chords": {
+   "2": "F7",
+   "6": "Bb7",
+   "8": "F7",
+   "10": "C7",
+   "12": "F . Bb7 .",
+   "13": "F",
+   "14": "Bb7",
+   "16": "F7",
+   "18": "Bb7",
+   "20": "C7 . Cdim7 .",
+   "21": "C7",
+   "22": "C7",
+   "23": "F6"
+  },
+  "notes": {
+   "20": "C5/4t C5/4t C5/4t C5/4t C5/4t C5/4t",
+   "22": "C5/4t C5/4t C5/4t C5/4t D5/4t E5/4t"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "20": {
+    "e": [
+     1
+    ]
+   },
+   "21": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "22": {
+    "e": [
+     2
+    ]
+   },
+   "23": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-84": {
+  "title": "The Christmas Song (Chestnuts Roasting On An Open Fire)",
+  "chords": {
+   "1": "Eb6 . Bb7 .",
+   "2": "Eb6 . Fm7 Bb7",
+   "3": "Eb6 . Bbm7 Eb9",
+   "4": "Ab . G7#5 .",
+   "5": "Cm7 . Abm6 .",
+   "6": "Eb . Am7 D7",
+   "7": "GM7 . Abm7 Db9",
+   "8": "GbM7 . Fm7 Bb7",
+   "9": "Eb6 . Bb7 .",
+   "10": "Eb6 . Fm7 Bb7",
+   "11": "Eb6 . Bbm7 Eb9",
+   "12": "Ab . G7#5 .",
+   "13": "Cm7 . Abm6 .",
+   "14": "Eb . Am7 D7",
+   "15": "Gm7 C7 Fm7 Bb7",
+   "16": "Eb6",
+   "17": "Bbm7 . Eb9 .",
+   "18": "Bbm7 . Eb9 Eb7",
+   "19": "Bbm7 . Eb9 .",
+   "20": "AbM7",
+   "21": "Abm7 . Db9 .",
+   "22": "GbM7",
+   "23": "Cm7 . . F7",
+   "24": "Fm7 . Bb7b9 .",
+   "25": "Eb6 . Bb7 .",
+   "26": "Eb6 . Fm7 Bb7",
+   "27": "Eb6 . Bbm7 Eb9",
+   "28": "Ab . G7 .",
+   "29": "Cm7 . Abm7 .",
+   "30": "Eb Cm7 D7 F#dim7",
+   "31": "Gm7 Cm7 Fm7 Bb7b9",
+   "32": "Eb6"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-85": {
+  "title": "Close As Pages In A Book",
+  "skip": "homr read the rhythm of most bars wrong (three beats where the page has four); needs the notes written out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-87": {
+  "title": "Comes Love",
+  "chords": {
+   "2": "Gm",
+   "4": "D7",
+   "6": "C/E . Fdim7 .",
+   "7": "D7/F# . Eb7 D7",
+   "8": "Gm . Gm/F .",
+   "9": "Em7b5 . Eb7 D7",
+   "10": "Gm",
+   "12": "D7",
+   "14": "C/E . Fdim7 .",
+   "15": "D7/F# . Eb7 D7",
+   "16": "Gm . Gm/F .",
+   "17": "Eb . D7 .",
+   "18": "G7",
+   "20": "Cm . G7 .",
+   "21": "Cm7",
+   "22": "F7",
+   "23": "Am7b5 . . D7",
+   "24": "Ddim7",
+   "25": "D7",
+   "26": "Gm",
+   "28": "D7",
+   "30": "C/E . Fdim7 .",
+   "31": "D7/F# . Eb7 D7",
+   "32": "Gm . Gm/F .",
+   "33": "Em7b5 . Eb7 D7",
+   "34": "Gm . Cm7 .",
+   "35": "Gm"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "32": {
+    "e": [
+     1
+    ]
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-87b": {
+  "title": "Confirmation",
+  "chords": {
+   "1": "F",
+   "2": "Em7b5 . A7 .",
+   "3": "Dm7 . G7 .",
+   "4": "Cm7 . F7 .",
+   "5": "Bb7",
+   "6": "Am7 . D7 .",
+   "7": "G7",
+   "8": "Gm7 . C7 .",
+   "9": "F",
+   "10": "Em7b5 . A7 .",
+   "11": "Dm7 . G7 .",
+   "12": "Cm7 . F7 .",
+   "13": "Bb7",
+   "14": "Am7b5 . D7 .",
+   "15": "Gm7 . C7 .",
+   "16": "F",
+   "17": "Cm",
+   "18": "Cm7 . F7 .",
+   "19": "BbM7 . Bb6 .",
+   "20": "Bb",
+   "21": "Ebm7",
+   "22": "Ab7",
+   "23": "Db",
+   "24": "Gm7b5 . C7#5 .",
+   "25": "F",
+   "26": "Em7b5 . A7 .",
+   "27": "Dm7 . G7 .",
+   "28": "Cm7 . F7 .",
+   "29": "Bb7",
+   "30": "Am7b5 . D7 .",
+   "31": "Gm7 . C7 .",
+   "32": "F"
+  },
+  "notes": {
+   "1": "A4/8 C5/4 A4/8 Bb4/8 A4/8 E4/8t F4/8t F#4/8t",
+   "23": "F4/16 A4/16 C5/16 Eb5/16~ Eb5/8 D5/16 C5/16 Db5/8 Bb4/8 r/4"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-88": {
+  "title": "Count Every Star",
+  "chords": {
+   "1": "G6 . Em7 .",
+   "2": "Am7 . D7 .",
+   "3": "G6 . Em7 .",
+   "4": "Am7 . D7 .",
+   "5": "G7",
+   "6": "C . F7 .",
+   "7": "Em7",
+   "8": "Am7 . D7#5 .",
+   "9": "G6 . Em7 .",
+   "10": "Am7 . D7 .",
+   "11": "G6 . Em7 .",
+   "12": "Am7 . D7 .",
+   "13": "Dm7 . G7b9 .",
+   "14": "CM7 . F9 .",
+   "15": "G6 . Em .",
+   "16": "Am7 . D7b9 .",
+   "17": "G6 . Em7 .",
+   "18": "Am7 . D7 .",
+   "19": "G6 . Em7 .",
+   "20": "Am7 . AbM7 G69"
+  },
+  "notes": {
+   "1": "r/8 B3/8 D4/4t G4/4t E4/4t~ E4/8 D4/16 B3/16",
+   "3": "r/8 B3/8 D4/4t G4/4t E4/4t~ E4/8 D4/16 B3/16",
+   "9": "r/8 B3/8 D4/4t G4/4t E4/4t~ E4/8 D4/16 B3/16",
+   "11": "r/8 B3/8 D4/4t G4/4t E4/4t~ E4/8 D4/16 B3/16"
+  },
+  "bars": {
+   "17": {
+    "e": [
+     1
+    ]
+   },
+   "18": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "19": {
+    "e": [
+     2
+    ]
+   },
+   "20": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-89": {
+  "title": "A Cottage For Sale",
+  "chords": {
+   "2": "Eb6",
+   "3": "G9",
+   "4": "C7",
+   "5": "Fm7b5 . . Bb7b5",
+   "6": "Gm7 . C7 .",
+   "7": "Fm7 . Bb7b9 .",
+   "8": "F7 . Bb7 .",
+   "9": "EbM7 . Fm7 Bb7",
+   "10": "Eb6",
+   "11": "G9",
+   "12": "C7",
+   "13": "Fm7b5 . . Bb7b9",
+   "14": "Gm7 . C7 .",
+   "15": "Fm7 . Bb7b9 .",
+   "16": "F7 . Fm7/Bb Bb7",
+   "17": "Eb . Fm7 .",
+   "18": "Eb/G . Gbdim7 .",
+   "19": "Fm7 . G7 .",
+   "20": "Gm7",
+   "21": "C7b9",
+   "22": "F7",
+   "23": "F9",
+   "24": "Bb7 . Edim .",
+   "25": "Fm7 . Bb7 .",
+   "26": "Eb6",
+   "27": "G9",
+   "28": "C7",
+   "29": "Fm7b5 . . Bb7b9",
+   "30": "Gm7 . C7 .",
+   "31": "Fm7 . Bb7 .",
+   "32": "F7 . Fm7/Bb Bb7",
+   "33": "Eb . Fm7 Bb7",
+   "34": "Ab . Eb ."
+  },
+  "notes": {
+   "9": "G4/2~ G4/4. Bb4/8",
+   "25": "Bb4/2~ Bb4/4. Bb4/8",
+   "33": "Eb4/2. r/8 Bb4/8"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
