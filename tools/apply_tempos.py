@@ -4,14 +4,14 @@ as the tune's starting tempo (your own saved tempo for a tune still wins). Run a
 
   python3 tools/apply_tempos.py 462jazz        # reads leads-tempos/462jazz.json, updates leads/462jazz.json
 
-leads-tempos/<collection>.json: {song id: {"title", "tempo" (BPM, quarter notes), "feel" (swing | ballad | latin),
+leads-tempos/<collection>.json: {song id: {"title", "tempo" (BPM, quarter notes), "feel" (swing | ballad | latin | samba),
 "basis": "usual" (how the tune is commonly played, checked against search where unsure) | "guess" (little-known
 tune: an estimate from the chart itself)}}
 """
 import json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FEEL = {'swing': 0, 'ballad': 1, 'latin': 2}
+FEEL = {'swing': 0, 'ballad': 1, 'latin': 2, 'samba': 6}
 
 if __name__ == '__main__':
     name = sys.argv[1]

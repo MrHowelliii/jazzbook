@@ -71,7 +71,8 @@ export function unroll(bars) {
 }
 
 // ---------------------------------------------------------------------------------------------- one song
-// song: an entry of leads/*.json. opts: {feel: 0 swing / 1 ballad / 2 bossa, swing: ratio (2 = triplet), bpm}
+// song: an entry of leads/*.json. opts: {feel: 0 swing, 1 ballad, 2 bossa, 3 two-feel, 4 two then four, 5 shuffle,
+// 6 samba, 7 even eighths; swing: ratio (2 = triplet); bpm}
 export function prepare(song, opts = {}) {
   const pick = song.pickup ? song.bars[0] : null;
   const body = song.pickup ? song.bars.slice(1) : song.bars.slice();
@@ -111,7 +112,8 @@ export function prepare(song, opts = {}) {
     barBytes[9 * j + 8] = section[src] && (j === 0 || form[j - 1] !== src - 1 || section[src]) ? section[src] : 0;
   });
   // melody: ties joined (also across bar lines), swing on 8th notes, a little accent on strong beats
-  const swing = opts.feel === 2 ? 1 : (opts.swing || (opts.bpm > 220 ? 1.5 : opts.bpm < 90 ? 1.7 : 2));
+  // straight eighths in the bossa, samba and even-eighth feels; the shuffle is a full triplet
+  const swing = [2, 6, 7].includes(opts.feel) ? 1 : opts.feel === 5 ? 2 : (opts.swing || (opts.bpm > 220 ? 1.5 : opts.bpm < 90 ? 1.7 : 2));
   const sw = (x) => {                                      // x: 48ths in the bar -> swung position
     if (swing === 1) return x;
     const beat = Math.floor(x / 48), f = x - beat * 48, mid = 48 * swing / (1 + swing);
