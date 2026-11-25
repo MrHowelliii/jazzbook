@@ -151,6 +151,7 @@
     }
     #q {
       flex: 1;
+      min-width: 0;
       background: transparent;
       border: none;
       outline: none;
@@ -310,6 +311,24 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     .result-row.has-play { grid-template-columns: 1fr max-content max-content; }
+    @media (max-width: 560px) {
+      header { padding: 2rem 1rem 1.4rem; }
+      .header-inner { padding: 0 1rem; }
+      .treble { font-size: 3.2rem; }
+      #search-wrap { margin-top: 1.4rem; padding: 0 0.75rem; }
+      #results-wrap { padding: 0 0.75rem; }
+      .search-glyph { padding: 0 0.8rem; }
+      #q { font-size: 1.15rem; padding: 0.8rem 0.8rem; }
+      .result-row { margin: 0; padding: 0.6rem 0.2rem; }
+      .result-row.has-play { grid-template-columns: 1fr max-content; }
+      .result-row .play-badge { grid-column: 2; grid-row: 2; margin: 0.25rem 0 0; justify-self: end; }
+      .result-title { white-space: normal; }
+    }
+    @media (pointer: coarse) {
+      .pill { padding: 0.45rem 0.8rem; }
+      .result-row .play-badge { padding: 0.5rem 0.9rem; }
+      #q { font-size: max(16px, 1.15rem); }
+    }
     .pill.play-pill.on { background: var(--gold); color: var(--bg); border-color: var(--gold); }
   </style>
   <link rel="stylesheet" href="app/player.css">

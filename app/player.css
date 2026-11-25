@@ -100,11 +100,47 @@ details.pl-more > summary { cursor: pointer; padding: 0.7rem 1rem; font-size: 0.
 }
 .result-row .play-badge:hover { background: var(--cream); }
 
+/* the transport stays in reach while the chart scrolls */
+.pl-transport { position: sticky; top: 0; z-index: 10; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45); }
+.bar { scroll-margin-top: 110px; }
+.chart.flow .chart-row .sec { width: 1.2rem; font-size: 1rem; }
+.bar.filler { visibility: hidden; pointer-events: none; }
+.pl-break { flex-basis: 100%; height: 0; }
+@media (min-width: 1100px) { .pl-break { flex-basis: 0; width: 0.6rem; } }
+
+/* tablets */
+@media (max-width: 900px) {
+  #player { padding: 1rem 0.75rem 5rem; }
+  .pl-hint { flex-basis: 100%; margin-left: 0; }
+}
+/* phones */
 @media (max-width: 640px) {
-  .bar { height: 78px; }
-  .bar .chords span { font-size: 0.9rem; }
-  .chart-row { flex-wrap: wrap; }
-  .chart-row .bar { flex: 1 1 24%; }
-  .pl-bar { padding: 0.7rem; gap: 0.5rem 0.8rem; }
+  #player { padding: 0.75rem 0.5rem 5rem; }
+  .pl-top { gap: 0.6rem; margin-bottom: 0.7rem; }
+  .pl-title { min-width: 0; flex-basis: 100%; order: 2; }
+  .pl-bar { padding: 0.6rem; gap: 0.5rem 0.7rem; }
+  .pl-transport { border-radius: 0; margin-left: -0.5rem; margin-right: -0.5rem; border-left: none; border-right: none; }
+  .pl-transport { flex-wrap: wrap; gap: 0.4rem 0.6rem; padding: 0.5rem 0.6rem; }
+  .pl-play { min-width: 6em; padding: 0.55rem 0.8rem; }
+  .pl-status { order: 3; flex-basis: 100%; min-width: 0; min-height: 1.1em; font-size: 0.66rem; }
+  .lbl-tempo { margin-left: auto; }
+  .lbl-tempo .in-tempo-r { display: none; }
+  .pl-bar label { flex-wrap: nowrap; }
+  .pl-seg { width: 100%; }
+  .pl-seg button { flex: 1 1 auto; }
+  .seg-role { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .seg-role button { border-bottom: 1px solid var(--border); }
   .pl-hint { display: none; }
+  .bar .chords span { padding-left: 3px; }
+  .pl-grid { grid-template-columns: 1fr; padding: 0 0.7rem 0.8rem; }
+  .bar { height: 76px; }
+  .bar .chords span { font-size: 0.92rem; }
+  .bar .roll { top: 26px; height: calc(100% - 31px); }
+  .pdfwrap { margin: 0 -0.5rem; }
+}
+/* fingers: larger targets */
+@media (pointer: coarse) {
+  .pl-btn, .pl-seg button, .pl-back { min-height: 40px; }
+  .pl-bar select, .pl-bar input[type=number] { min-height: 36px; font-size: 16px; }   /* 16px: iOS does not zoom */
+  .pl-grid label select { min-height: 36px; font-size: 16px; }
 }

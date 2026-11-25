@@ -83,6 +83,8 @@ export class Player {
     }, store.get('settings', {}));
     this.s.tempo = null; this.s.key = 0;
     onPos = (d) => this.position(d);
+    let rt = 0;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => this.resized(), 150); });
     document.addEventListener('keydown', (e) => {
       if (!document.body.classList.contains('playing-view')) return;
       if (e.code === 'Space' && !/INPUT|SELECT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) { e.preventDefault(); this.toggle(); }
@@ -96,9 +98,9 @@ export class Player {
     this.s.tempo = song.tempo || defaultTempo(song);
     this.s.key = 0; this.startSrc = -1; this.loop = null;
     this.s.feel = song.feel ?? guessFeel(song);
+    document.body.classList.add('playing-view');        // visible first: the chart lays out by its width
     this.render();
     this.reprep();
-    document.body.classList.add('playing-view');
     window.scrollTo(0, 0);
   }
   close() { this.stop(); document.body.classList.remove('playing-view'); }
@@ -206,16 +208,17 @@ export class Player {
             ${problems ? `<span class="warn" title="${esc(song.problems.join('\n'))}"> · ${problems} bar${problems > 1 ? 's' : ''} may be misread</span>` : ''}</div>
         </div>
       </div>
-      <div class="pl-bar">
+      <div class="pl-bar pl-transport">
         <button class="pl-play" type="button">▶ Play</button>
         <button class="pl-btn pl-finish" type="button" disabled title="Play the ending after this chorus">Finish</button>
         <span class="pl-status" role="status"></span>
-        <label>Tempo <input type="number" class="in-tempo" min="40" max="320" value="${s.tempo}">
+        <label class="lbl-tempo">Tempo <input type="number" class="in-tempo" min="40" max="320" value="${s.tempo}" inputmode="numeric">
           <input type="range" class="in-tempo-r" min="40" max="320" value="${s.tempo}" aria-label="Tempo"></label>
-        <label>Key <select class="in-key">${keyOpts.join('')}</select></label>
-        <label>Feel <select class="in-feel"><option value="0">Swing</option><option value="1">Ballad</option><option value="2">Bossa / straight</option></select></label>
       </div>
       <div class="pl-bar">
+        <label>Key <select class="in-key">${keyOpts.join('')}</select></label>
+        <label>Feel <select class="in-feel"><option value="0">Swing</option><option value="1">Ballad</option><option value="2">Bossa / straight</option></select></label>
+        <span class="pl-break"></span>
         <span class="pl-field">You play</span>
         <span class="pl-seg seg-role">${ROLES.map(([v, t]) => `<button type="button" data-v="${v}" class="${s.role === v ? 'on' : ''}">${t}</button>`).join('')}</span>
         <label class="lbl-guide" title="The melody stays in, quietly, to guide you"><input type="checkbox" class="in-guide" ${s.guide ? 'checked' : ''}> Guide melody</label>
@@ -239,7 +242,7 @@ export class Player {
         <span class="pl-seg seg-view"><button type="button" data-v="chart">Chart</button><button type="button" data-v="page">Original page</button></span>
         <button class="pl-btn btn-loop" type="button" title="Loop the bars you selected">Loop</button>
         <button class="pl-btn btn-clear" type="button">Clear selection</button>
-        <span class="pl-hint">Click a bar to start there · Shift-click a second bar to choose a loop · Space plays / stops</span>
+        <span class="pl-hint">Tap a bar to start there · to loop: tap the first bar, Loop, then the last bar (or Shift-click) · Space plays / stops</span>
       </div>
       <div class="pl-view"></div>`;
     const r = this.root;
@@ -281,10 +284,14 @@ export class Player {
     });
     $('.seg-view', r).onclick = (e) => { const b = e.target.closest('button'); if (!b) return; s.view = b.dataset.v; this.save(); this.drawChart(); };
     $('.btn-loop', r).onclick = () => {
-      if (this.loop) { this.loopOff(); return; }
-      if (this.sel) { this.loop = this.sel.slice(); this.sendLoop(); this.drawChart(); }
+      if (this.loop || this.picking) { this.picking = false; this.loopOff(); return; }
+      if (!this.sel) return;
+      if (this.sel[0] === this.sel[1]) {                  // one bar chosen: the next tap picks the last bar
+        this.picking = true; const lb = $('.btn-loop', r); lb.textContent = 'Tap the last bar'; lb.classList.add('on'); return;
+      }
+      this.loop = this.sel.slice(); this.sendLoop(); this.drawChart();
     };
-    $('.btn-clear', r).onclick = () => { this.sel = null; this.startSrc = -1; this.loopOff(); };
+    $('.btn-clear', r).onclick = () => { this.sel = null; this.startSrc = -1; this.picking = false; this.loopOff(); };
     this.updateTransport();
   }
   loopOff() { this.loop = null; this.sendLoop(); this.drawChart(); }
@@ -326,15 +333,27 @@ export class Player {
       return `<div class="${classes}" data-src="${i}">${volta}<div class="chords">${chords}</div>
         <svg class="roll" viewBox="0 0 100 100" preserveAspectRatio="none">${rects}</svg>${tags ? `<span class="tag">${tags}</span>` : ''}</div>`;
     };
-    // rows: the systems of the printed page
+    // rows: the lines of the printed page when there is room; else 4 (or 2) bars a line, a new line at each section
     const rows = [];
     const bodyStart = song.pickup ? 1 : 0;
-    let cur = null, lastKey = '';
-    song.bars.forEach((b, k) => {
-      const key = b.box[0] + ':' + b.box[2];
-      if (key !== lastKey) { cur = []; rows.push(cur); lastKey = key; }
-      cur.push(k);
-    });
+    const per = chartPerLine(view.clientWidth);
+    this.chartMode = per;
+    if (per) {
+      let cur = [];
+      song.bars.forEach((b, k) => {
+        const i = k - bodyStart, inRow = cur.filter(x => x >= bodyStart).length;
+        if (i >= 0 && cur.length && (inRow >= per || (i > 0 && p.section[i]))) { rows.push(cur); cur = []; }
+        cur.push(k);
+      });
+      if (cur.length) rows.push(cur);
+    } else {
+      let cur = null, lastKey = '';
+      song.bars.forEach((b, k) => {
+        const key = b.box[0] + ':' + b.box[2];
+        if (key !== lastKey) { cur = []; rows.push(cur); lastKey = key; }
+        cur.push(k);
+      });
+    }
     let html = '<div class="chart">';
     for (const row of rows) {
       const first = row.find(k => k >= bodyStart) - bodyStart;
@@ -344,16 +363,46 @@ export class Player {
         if (k < bodyStart) html += barHTML(song.bars[k], 'pickup', 'pickup', song.bars[k].len || barLen);
         else html += barHTML(song.bars[k], k - bodyStart, '');
       }
+      if (per) for (let f = row.filter(k => k >= bodyStart).length; f < per; f++) html += '<div class="bar filler" aria-hidden="true"></div>';
       html += '</div>';
     }
     html += '</div>';
     view.innerHTML = html;
-    view.querySelectorAll('.bar').forEach(el => el.onclick = (e) => this.barClick(el.dataset.src, e.shiftKey));
+    view.querySelector('.chart').classList.toggle('flow', !!per);
+    view.querySelectorAll('.bar:not(.filler)').forEach(el => el.onclick = (e) => this.barClick(el.dataset.src, e.shiftKey));
     this.markSelection();
+    this.fitChords();
+  }
+  // chord names shrink to fit before the next chord (or the bar line)
+  fitChords() {
+    const view = $('.pl-view', this.root); if (!view) return;
+    view.querySelectorAll('.bar').forEach(bar => {
+      const spans = [...bar.querySelectorAll('.chords span')];
+      spans.forEach(sp => { sp.style.fontSize = ''; });
+      spans.forEach((sp, k) => {
+        const end = k + 1 < spans.length ? spans[k + 1].offsetLeft : bar.clientWidth;
+        const room = end - sp.offsetLeft - 3, need = sp.scrollWidth;
+        if (need > room && room > 0) sp.style.fontSize = Math.max(0.5, room / need).toFixed(3) + 'em';
+      });
+    });
+  }
+  resized() {
+    if (!this.song || !document.body.classList.contains('playing-view')) return;
+    const view = $('.pl-view', this.root); if (!view) return;
+    if (this.s.view === 'page') {
+      if (Math.abs((this.pageWidth || 0) - view.clientWidth) > 40) this.drawChart();
+    } else if (chartPerLine(view.clientWidth) !== this.chartMode) { this.drawChart(); if (this.state.playing) this.highlight(this.lastSrc, this.lastBeat); }
+    else this.fitChords();
   }
   barClick(src, shift) {
     if (src === 'pickup') { this.startSrc = -1; this.sel = null; this.markSelection(); return; }
     src = +src;
+    if (this.picking && this.sel) {
+      this.picking = false;
+      this.sel = [Math.min(this.sel[0], src), Math.max(this.sel[0], src)];
+      this.loop = this.sel.slice(); this.startSrc = this.sel[0]; this.sendLoop(); this.drawChart();
+      return;
+    }
     if (shift && this.sel) this.sel = [Math.min(this.sel[0], src), Math.max(this.sel[0], src)];
     else this.sel = [src, src];
     this.startSrc = this.sel[0];
@@ -371,6 +420,7 @@ export class Player {
     });
   }
   highlight(src, beat) {
+    this.lastSrc = src; this.lastBeat = beat;
     const view = $('.pl-view', this.root); if (!view) return;
     view.querySelectorAll('.bar.now').forEach(el => { el.classList.remove('now'); const b = el.querySelector('.beat'); if (b) b.remove(); });
     if (this.s.view === 'page') { this.pageHighlight(src); return; }
@@ -383,7 +433,7 @@ export class Player {
     bt.style.left = ((beat || 0) / beats * 100) + '%'; bt.style.width = (100 / beats) + '%';
     el.appendChild(bt);
     const rect = el.getBoundingClientRect();
-    if (this.state.playing && (rect.top < 80 || rect.bottom > innerHeight - 20)) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (this.state.playing && (rect.top < stickyBottom(this.root) + 8 || rect.bottom > innerHeight - 20)) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
 
   // ------------------------------------------------------------------------------------------ the original page
@@ -402,7 +452,8 @@ export class Player {
         const vp1 = page.getViewport({ scale: 1 });
         const box = document.createElement('div'); box.className = 'pdfpage';
         const canvas = document.createElement('canvas');
-        const w = Math.min(860, view.clientWidth || 860), scale = (w / vp1.width) * (window.devicePixelRatio || 1);
+        const w = Math.min(860, view.clientWidth || 860), scale = (w / vp1.width) * Math.min(2, window.devicePixelRatio || 1);
+        this.pageWidth = view.clientWidth;
         const vp = page.getViewport({ scale });
         canvas.width = vp.width; canvas.height = vp.height;
         box.appendChild(canvas); wrap.appendChild(box);
@@ -434,9 +485,11 @@ export class Player {
     place(h, bar.box, p.w, p.h);
     p.box.appendChild(h);
     const r = h.getBoundingClientRect();
-    if (this.state.playing && (r.top < 60 || r.bottom > innerHeight - 20)) h.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (this.state.playing && (r.top < stickyBottom(this.root) + 8 || r.bottom > innerHeight - 20)) h.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
 }
+function chartPerLine(w) { w = w || innerWidth - 16; return w >= 700 ? 0 : w >= 340 ? 4 : 2; }
+function stickyBottom(root) { const t = root.querySelector('.pl-transport'); return t ? t.getBoundingClientRect().bottom : 0; }
 function place(el, box, w, h) {
   const [, x0, y0, x1, y1] = box, sp = (y1 - y0) / 4;
   const top = y0 - sp * 5.5, bot = y1 + sp * 2.2;

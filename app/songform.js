@@ -99,6 +99,7 @@ export function prepare(song, opts = {}) {
   const section = new Array(body.length).fill(0);
   let letter = 65;
   body.forEach((b, i) => {
+    if (b.e && i > 0) return;                            // first / second endings belong to the section they end
     if (i === 0 || b.rs || (i > 0 && body[i - 1].db) || (b.sg && b.sg.length)) { section[i] = letter; letter = Math.min(letter + 1, 90); }
   });
   const barBytes = new Uint8Array(form.length * 9);
