@@ -1043,5 +1043,321 @@
    "16": "F7 . Bb ."
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-53": {
+  "title": "Basin Street Blues",
+  "skip": "this book prints no chord symbols for it",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-53b": {
+  "title": "Be-Bop",
+  "skip": "fast bop line with segno, coda and endings that homr ran together; needs the notes written out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-54": {
+  "title": "Bernie's Tune",
+  "bars_total": 37,
+  "drop": [
+   1
+  ],
+  "chords": {
+   "2": "Dm6",
+   "4": "Bb7b5",
+   "6": "A7",
+   "8": "Dm6",
+   "12": "Bb7b5",
+   "14": "A7",
+   "16": "Dm6",
+   "18": "Bb7",
+   "19": "Fm7 . Bb7 .",
+   "21": "Fm7",
+   "22": "Bb7",
+   "23": "Fm7 . Bb7 .",
+   "24": "A7",
+   "26": "Dm6",
+   "28": "Bb7b5",
+   "30": "A7",
+   "32": "Dm6",
+   "34": "A7",
+   "36": "Dm6"
+  },
+  "notes": {
+   "12": "G#4/2. G4/8 E4/8~",
+   "34": "r/8 G4/4 F#4/8 G4/4. G4/8~",
+   "35": "~G4/8 F#4/8 G4/4 A4/8 A4/8 A4/8 A4/8",
+   "36": "D5/1~",
+   "37": "~D5/2 r/2"
+  },
+  "bars": {
+   "30": {
+    "e": [
+     1
+    ]
+   },
+   "31": {
+    "e": [
+     1
+    ]
+   },
+   "32": {
+    "e": [
+     1
+    ]
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   },
+   "36": {
+    "e": [
+     2
+    ]
+   },
+   "37": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-55": {
+  "title": "Bess You Is My Woman",
+  "chords": {
+   "1": "Bb",
+   "2": "F7/C . . Bb/D",
+   "3": "Dm7b5",
+   "4": "Eb . Ebm .",
+   "5": "Gm . Gm7/F .",
+   "6": "Em7b5 . Eb7 .",
+   "7": "Bb/D . Ab7 .",
+   "8": "Db . F7 .",
+   "9": "Bb",
+   "10": "F7/C",
+   "11": "Bb/D . Dm Gm7/D",
+   "12": "A7/E",
+   "13": "Bm . Bm/A .",
+   "14": "G7",
+   "15": "D",
+   "16": "G#m7b5 . C#7 .",
+   "17": "F#/A#",
+   "18": "B7 . . C#7",
+   "19": "F#",
+   "20": "F#m Gm C7 F7",
+   "21": "D/A . A7/G .",
+   "22": "D9/F# . A7/E .",
+   "23": "Bm/D . F#7/C# .",
+   "24": "Bm . Bb7 .",
+   "25": "D",
+   "26": ". Gm7b5",
+   "27": "D",
+   "28": ". Gm7b5",
+   "29": "D . D9/F# .",
+   "30": "GM7 . Em7 .",
+   "31": "D . D9/F# .",
+   "32": "GM7 . Em7 .",
+   "33": "D",
+   "34": "A7",
+   "35": "Dm"
+  },
+  "bars": {
+   "12": {
+    "sg": [
+     "coda"
+    ]
+   },
+   "20": {
+    "dc": "coda"
+   },
+   "21": {
+    "sg": [
+     "coda"
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-55b": {
+  "title": "The Best Is Yet To Come",
+  "chords": {
+   "1": "Ab",
+   "7": ". . F7 .",
+   "9": "Bbm7",
+   "10": "Eb7",
+   "11": "Ab",
+   "12": "Dm7b5 . G7 .",
+   "13": "C",
+   "19": ". . A7 .",
+   "21": "Dm7 . G7 .",
+   "22": "Dm7 . G7 .",
+   "23": "C . Dm7 .",
+   "24": "D#dim7 . C/E .",
+   "25": "Dm7 . G7 .",
+   "26": "Dm7 . G7 .",
+   "27": "C",
+   "28": "Bbm7 . Eb7 .",
+   "29": "Ab",
+   "31": ". . F7 .",
+   "33": "Bb7",
+   "34": "Eb7",
+   "35": "Ab"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-56": {
+  "title": "The Best Things In Life Are Free",
+  "chords": {
+   "2": "C",
+   "7": "C/E . Ebdim7 .",
+   "8": "Dm7",
+   "9": "G7",
+   "10": "Dm7",
+   "14": "G7",
+   "15": ". . G7b9 .",
+   "16": "C . C#dim7 .",
+   "17": "G7/D . G7 .",
+   "18": "C7",
+   "20": "F",
+   "22": "D7",
+   "24": "Dm7",
+   "25": "G9",
+   "26": "C",
+   "28": "A7",
+   "30": "Dm7",
+   "31": "G7sus . G7 .",
+   "32": "C . Ab7 .",
+   "33": "C"
+  },
+  "notes": {
+   "27": "G4/2 C5/2"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-57": {
+  "title": "Bewitched",
+  "drop": [
+   26
+  ],
+  "chords": {
+   "2": "C . C#dim7 .",
+   "3": "Dm7 . D#dim7 .",
+   "4": "C . E7 .",
+   "5": "FM7 . F#dim7 .",
+   "6": "C . D7 .",
+   "7": "G7 . A7 .",
+   "8": "Dm7",
+   "9": "G7",
+   "10": "C . C#dim7 .",
+   "11": "Dm . D#dim7 .",
+   "12": "C . E7 .",
+   "13": "FM7 . F#dim7 .",
+   "14": "C . D7 .",
+   "15": "G7 . C7 .",
+   "16": "FM7",
+   "17": "A7",
+   "18": "Dm",
+   "20": "Am",
+   "22": "Dm",
+   "23": "G7",
+   "24": "Em7 . A7b9 .",
+   "25": "Dm7 . G7 .",
+   "27": "C . C#dim7 .",
+   "28": "Dm . D#dim7 .",
+   "29": "C . E7 .",
+   "30": "FM7 . F#dim7 .",
+   "31": "C . D7 .",
+   "32": "Dm . G7 .",
+   "33": "C . Am .",
+   "34": "Dm7 . G7 .",
+   "35": "C . F .",
+   "36": "C"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "33": {
+    "e": [
+     1
+    ]
+   },
+   "34": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   },
+   "36": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-57b": {
+  "title": "Big P",
+  "chords": {
+   "1": "Dm . Dm/F .",
+   "2": "E7 . Eb7 .",
+   "3": "Dm",
+   "4": "Am7b5 . D7 .",
+   "5": "Gm . Bb .",
+   "6": "A . Ab .",
+   "7": "Dm . A7 Dm",
+   "8": "Dm7/C . Dm6/B .",
+   "9": "Bb7",
+   "10": "A7",
+   "11": "Dm",
+   "13": "Dm . F .",
+   "14": "E . Eb .",
+   "15": "Dm",
+   "16": "Am7 . D7 .",
+   "17": "Gm . Bb .",
+   "18": "A . Ab .",
+   "19": "Dm",
+   "20": "Dm7/C . Dm6/B .",
+   "21": "Bb7 . B7b5 .",
+   "22": "A7#9",
+   "23": "Dm"
+  },
+  "notes": {
+   "15": "E5/16 F5/16 E5/16 D5/16 B4/8 F4/8 A4/8 D4/8 r/4",
+   "19": "E5/16 F5/16 E5/16 D5/16 B4/8 F4/8 A4/8 D4/8 r/4"
+  },
+  "bars": {
+   "13": {
+    "rs": true
+   },
+   "24": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "25": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
