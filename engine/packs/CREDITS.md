@@ -1,8 +1,7 @@
-# Jazz Band sound packs: sources and licenses
+# Sound packs of the web build: sources and licenses
 
-The packs (`jbpiano`, `jbbass`, `jbguitar`, `jbdrums`, `jbnylon`) are built by `make_packs.py` from these free sample
-libraries (the sfzinstruments.github.io git repositories; jbnylon from FreePats). Only selected notes, dynamic layers and takes are used; they are
-trimmed, faded, level-matched and compressed (IMA ADPCM, mu-law for cymbals).
+Built by `web/make_web_packs.py` from free sample libraries (the sfzinstruments.github.io git repositories). Selected
+notes and dynamics, trimmed, faded, level-matched; 16-bit PCM.
 
 | Pack | Library | Author | License |
 |---|---|---|---|
@@ -10,6 +9,4 @@ trimmed, faded, level-matched and compressed (IMA ADPCM, mu-law for cymbals).
 | jbbass | Meatbass (1958 Otto Rubner double bass, pizzicato) | Karoryfer Samples | CC0 1.0 |
 | jbguitar | Shinyguitar (black archtop, pickup + microphone blended) | Karoryfer Samples | CC0 1.0 |
 | jbdrums | Virtuosity Drums (jazz kit, sticks; overhead, room and close mics mixed) | Versilian Studios | CC0 1.0 |
-| jbnylon | Spanish Classical Guitar (FreePats, 2019-06-18 SFZ+FLAC; freepats.zenvoid.org/Guitar/acoustic-guitar.html) | Roberto (roberto@zenvoid.org), FreePats project | CC0 1.0 |
-
-Each pack also shows its credit on its own OP-1 FX screen.
+| jblead | Weresax (alto saxophone, condenser microphone, soft and loud takes) | Karoryfer Samples | CC0 1.0 |
