@@ -537,7 +537,7 @@ function showResults(results, q) {
           <div class="result-title">${highlight(s.title, q)}</div>
           <div class="result-page">${play && href ? `<a href="${href}" target="_blank" rel="noopener" title="Open the PDF page" onclick="event.stopPropagation()"><span>page</span>${s.page||'—'}</a>` : `<span>page</span>${s.page||'—'}`}</div>
           ${s.composer ? `<div class="result-composer">${highlight(s.composer, q)}</div>` : ''}
-          ${play ? '<button class="play-badge" type="button">▶ Play along</button>' : ''}
+          ${play ? `<button class="play-badge" type="button"${s.leadNote ? ` title="${esc(s.leadNote)}"` : ''}>▶ Play along${s.leadNote ? ' *' : ''}</button>` : ''}
         </${tag}>`;
     });
   }
@@ -597,6 +597,14 @@ async function init() {
         if (s.bookId !== '462jazz' || !s.page) continue;
         const L = byPage[s.page + (s.offset || 0)];
         if (L) { s.lead = L.id; matched.add(L.id); }
+      }
+      // the same tune in the scanned books plays the 462 Jazz Standards lead sheet (matched by title)
+      const byTitle = new Map();
+      for (const L of leads) { const k = normTitle(L.title); if (k && !byTitle.has(k)) byTitle.set(k, L.id); }
+      for (const s of allSongs) {
+        if (s.lead || s.bookId === '462jazz') continue;
+        const id = byTitle.get(normTitle(String(s.title).replace(/\(also known as.*$/i, '').replace(/\s+--.*$/, '')));
+        if (id) { s.lead = id; s.leadNote = 'Plays the 462 Jazz Standards chart of this tune'; }
       }
       for (const L of leads) {
         if (matched.has(L.id) || !book) continue;

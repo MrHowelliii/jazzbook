@@ -26,7 +26,14 @@ so notes, rests, accidentals, beams, ties, triplets, repeats, endings and chord 
 lines rather than pixels, and they are read exactly. Every bar is checked: its notes must add up to the time
 signature and the bar count must match the printed bar numbers. 453 of 462 songs pass both checks; the player
 marks the others ("n bars may be misread"). The two scanned books (*Real Book*, *Jazz Fakebook*) are images and are
-not play-along yet.
+not play-along themselves; their songs that are also in *462 Jazz Standards* (by title: 177 in the Jazz Fakebook,
+56+ in the Real Book) play that chart, marked **▶ Play along \***.
+
+Experimental, for the scanned books: `tools/omr_prep.py` renders pages for [Audiveris](https://github.com/Audiveris/audiveris)
+(5.6.3 builds with Java 21; it also needs `repository.jboss.org` for jai-core and the legacy `eng.traineddata` from
+tesseract-ocr/tessdata), and `tools/mxl_lead.py` turns its MusicXML into this lead-sheet format with the same bar
+checks. On the Jazz Fakebook scans (200 dpi, about 9 px between staff lines) only about 30% of bars come out right,
+so none of its songs is offered from recognition yet.
 
 The band is the Jazz Band engine (github.com/MrHowelliii/jazzband-op1r, the OP-1 plugin's C code compiled to
 WebAssembly) with its sampled instruments; credits for the samples are in `engine/packs/CREDITS.md`.
