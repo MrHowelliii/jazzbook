@@ -1,20 +1,23 @@
-# Patch for MrHowelliii/jazz-play-along
+# Patches for MrHowelliii/jazz-play-along
 
-`0001-practice-experience.patch` holds one commit for the jazz-play-along repository (on top of its commit
-`ffbebb8`, "Pause and resume the band at the current beat"). It is stored here because the session that wrote it
-could push to jazzbook but not to jazz-play-along.
-
-Apply it in a jazz-play-along checkout:
+Two commits for the jazz-play-along repository, on top of its commit `ffbebb8` ("Pause and resume the band at the
+current beat"). They are stored here because the session that wrote them could push to jazzbook but not to
+jazz-play-along.
 
 ```sh
-git checkout -b practice-experience ffbebb8
-git am /path/to/jazzbook/handoff/jazz-play-along/0001-practice-experience.patch
+git checkout -b practice-and-sound ffbebb8
+git am /path/to/jazzbook/handoff/jazz-play-along/000*.patch
 ```
 
-Then push the branch and merge it when you are happy with it; merging to `main` deploys the site.
+Push the branch and merge it when you are happy with it; merging to `main` deploys the site.
 
-What it adds is listed in the patched `README.md` (instant start, per-tune memory, quick practice controls, count-in
-and melody cues, stage view with screen wake, keys and pedals, loop speed-up, recording, my list, room reverb,
-speaker delay, pause on interruptions, offline install). `feature-test.cjs` in the patch tests them in Chromium.
+1. `0001`: practice experience (instant start, stage view, cues, keys and pedals, loop speed-up, recording, my list,
+   room, offline install).
+2. `0002`: melody on a staff, chords as functions, 16-bit instruments with a recorded alto sax, human band feel,
+   play / pause / stop symbols, compact phone layout.
+
+The second patch moves the build's pins to commits on the `claude/jazzbook-jazzband-unified-kljyw4` branches of
+jazzbook (`9e439b0`: new engine and sound packs) and jazzband-op1r (`23383d7`: engine source). Keep those branches,
+or merge them and re-pin, before the Pages build runs.
 
 Once applied, this folder can be deleted.

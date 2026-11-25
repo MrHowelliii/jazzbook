@@ -1,0 +1,779 @@
+From 6f4179f3d7e266c3d233c41375b55278a6987281 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 25 Nov 2026 12:09:56 +0000
+Subject: [PATCH 2/2] Staff notation, chord functions, real-instrument sound,
+ transport symbols, compact phone layout
+
+notation.js draws each bar's melody on a staff (clef, key signature,
+accidentals, beams, flags, dots, rests, ties, triplets) and analyses
+chords as roman numerals with secondary dominants. The player loads the
+16-bit packs and the recorded alto sax lead from the new engine (pins
+moved to jazzband-op1r 23383d7 and jazzbook 9e439b0), with a Band feel
+setting for human timing. Play, pause and stop are symbols. The header
+is one compact block with the status under the title, the output meter
+moves to the mixer, and one scrolling toolbar replaces two rows, so the
+chart starts about 90 px from the top on a phone.
+
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01MFtnqVmArJUVScHreHoD7y
+---
+ .github/workflows/deploy.yml |   4 +-
+ README.md                    |   3 +
+ build.sh                     |   6 +-
+ feature-test.cjs             |  16 +--
+ mobile-test.cjs              |   4 +-
+ notation.js                  | 223 +++++++++++++++++++++++++++++++++++
+ player.js                    | 104 +++++++++++-----
+ studio.css                   |  46 +++++++-
+ sw.js                        |   6 +-
+ worklet.js                   |   3 +-
+ 10 files changed, 362 insertions(+), 53 deletions(-)
+ create mode 100644 notation.js
+
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+index 6538577..eb29bf5 100644
+--- a/.github/workflows/deploy.yml
++++ b/.github/workflows/deploy.yml
+@@ -18,12 +18,12 @@ jobs:
+       - uses: actions/checkout@v4
+         with:
+           repository: MrHowelliii/jazzband-op1r
+-          ref: a7486c312836afd8c8764bf5490d99453e415bee
++          ref: 23383d7d139dfac1924d6e83db18fcc3cfbbecae
+           path: upstream
+       - uses: actions/checkout@v4
+         with:
+           repository: MrHowelliii/jazzbook
+-          ref: 0c4be4ee80ec6bb0a024aa44340636e34cdca0aa
++          ref: 9e439b0e7a7b7dd3df158a2706e2cebe16ca9176
+           path: catalog
+       - run: bash build.sh
+       - uses: actions/configure-pages@v5
+diff --git a/README.md b/README.md
+index 07dad55..d136b2b 100644
+--- a/README.md
++++ b/README.md
+@@ -16,6 +16,9 @@ Jazz Band engine from [jazzband-op1r](https://github.com/MrHowelliii/jazzband-op
+ | **Loops** | Tap a bar, Loop, tap the last bar. Setup › Loop speed-up makes each pass 2, 4 or 8 BPM faster; Stop brings the tempo back |
+ | **Record** | ● Rec records the band and your microphone together (the band is delayed by the output latency so they line up); takes are in Setup, with Save file |
+ | **My list** | ☆ adds the tune to your list on the Songs screen: reorder it, and optionally play it in order (after a tune's ending the next one starts) |
++| **Chart** | The melody is drawn on a staff (clef, key signature, accidentals, beams, ties, triplets), transposed with the key and with "Chords for" B♭ / E♭ / F instruments. Setup › Melody shown as: staff or outline |
++| **Chord functions** | The ii–V button (or Setup) shows chords as roman numerals: relative to the major key of the signature, or its relative minor when the tune lives there; secondary dominants as V7/x, their ii chords as ii/x, half-step resolutions as subV7 |
++| **Sound** | 16-bit sample packs (about 27 MB, kept on the device after the first visit), a recorded alto sax for the melody (Mixer › Melody; the synth horn, piano, guitar and vibes remain), and Setup › Band feel: how human the placement and dynamics are (Exact, Tight, Natural, Loose) |
+ | **Room** | Mixer › Room: a small-room reverb around the band (0 turns it off) |
+ | **Speaker delay** | Setup: for Bluetooth speakers, delays the moving bar (and aligns recordings) by the milliseconds you set |
+ | **Interruptions** | A call or a route change pauses the band at the beat; Resume carries on from there |
+diff --git a/build.sh b/build.sh
+index 73bcbf3..6507de1 100644
+--- a/build.sh
++++ b/build.sh
+@@ -3,7 +3,7 @@ set -euo pipefail
+ root=$(pwd)
+ site="$root/site"
+ mkdir -p "$site/engine/packs"
+-cp index.html player.js studio.css "$site/"
++cp index.html player.js notation.js studio.css "$site/"
+ cp sw.js manifest.webmanifest "$site/"
+ cp -R icons "$site/"
+ cp catalog/app/songform.js "$site/"
+@@ -11,11 +11,11 @@ cp -R catalog/{app,books,leads,vendor} "$site/"
+ cp catalog/{books.json,songs.json,practice.html} "$site/"
+ cp worklet.js "$site/engine/"
+ cp upstream/{LICENSE,NOTICE,UPSTREAM-NOTICE} "$site/engine/"
+-cp "upstream/sound packs/CREDITS.md" "$site/engine/packs/"
++cp catalog/engine/packs/CREDITS.md "$site/engine/packs/"
+ cd upstream/jazzband-op1r
+ sh web/build.sh
+ mkdir -p web/packs
+-for pack in jbdrums jbbass jbpiano jbguitar; do
++for pack in jbdrums jbbass jbpiano jbguitar jblead; do
+   cp "$root/catalog/engine/packs/$pack.jbp" "web/packs/$pack.jbp"
+ done
+ node web/test/wasm.test.mjs
+diff --git a/feature-test.cjs b/feature-test.cjs
+index ff00304..4f0a84f 100644
+--- a/feature-test.cjs
++++ b/feature-test.cjs
+@@ -25,7 +25,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+ 
+     // 1. the band downloads before anyone presses Play
+     await page.waitForFunction(() => true); await page.waitForTimeout(1500);
+-    assert.equal(loaded.size, 5, 'engine and four instruments preloaded: ' + [...loaded]);
++    assert.equal(loaded.size, 6, 'engine and five instruments preloaded: ' + [...loaded]);
+ 
+     // 2. tempo from the quick row, remembered for this tune
+     const base = +(await text('.tempo-now'));
+@@ -39,7 +39,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+ 
+     // 3. count-in shown big, then gone
+     await $('.in-role-q').selectOption('lead');
+-    await button('▶ Play').click();
++    await button('Play').click();
+     await $('.pl-cue.count').waitFor({ timeout: 30000 });
+     assert.match(await text('.pl-cue'), /^[1-4]$/);
+     await page.waitForFunction(() => document.querySelector('.pl-status')?.textContent.includes('Chorus'));
+@@ -52,7 +52,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+     await page.keyboard.press('Shift+ArrowDown'); assert.equal(+(await text('.tempo-now')), t0 + 4);
+     await page.keyboard.press('PageDown'); await button('Resume').waitFor();
+     await page.keyboard.press('ArrowRight'); await button('Pause').waitFor();
+-    await page.keyboard.press('PageUp'); await button('▶ Play').waitFor();
++    await page.keyboard.press('PageUp'); await button('Play').waitFor();
+ 
+     // 5. a two-bar loop that speeds up each pass, and the tempo coming back at Stop
+     await button('Setup').click();
+@@ -60,7 +60,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+     await button('Score').click();
+     await $('.bar[data-src="4"]').click(); await $('.bar[data-src="5"]').click({ modifiers: ['Shift'] });
+     await button('Loop').click();
+-    await button('▶ Play').click();
++    await button('Play').click();
+     await page.waitForFunction(() => /Loop pass 3/.test(document.querySelector('.pl-status')?.textContent), null, { timeout: 30000 });
+     assert.equal(+(await text('.tempo-now')), 316, 'two passes at +8');
+     await button('Stop').click();
+@@ -69,7 +69,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+ 
+     // 6. "Solos next" a bar before the melody drops out (3 choruses: head, solos, head)
+     await button('Setup').click(); await $('.in-chor').selectOption('3'); await $('.in-tempo').fill('320'); await $('.in-tempo').press('Enter'); await button('Score').click();
+-    await button('▶ Play').click();
++    await button('Play').click();
+     await page.waitForFunction(() => document.querySelector('.pl-cue')?.textContent === 'Solos next', null, { timeout: 60000 });
+     assert.match(await text('.pl-status'), /Chorus 1 of 3/);
+ 
+@@ -82,7 +82,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+     const now = await $('.bar.now').boundingBox(), view = await $('.pl-view').boundingBox();
+     assert.ok(now.height > h0 * 1.15, `stage bars are larger (${h0} -> ${now.height})`);
+     assert.ok(Math.abs(now.y - view.y) < 12, 'current line at the top of the stage');
+-    assert.ok(await $('.song-head').isHidden());
++    assert.ok(await $('.song-head h2').isHidden());
+     await page.keyboard.press('s');
+     assert.ok(!(await page.evaluate(() => document.body.classList.contains('stage'))));
+     await button('Stop').click();
+@@ -119,7 +119,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+     await $('#auto-next').check();
+     await $('#my-list .ml-title').first().click();
+     assert.equal(await text('.song-head h2'), 'Autumn Leaves');
+-    await button('▶ Play').click();
++    await button('Play').click();
+     await page.waitForFunction(() => document.querySelector('.song-head h2')?.textContent === 'Blue Bossa'
+       && /Count-in|Chorus/.test(document.querySelector('.pl-status')?.textContent), null, { timeout: 120000 });
+     await button('Stop').click();
+@@ -129,7 +129,7 @@ const URL = process.env.SITE || 'http://127.0.0.1:8765/';
+     await page.waitForFunction(async () => (await caches.keys()).length && (await (await caches.open((await caches.keys())[0])).keys()).length >= 15, null, { timeout: 60000 });
+     await context.setOffline(true);
+     await page.reload(); await $('#player .bar').first().waitFor({ timeout: 30000 });
+-    await button('▶ Play').click();
++    await button('Play').click();
+     await page.waitForFunction(() => document.querySelector('.pl-status')?.textContent.includes('Chorus'), null, { timeout: 30000 });
+     await button('Stop').click();
+     await context.setOffline(false);
+diff --git a/mobile-test.cjs b/mobile-test.cjs
+index 6d3d4d8..3be80e7 100644
+--- a/mobile-test.cjs
++++ b/mobile-test.cjs
+@@ -9,7 +9,7 @@ const assert = require('node:assert/strict');
+     page.on('pageerror', e=>console.error(e.message));
+     await page.goto('http://127.0.0.1:8765', {waitUntil:'domcontentloaded'});
+     const button = name => page.getByRole('button', {name,exact:true});
+-    await button('▶ Play').tap();
++    await button('Play').tap();
+     await button('Stop').waitFor({timeout:30000});
+     const status = page.locator('.pl-status');
+     await page.waitForFunction(()=>document.querySelector('.pl-status')?.textContent.includes('Chorus'));
+@@ -45,7 +45,7 @@ const assert = require('node:assert/strict');
+     await button('← Back to tune').tap();
+     await button('Pause').tap();
+     await button('Stop').tap();
+-    await button('▶ Play').waitFor();
++    await button('Play').waitFor();
+     for(const size of [{width:320,height:568},{width:844,height:390},{width:1024,height:768}]){
+       await page.setViewportSize(size);
+       await button('Mixer').tap();
+diff --git a/notation.js b/notation.js
+new file mode 100644
+index 0000000..3b22609
+--- /dev/null
++++ b/notation.js
+@@ -0,0 +1,223 @@
++// notation.js - the melody of a bar on a five-line staff (SVG), and chords as functions (roman numerals).
++// A bar's notes come as [t, d, pitch] triples (48ths of a quarter note; pitch MIDI, +128 when it continues a tie,
++// 0 for a rest). Horizontal positions are percentages of the bar (time-proportional), everything else is in pixels,
++// so a bar can be any width.
++
++const LETTERS = 'CDEFGAB', STEP_PC = [0, 2, 4, 5, 7, 9, 11];
++const SHARP_ORDER = [3, 0, 4, 1, 5, 2, 6], FLAT_ORDER = [6, 2, 5, 1, 4, 0, 3];   // F C G D A E B / B E A D G C F
++const ACC = { '-2': '𝄫', '-1': '♭', 0: '♮', 1: '♯', 2: '𝄪' };
++
++// key signature after transposing by `semis`: the one with at most six flats or five sharps
++export function transposeKey(fifths, semis) { let k = ((fifths + 7 * semis) % 12 + 12) % 12; return k > 5 ? k - 12 : k; }
++export function keyAlter(fifths, letter) {
++  if (fifths > 0 && SHARP_ORDER.slice(0, fifths).includes(letter)) return 1;
++  if (fifths < 0 && FLAT_ORDER.slice(0, -fifths).includes(letter)) return -1;
++  return 0;
++}
++// a MIDI pitch spelled for a key: the name closest to the key on the line of fifths (in C: Db Eb F# Ab Bb)
++export function spell(midi, fifths) {
++  const pc = ((midi % 12) + 12) % 12;
++  let i = fifths - 5; while ((((i * 7) % 12) + 12) % 12 !== pc) i++;
++  const letter = [3, 0, 4, 1, 5, 2, 6][(((i + 1) % 7) + 7) % 7], alter = Math.floor((i + 1) / 7);
++  const octave = Math.floor((midi - alter) / 12) - 1;
++  return { letter, alter, octave, dn: octave * 7 + letter };          // dn: diatonic number, E4 (bottom line) = 30
++}
++function value(d) {
++  for (const base of [192, 96, 48, 24, 12, 6]) {
++    if (d === base) return { base, dots: 0 };
++    if (d * 2 === base * 3) return { base, dots: 1 };
++    if (d * 4 === base * 7) return { base, dots: 2 };
++    if (d * 3 === base * 2) return { base, dots: 0, tuplet: 3 };
++  }
++  for (const base of [192, 96, 48, 24, 12, 6]) if (d >= base) return { base, dots: 0 };
++  return { base: 6, dots: 0 };
++}
++const pct = (t, L) => (9 + t / L * 85).toFixed(2) + '%';
++const n2 = (x) => (Math.round(x * 100) / 100).toString();
++
++// geometry for a bar `h` pixels high: chords above, the staff around 60% down
++export function staffMetrics(h) { const sp = h / 13.5; return { h, sp, top: h * 0.6 - 2 * sp, bottom: h * 0.6 + 2 * sp }; }
++
++function lines(m, x1 = '0', x2 = '100%') {
++  let s = '';
++  for (let k = 0; k < 5; k++) { const y = n2(m.top + k * m.sp); s += `<line class="sl" x1="${x1}" x2="${x2}" y1="${y}" y2="${y}"/>`; }
++  return s;
++}
++
++// The start of a line of music: clef and key signature. Returns { html, width }.
++export function rowHead(fifths, h) {
++  const m = staffMetrics(h), sp = m.sp, n = Math.abs(fifths);
++  const width = Math.round(sp * (3.4 + n * 1.05) + 2);
++  // an original, simple G clef drawn around the G line (second from the bottom)
++  const g = m.bottom - sp, u = sp / 10;
++  const P = (pts) => pts.map(([x, y]) => `${n2(x * u + sp * 0.35)} ${n2(g + y * u)}`);
++  const c = (a, b, e) => `C${P([a, b, e]).join(' ')}`;
++  const clef = `<path class="clef" d="M${P([[15, 2]])[0]} ${c([11, -3], [4, 0], [5, 6])} ${c([6, 11], [13, 12], [17, 8])} ${c([22, 3], [20, -7], [12, -9])}
++    ${c([3, -11], [-4, -3], [-1, 6])} ${c([2, 16], [13, 20], [21, 15])} ${c([29, 10], [28, -4], [19, -13])} ${c([12, -20], [8, -28], [10, -37])}
++    ${c([11, -44], [15, -49], [18, -50])} ${c([22, -44], [20, -34], [13, -26])} M${P([[14, -46]])[0]} L${P([[18, 30]])[0]} ${c([19, 37], [13, 40], [9, 36])}"/>
++    <circle class="nh" cx="${n2(10 * u + sp * 0.35)}" cy="${n2(g + 34 * u)}" r="${n2(2.6 * u)}"/>`;
++  let ks = '';
++  const order = fifths > 0 ? SHARP_ORDER : FLAT_ORDER;
++  const sharpDn = { 3: 38, 0: 35, 4: 39, 1: 36, 5: 33, 2: 37, 6: 34 }, flatDn = { 6: 34, 2: 37, 5: 33, 1: 36, 4: 32, 0: 35, 3: 31 };
++  for (let k = 0; k < n; k++) {
++    const dn = (fifths > 0 ? sharpDn : flatDn)[order[k]], y = m.bottom - (dn - 30) * sp / 2;
++    ks += `<text class="acc" x="${n2(sp * (3.2 + k * 1.05))}" y="${n2(y + sp * (fifths > 0 ? 0.55 : 0.4))}" font-size="${n2(sp * 2.1)}">${fifths > 0 ? '♯' : '♭'}</text>`;
++  }
++  return { width, html: `<svg class="staff rowhead" width="${width}" height="${n2(h)}" aria-hidden="true">${lines(m)}${clef}${ks}</svg>` };
++}
++
++// One bar. notes: flat [t, d, p, ...]; L: bar length; fifths: key signature shown; semis: transposition of the pitches;
++// tieOut: the next bar starts with the continuation of this bar's last note. sigFifths: the key signature printed at
++// the start of the line (accidentals are shown against it when the key changes inside a line).
++export function staffBar(notes, L, fifths, semis, h, tieOut, sigFifths = fifths) {
++  const m = staffMetrics(h), sp = m.sp, hw = sp * 0.62, stemLen = sp * 3.3;
++  const yOf = (dn) => m.bottom - (dn - 30) * sp / 2;
++  const state = {};                                            // accidentals in force in this bar: letter+octave -> alter
++  const ev = [];
++  for (let k = 0; k < notes.length; k += 3) {
++    const t = notes[k], d = notes[k + 1], raw = notes[k + 2], v = value(d);
++    if (!raw) { ev.push({ t, d, v, rest: true }); continue; }
++    const tie = raw >= 128, sp_ = spell((raw & 127) + semis, fifths), key = sp_.letter + ':' + sp_.octave;
++    const cur = key in state ? state[key] : keyAlter(sigFifths, sp_.letter);
++    const acc = !tie && sp_.alter !== cur ? sp_.alter : null;
++    state[key] = sp_.alter;
++    ev.push({ t, d, v, tie, midi: raw & 127, dn: sp_.dn, y: yOf(sp_.dn), acc });
++  }
++  let s = lines(m);
++  // beams: runs of flagged notes inside one beat
++  const groups = []; let run = [];
++  const flush = () => { if (run.length > 1) groups.push(run); run = []; };
++  for (const e of ev) {
++    const beamable = !e.rest && e.v.base <= 24;
++    const last = run[run.length - 1];
++    if (!beamable || (last && (last.t + last.d !== e.t || Math.floor(last.t / 48) !== Math.floor(e.t / 48)))) flush();
++    if (beamable) run.push(e);
++  }
++  flush();
++  const grouped = new Map();
++  for (const g of groups) {
++    const up = g.reduce((a, e) => a + e.dn, 0) / g.length < 34;
++    const tip = up ? Math.min(...g.map(e => e.y)) - stemLen : Math.max(...g.map(e => e.y)) + stemLen;
++    g.forEach(e => grouped.set(e, { up, tip }));
++    const dx = n2(up ? hw : -hw), y = n2(tip + (up ? sp * 0.22 : -sp * 0.22));
++    s += `<line class="beam" x1="${pct(g[0].t, L)}" x2="${pct(g[g.length - 1].t, L)}" y1="${y}" y2="${y}" transform="translate(${dx} 0)" stroke-width="${n2(sp * 0.45)}"/>`;
++    for (let k = 0; k < g.length; k++) {                       // second beam for 16ths (a stub when the neighbour is an 8th)
++      if (g[k].v.base > 12) continue;
++      const y2 = n2(tip + (up ? sp * 0.92 : -sp * 0.92));
++      const nxt = g[k + 1], prv = g[k - 1];
++      if (nxt && nxt.v.base <= 12) s += `<line class="beam" x1="${pct(g[k].t, L)}" x2="${pct(nxt.t, L)}" y1="${y2}" y2="${y2}" transform="translate(${dx} 0)" stroke-width="${n2(sp * 0.45)}"/>`;
++      else if (!(prv && prv.v.base <= 12)) {
++        const to = nxt ? g[k].t + (nxt.t - g[k].t) * 0.45 : g[k].t - (g[k].t - prv.t) * 0.45;
++        s += `<line class="beam" x1="${pct(g[k].t, L)}" x2="${pct(to, L)}" y1="${y2}" y2="${y2}" transform="translate(${dx} 0)" stroke-width="${n2(sp * 0.45)}"/>`;
++      }
++    }
++    if (g[0].v.tuplet) {
++      const mid = (g[0].t + g[g.length - 1].t) / 2;
++      s += `<text class="tup" x="${pct(mid, L)}" y="${n2(tip + (up ? -sp * 0.5 : sp * 1.5))}" font-size="${n2(sp * 1.5)}" text-anchor="middle">3</text>`;
++    }
++  }
++  let prev = null;
++  for (const e of ev) {
++    const x = pct(e.t, L);
++    let g = '';
++    if (e.rest) {
++      const y = m.top + 2 * sp;
++      if (e.d >= L || e.v.base === 192) g = `<rect class="nh" x="${n2(-sp * 0.6)}" y="${n2(m.top + sp)}" width="${n2(sp * 1.2)}" height="${n2(sp * 0.5)}"/>`;
++      else if (e.v.base === 96) g = `<rect class="nh" x="${n2(-sp * 0.6)}" y="${n2(y - sp * 0.5)}" width="${n2(sp * 1.2)}" height="${n2(sp * 0.5)}"/>`;
++      else if (e.v.base === 48) g = `<path class="rest" d="M${n2(-sp * 0.3)} ${n2(y - sp * 1.4)} l${n2(sp * 0.6)} ${n2(sp * 0.8)} l${n2(-sp * 0.6)} ${n2(sp * 0.7)} l${n2(sp * 0.6)} ${n2(sp * 0.8)} q${n2(-sp * 0.9)} ${n2(-sp * 0.3)} ${n2(-sp * 0.3)} ${n2(sp * 0.6)}"/>`;
++      else {
++        const nf = e.v.base === 24 ? 1 : e.v.base === 12 ? 2 : 3;
++        g = `<line class="stem" x1="${n2(sp * 0.45)}" y1="${n2(y - sp * 0.7)}" x2="${n2(-sp * 0.15)}" y2="${n2(y + sp * (0.4 + nf * 0.5))}"/>`;
++        for (let k = 0; k < nf; k++) g += `<circle class="nh" cx="${n2(-sp * 0.25 - k * sp * 0.12)}" cy="${n2(y - sp * 0.45 + k * sp)}" r="${n2(sp * 0.28)}"/>`;
++      }
++      const rx = e.d >= L || e.v.base === 192 ? '50%' : x;
++      if (e.v.dots && e.v.base < 192) g += `<circle class="nh" cx="${n2(sp * 1.0)}" cy="${n2(y - sp * 0.5)}" r="${n2(sp * 0.2)}"/>`;
++      s += `<svg x="${rx}" overflow="visible">${g}</svg>`;
++      prev = null; continue;
++    }
++    // ledger lines
++    for (let dn = 28; dn >= e.dn; dn -= 2) g += `<line class="sl" x1="${n2(-hw * 1.7)}" x2="${n2(hw * 1.7)}" y1="${n2(yOf(dn))}" y2="${n2(yOf(dn))}"/>`;
++    for (let dn = 40; dn <= e.dn; dn += 2) g += `<line class="sl" x1="${n2(-hw * 1.7)}" x2="${n2(hw * 1.7)}" y1="${n2(yOf(dn))}" y2="${n2(yOf(dn))}"/>`;
++    const open = e.v.base >= 96;
++    g += `<ellipse class="${open ? 'nho' : 'nh'}" cx="0" cy="${n2(e.y)}" rx="${n2(hw)}" ry="${n2(sp * 0.43)}" transform="rotate(-18 0 ${n2(e.y)})"${open ? ` stroke-width="${n2(sp * 0.2)}"` : ''}/>`;
++    if (e.v.base < 192) {
++      const gi = grouped.get(e), up = gi ? gi.up : e.dn < 34, tip = gi ? gi.tip : e.y + (up ? -stemLen : stemLen), sx = up ? hw - 0.6 : -hw + 0.6;
++      g += `<line class="stem" x1="${n2(sx)}" x2="${n2(sx)}" y1="${n2(e.y)}" y2="${n2(tip)}"/>`;
++      if (!gi && e.v.base <= 24) {
++        const nf = e.v.base === 24 ? 1 : e.v.base === 12 ? 2 : 3, dir = up ? 1 : -1;
++        for (let k = 0; k < nf; k++) {
++          const fy = tip + dir * k * sp * 0.75;
++          g += `<path class="flag" d="M${n2(sx)} ${n2(fy)} q${n2(sp * 0.2)} ${n2(dir * sp * 0.9)} ${n2(sp * 1.0)} ${n2(dir * sp * 1.5)} q${n2(-sp * 0.1)} ${n2(-dir * sp * 0.8)} ${n2(-sp * 1.0)} ${n2(-dir * sp * 0.9)}z"/>`;
++        }
++        if (e.v.tuplet) g += `<text class="tup" x="0" y="${n2(up ? tip - sp * 0.4 : tip + sp * 1.4)}" font-size="${n2(sp * 1.5)}" text-anchor="middle">3</text>`;
++      } else if (!gi && e.v.tuplet) g += `<text class="tup" x="0" y="${n2(up ? tip - sp * 0.4 : tip + sp * 1.4)}" font-size="${n2(sp * 1.5)}" text-anchor="middle">3</text>`;
++    }
++    for (let k = 0; k < e.v.dots; k++) g += `<circle class="nh" cx="${n2(hw + sp * (0.55 + k * 0.5))}" cy="${n2(e.y - (e.dn % 2 === 0 ? sp * 0.5 : 0))}" r="${n2(sp * 0.2)}"/>`;
++    if (e.acc !== null) g += `<text class="acc" x="${n2(-hw - sp * 0.25)}" y="${n2(e.y + sp * (e.acc < 0 ? 0.4 : 0.55))}" font-size="${n2(sp * 2.1)}" text-anchor="end">${ACC[e.acc]}</text>`;
++    s += `<svg x="${x}" overflow="visible">${g}</svg>`;
++    // ties: from the previous note, or in from the bar before
++    const below = e.dn >= 34, ty = e.y + (below ? -sp * 0.9 : sp * 0.9);
++    const arc = (a, b) => `<svg class="tiebox" x="${a}" y="${n2(below ? ty - sp : ty)}" width="${b}" height="${n2(sp)}" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible"><path class="tie" d="M3 ${below ? 10 : 0} Q50 ${below ? -6 : 16} 97 ${below ? 10 : 0}" vector-effect="non-scaling-stroke"/></svg>`;
++    if (e.tie && prev && prev.midi === e.midi) s += arc(pct(prev.t, L), (parseFloat(pct(e.t, L)) - parseFloat(pct(prev.t, L))).toFixed(2) + '%');
++    else if (e.tie && !prev) s += arc('0%', pct(e.t, L));
++    prev = e;
++  }
++  if (tieOut && prev) {
++    const below = prev.dn >= 34, ty = prev.y + (below ? -sp * 0.9 : sp * 0.9), a = parseFloat(pct(prev.t, L));
++    s += `<svg class="tiebox" x="${a}%" y="${n2(below ? ty - sp : ty)}" width="${(100 - a).toFixed(2)}%" height="${n2(sp)}" viewBox="0 0 100 10" preserveAspectRatio="none" overflow="visible"><path class="tie" d="M3 ${below ? 10 : 0} Q50 ${below ? -6 : 16} 100 ${below ? 2 : 8}" vector-effect="non-scaling-stroke"/></svg>`;
++  }
++  return `<svg class="staff" width="100%" height="${n2(h)}" aria-hidden="true">${s}</svg>`;
++}
++
++// ---------------------------------------------------------------------------------------------- chords as functions
++const NUMERAL = ['I', '♭II', 'II', '♭III', 'III', 'IV', '♯IV', 'V', '♭VI', 'VI', '♭VII', 'VII'];
++const PCS = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
++function parse(c) {                                             // c: [t, symbol, iReal token]
++  const mt = /^([A-G])([b#]?)(.*)$/.exec(c[2] || ''), ms = /^([A-G][b#]?)([^/]*)/.exec(c[1] || '');
++  if (!mt) return null;
++  const root = (PCS[mt[1]] + (mt[2] === 'b' ? -1 : mt[2] === '#' ? 1 : 0) + 12) % 12, q = mt[3];
++  const kind = q === 'h7' ? 'hdim' : q === 'o7' ? 'dim' : q[0] === '-' ? 'min' : q === '7' || q === '7b9' ? 'dom' : 'maj';
++  let rest = ms ? ms[2] : '';
++  if (kind === 'hdim') rest = 'ø7' + rest.replace(/^m(in)?7?\(?b5\)?/, '').replace(/^ø7?/, '');
++  else if (kind === 'dim') rest = '°' + rest.replace(/^(dim|°|o)/, '');
++  else if (kind === 'min') rest = rest.replace(/^m(?!aj)/, '');
++  return { root, kind, rest, lower: kind !== 'maj' && kind !== 'dom' };
++}
++const numeral = (ch, tonic) => { const n = NUMERAL[(ch.root - tonic + 12) % 12]; return ch.lower ? n.toLowerCase() : n; };
++
++// Roman numerals for every chord of a song, bar by bar (same shape as bars[k].c). Relative to the major key of the
++// key signature, or to its relative minor when the tune lives there (♭III, ♭VI, ♭VII in minor). Secondary dominants
++// are V7/x, their ii chords ii/x, dominants that resolve down a half step subV7/x.
++export function romanize(bars, fifths0 = 0) {
++  const flat = [];
++  let fifths = fifths0;
++  bars.forEach((b, bi) => { if (b.k !== undefined) fifths = b.k; b.c.forEach((c, ci) => flat.push({ bi, ci, ch: parse(c), fifths })); });
++  const major = (f) => (((f * 7) % 12) + 12) % 12;
++  // minor: the tune rests more on the minor chord a minor third below the major tonic than on the major tonic itself
++  const tonicOf = {}, home = {};
++  for (const x of flat) {
++    if (!x.ch) continue;
++    const t = major(x.fifths), h = home[x.fifths] = home[x.fifths] || { maj: 0, min: 0 };
++    if (x.ch.root === t && x.ch.kind === 'maj') h.maj++;
++    if (x.ch.root === (t + 9) % 12 && x.ch.kind === 'min') h.min++;
++  }
++  for (const f of Object.keys(home)) { const t = major(+f); tonicOf[f] = home[f].min > home[f].maj ? (t + 9) % 12 : t; }
++  const out = bars.map(b => b.c.map(() => ''));
++  const lab = flat.map(x => x.ch ? numeral(x.ch, tonicOf[x.fifths]) + x.ch.rest : '');
++  for (let i = 0; i < flat.length; i++) {
++    const x = flat[i], ch = x.ch; if (!ch) continue;
++    const tonic = tonicOf[x.fifths], nx = flat.slice(i + 1).find(y => y.ch && (y.ch.root !== ch.root || y.ch.kind !== ch.kind));
++    if (ch.kind !== 'dom' || !nx) continue;
++    const deg = (ch.root - tonic + 12) % 12, tdeg = (nx.ch.root - tonic + 12) % 12, target = numeral(nx.ch, tonic);
++    let sec = '';
++    if (nx.ch.root === (ch.root + 5) % 12 && deg !== 7) sec = 'V' + ch.rest + '/' + target;
++    else if (nx.ch.root === (ch.root + 11) % 12 && nx.ch.kind !== 'dim') sec = 'subV' + ch.rest + (tdeg === 0 ? '' : '/' + target);
++    if (!sec) continue;
++    lab[i] = sec;
++    const pv = flat[i - 1];                                    // the ii of a secondary dominant
++    if (sec[0] === 'V' && pv && pv.ch && (pv.ch.kind === 'min' || pv.ch.kind === 'hdim') && pv.ch.root === (ch.root + 7) % 12
++        && !/^(V|subV)/.test(lab[i - 1])) lab[i - 1] = 'ii' + pv.ch.rest + '/' + target;
++  }
++  flat.forEach((x, i) => { out[x.bi][x.ci] = lab[i]; });
++  return out;
++}
+diff --git a/player.js b/player.js
+index c15fa36..182c62f 100644
+--- a/player.js
++++ b/player.js
+@@ -1,6 +1,7 @@
+ // player.js - the play-along player: the Jazz Band engine (WebAssembly, in an AudioWorklet) plays the chords with a
+ // band and the melody with a lead voice, from lead sheets parsed out of the fake-book PDFs (leads/*.json).
+ import { prepare, transposeSym, prettySym, KEY_NAMES, keyTonic, normTitle } from './songform.js';
++import { staffBar, rowHead, romanize, transposeKey } from './notation.js';
+ 
+ const INST = ['Drums', 'Bass', 'Piano', 'Guitar'];
+ const PLAYERS = [
+@@ -15,7 +16,14 @@ const PLAYERS = [
+ ];
+ const LVL_DEFAULT = [23593, 26214, 20971, 11796];       // the plugin's defaults (Q15) for drums, bass, piano, guitar
+ const LEAD_DEFAULT = 24000;
+-const PACKS = ['jbdrums', 'jbbass', 'jbpiano', 'jbguitar'];
++const PACKS = ['jbdrums', 'jbbass', 'jbpiano', 'jbguitar', 'jblead'];   // jblead: the recorded alto sax (optional)
++const LEADS = [[4, 'Alto sax'], [0, 'Synth horn'], [1, 'Piano'], [2, 'Guitar'], [3, 'Vibes']];
++const ICON = {
++  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>',
++  pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.5h4.5v15H6zM13.5 4.5H18v15h-4.5z"/></svg>',
++  stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 5.5h13v13h-13z"/></svg>',
++  wait: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>',
++};
+ const ROLES = [['none', 'Just listen'], ['lead', 'Melody'], ['piano', 'Piano'], ['guitar', 'Guitar'], ['bass', 'Bass'], ['drums', 'Drums']];
+ const HORNS = [['C', 0, 'Concert'], ['Bb', 2, 'B♭ instrument'], ['Eb', 9, 'E♭ instrument'], ['F', 7, 'F instrument']];
+ 
+@@ -27,7 +35,7 @@ const store = {
+ };
+ 
+ // ---------------------------------------------------------------------------------------------- the engine
+-let ctx = null, node = null, gain = null, room = null, engineReady = null, packsOk = [0, 0, 0, 0];
++let ctx = null, node = null, gain = null, room = null, engineReady = null, packsOk = [0, 0, 0, 0, 0];
+ let onPos = () => {}, onAudioState = () => {};
+ 
+ // The engine and its instruments start downloading when the page opens, so the first Play does not wait for them.
+@@ -125,15 +133,15 @@ async function ensureEngine(status) {
+     }));
+     // the engine checks each pack (a checksum, a few KB per audio block): wait for it, at most a few seconds
+     await ctx.resume();
+-    for (let i = 0; i < 40 && packsOk.reduce((a, b) => a + b, 0) < got; i++) {
++    for (let i = 0; i < 80 && packsOk.reduce((a, b) => a + b, 0) < got; i++) {
+       node.port.postMessage({ t: 'packs' });
+       await new Promise(r => setTimeout(r, 100));
+     }
+-    if (packsOk.some(ok => !ok)) throw new Error('Instrument samples failed to load. Tap Play to retry.');
++    if (packsOk.slice(0, 4).some(ok => !ok)) throw new Error('Instrument samples failed to load. Tap Play to retry.');
+     status('');
+   })().catch(async error => {
+     await ctx?.close().catch(() => {});
+-    engineReady = null; ctx = null; node = null; room = null; assets = null; packsOk = [0, 0, 0, 0];
++    engineReady = null; ctx = null; node = null; room = null; assets = null; packsOk = [0, 0, 0, 0, 0];
+     throw error;
+   });
+   return engineReady;
+@@ -151,8 +159,9 @@ export class Player {
+     this.s = Object.assign({
+       tempo: null, key: 0, feel: 0, choruses: 3, intro: 0, ending: 0, role: 'none', guide: false, leadEvery: false,
+       players: [0, 0, 0, 0], levels: [100, 100, 100, 100], lead: 100, leadSound: 0, leadOct: 0, horn: 'C', view: 'chart',
+-      room: 18, latency: 0, passStep: 0,
++      room: 18, latency: 0, passStep: 0, human: 60, chordMode: 'name', notes: 'staff',
+     }, store.get('settings', {}));
++    if (!this.s.sax) { this.s.sax = 1; this.s.leadSound = 4; }      // once: the recorded sax becomes the lead
+     this.s.tempo = null; this.s.key = 0;
+     this.takes = [];
+     preload();
+@@ -252,6 +261,7 @@ export class Player {
+     s.players.forEach((who, inst) => post({ t: 'player', inst, who }));
+     this.sendLevels();
+     post({ t: 'form', choruses: s.choruses, ending: s.ending, intro: s.intro, turn: 0 });
++    post({ t: 'human', amount: s.human });
+     post({ t: 'leadmask', mask: this.leadMask() });
+     this.sendLoop();
+   }
+@@ -260,7 +270,7 @@ export class Player {
+     LVL_DEFAULT.forEach((d, i) => post({ t: 'level', inst: i, value: i === muted ? 1 : Math.min(32767, Math.round(d * s.levels[i] / 100)) }));
+     let lead = Math.round(LEAD_DEFAULT * s.lead / 100);
+     if (s.role === 'lead') lead = s.guide ? Math.round(lead * 0.22) : 0;
+-    post({ t: 'leadsound', sound: s.leadSound, level: lead, oct: s.leadOct });
++    post({ t: 'leadsound', sound: s.leadSound === 4 && !packsOk[4] ? 0 : s.leadSound, level: lead, oct: s.leadOct });
+   }
+   leadMask() {
+     const n = this.s.choruses;
+@@ -402,11 +412,12 @@ export class Player {
+       <audio controls preload="metadata" src="${t.url}"></audio><a download="${esc(t.name)}" href="${t.url}">Save file</a></div>`).join('')
+       : '<p class="takes-empty">No takes yet. Press ● Rec, play along, then press it again: your microphone and the band are recorded together. Takes stay until you close the page; use Save file to keep one.</p>';
+   }
+-  status(m) { const el = $('.pl-status', this.root); if (el) el.textContent = m; }
++  status(m) { const el = $('.pl-status', this.root); if (el) el.textContent = m; this.root.classList.toggle('has-status', !!m); }
+   updateTransport() {
+     const b = $('.pl-play', this.root);
+     if (!b) return;
+-    b.textContent = this.starting ? 'Loading…' : this.paused ? 'Resume' : this.state.playing ? 'Pause' : '▶ Play';
++    const [icon, name] = this.starting ? ['wait', 'Loading'] : this.paused ? ['play', 'Resume'] : this.state.playing ? ['pause', 'Pause'] : ['play', 'Play'];
++    if (b.getAttribute('aria-label') !== name) { b.innerHTML = ICON[icon]; b.setAttribute('aria-label', name); b.title = name; }
+     b.disabled = !!this.starting;
+     $('.pl-stop', this.root).disabled = !this.state.playing;
+     b.classList.toggle('stop', this.state.playing);
+@@ -422,26 +433,22 @@ export class Player {
+ 
+     this.root.innerHTML = `
+       <div class="song-head">
+-        <div><h2>${esc(song.title)}</h2><p>${esc(song.composer || book.title)} · ${song.time[0]}/${song.time[1]} · ${song.bars.length} bars</p></div>
++        <div><h2>${esc(song.title)}</h2><p class="song-meta">${esc(song.composer || book.title)} · ${song.time[0]}/${song.time[1]} · ${song.bars.length} bars</p><p class="pl-status" role="status"></p></div>
+         <span class="head-buttons"><button class="pl-fav" type="button" aria-pressed="false" aria-label="Add to my list" title="Add to my list">☆</button>
+         <button class="pl-back" type="button">Songs</button></span>
+       </div>
+-      <div class="pl-transport">
+-        <span class="pl-status"></span>
+-        <label>Output <meter class="pl-output" aria-label="Audio output level" min="-90" max="0" value="-90"></meter></label>
+-      </div>
+       <section class="mix-sheet panel" aria-label="Band mixer" hidden>
+-        <h3>Band mixer</h3>
++        <h3>Band mixer <label class="out-meter">Output <meter class="pl-output" aria-label="Audio output level" min="-90" max="0" value="-90"></meter></label></h3>
+         <section class="channel room-channel"><h4>Room</h4><span class="room-note">Reverb around the band</span>
+           <label class="fader"><input type="range" aria-label="Room level" class="in-room" min="0" max="60" value="${s.room}"><output>${s.room}%</output></label></section>
+         ${[...INST, 'Melody'].map((name,i) => {
+           const lead = i === INST.length;
+-          const choices = lead ? ['Horn', 'Piano', 'Guitar', 'Vibes'] : PLAYERS[i];
++          const choices = lead ? LEADS : PLAYERS[i].map((n, k) => [k, n]);
+           const selected = lead ? s.leadSound : s.players[i];
+           const level = lead ? s.lead : s.levels[i];
+           return `<section class="channel"><h4>${name}</h4>
+             <div class="picker"><button type="button" data-step="-1" aria-label="Previous ${name} sound">‹</button>
+-            <select class="${lead ? 'in-leadsound' : 'in-player'}" data-i="${i}" aria-label="${name} player">${choices.map((n,k) => `<option value="${k}" ${selected===k?'selected':''}>${esc(n)}</option>`).join('')}</select>
++            <select class="${lead ? 'in-leadsound' : 'in-player'}" data-i="${i}" aria-label="${name} player">${choices.map(([k, n]) => `<option value="${k}" ${selected===k?'selected':''}>${esc(n)}</option>`).join('')}</select>
+             <button type="button" data-step="1" aria-label="Next ${name} sound">›</button></div>
+             <label class="fader"><input type="range" aria-label="${name} level" class="in-level" data-i="${lead?'lead':i}" min="0" max="150" value="${level}"><output>${level}%</output></label>
+           </section>`;
+@@ -467,6 +474,9 @@ export class Player {
+           <label>Count-in<select class="in-intro"><option value="0">One bar count</option><option value="1">Last 4 bars</option><option value="2">Turnaround intro</option></select></label>
+           <label>Ending<select class="in-ending"><option value="0">Final chord</option><option value="1">Tag (3 times)</option></select></label>
+           <label>Chords for<select class="in-horn">${HORNS.map(([v, , t]) => `<option value="${v}">${t}</option>`).join('')}</select></label>
++          <label title="How human the band plays: placement around the beat and note-to-note dynamics">Band feel<select class="in-human"><option value="0">Exact (on the grid)</option><option value="35">Tight</option><option value="60">Natural</option><option value="100">Loose</option></select></label>
++          <label>Chords shown as<select class="in-chordmode"><option value="name">Names (Dm7 G7)</option><option value="func">Functions (ii7 V7)</option></select></label>
++          <label>Melody shown as<select class="in-notes"><option value="staff">Notes on a staff</option><option value="roll">Outline</option></select></label>
+           <label title="Each time a loop comes round it gets a little faster. Stop brings the tempo back.">Loop speed-up<select class="in-pass"><option value="0">Same tempo each pass</option><option value="2">+2 BPM each pass</option><option value="4">+4 BPM each pass</option><option value="8">+8 BPM each pass</option></select></label>
+           <label title="Bluetooth speakers and headphones play late. Raise this until the moving bar matches what you hear.">Speaker delay (ms)<input type="number" class="in-latency" min="0" max="500" step="10" value="${s.latency}" inputmode="numeric"></label>
+         </div>
+@@ -475,22 +485,23 @@ export class Player {
+         <p class="keys-help">Space, → or Page Down: play / pause · ← or Page Up: stop · ↑ ↓: tempo (Shift: by 1) · L: loop · S: stage view · R: record. A Bluetooth page-turner pedal works as play / pause and stop.</p>
+         </section>
+       <section class="score-panel panel">${song.problems?.length ? '<small>Some measures may be misread. Check the original page.</small>' : ''}
+-      <div class="quick" aria-label="Practice controls">
++      <div class="toolbar"><div class="quick" aria-label="Practice controls">
+         <label>You play <select class="in-role-q" aria-label="You play">${ROLES.map(([v, t]) => `<option value="${v}" ${s.role === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+         <span class="tempo-step"><button type="button" class="tempo-down" aria-label="Slower">−</button><output class="tempo-now" aria-label="Tempo">${s.tempo}</output><button type="button" class="tempo-up" aria-label="Faster">+</button></span>
+-        <button type="button" class="btn-rec" aria-pressed="false" title="Record yourself with the band">● Rec</button>
++        <button type="button" class="btn-func" aria-pressed="false" title="Show chords as functions (ii7 V7 I) or as names" aria-label="Chord functions">ii–V</button>
+         <button type="button" class="btn-stage" aria-pressed="false" title="Large chart for a music stand">Stage</button>
++        <button type="button" class="btn-rec" aria-pressed="false" title="Record yourself with the band">● Rec</button>
+       </div>
+       <div class="pl-tabs">
+         <span class="pl-seg seg-view"><button type="button" data-v="chart">Chart</button><button type="button" data-v="page">Original page</button></span>
+         <button class="pl-btn btn-loop" type="button" title="Loop the bars you selected">Loop</button>
+         <button class="pl-btn btn-clear" type="button">Clear selection</button>
+         <label class="follow-control"><input type="checkbox" class="in-follow" checked> Follow score</label><span class="pl-hint">Tap a bar to start there · to loop: tap the first bar, Loop, then the last bar (or Shift-click) · Space plays / stops</span>
+-      </div>
++      </div></div>
+       <div class="pl-stagewrap"><div class="pl-view"></div><div class="pl-cue" hidden aria-live="polite"></div></div></section>
+       <nav class="dock" aria-label="Playback controls">
+-        <button class="pl-play" type="button">▶ Play</button>
+-        <button type="button" class="pl-stop" disabled>Stop</button>
++        <button class="pl-play" type="button" aria-label="Play" title="Play">${ICON.play}</button>
++        <button type="button" class="pl-stop" aria-label="Stop" title="Stop" disabled>${ICON.stop}</button>
+         <button type="button" data-panel="score" aria-pressed="true">Score</button>
+         <button type="button" data-panel="mix" aria-pressed="false">Mixer</button>
+         <button type="button" data-panel="setup" aria-pressed="false">Setup</button>
+@@ -526,6 +537,7 @@ export class Player {
+     $('.tempo-down', r).onclick = () => { setTempo(s.tempo - 5); if (!this.state.playing) this.reprep(); };
+     $('.tempo-up', r).onclick = () => { setTempo(s.tempo + 5); if (!this.state.playing) this.reprep(); };
+     $('.in-key', r).onchange = (e) => { s.key = +e.target.value; post({ t: 'transpose', semis: s.key }); this.saveTune(); this.drawChart(); };
++    this.roman = null;
+     $('.in-feel', r).onchange = (e) => { s.feel = +e.target.value; this.saveTune(); this.reprep(); };
+     const setRole = (v) => {
+       s.role = v; this.save();
+@@ -537,6 +549,18 @@ export class Player {
+     $('.seg-role', r).onclick = (e) => { const b = e.target.closest('button'); if (b) setRole(b.dataset.v); };
+     $('.in-role-q', r).onchange = (e) => setRole(e.target.value);
+     $('.btn-rec', r).onclick = () => this.toggleRec();
++    const setMode = (v) => {
++      s.chordMode = v; this.save();
++      $('.in-chordmode', r).value = v; $('.btn-func', r).setAttribute('aria-pressed', String(v === 'func'));
++      this.drawChart(); if (this.state.playing && this.lastSrc != null) this.highlight(this.lastSrc, this.lastBeat);
++    };
++    $('.in-chordmode', r).value = s.chordMode; $('.btn-func', r).setAttribute('aria-pressed', String(s.chordMode === 'func'));
++    $('.in-chordmode', r).onchange = (e) => setMode(e.target.value);
++    $('.btn-func', r).onclick = () => setMode(s.chordMode === 'func' ? 'name' : 'func');
++    $('.in-notes', r).value = s.notes;
++    $('.in-notes', r).onchange = (e) => { s.notes = e.target.value; this.save(); this.drawChart(); };
++    $('.in-human', r).value = s.human;
++    $('.in-human', r).onchange = (e) => { s.human = +e.target.value; this.save(); post({ t: 'human', amount: s.human }); };
+     $('.btn-stage', r).onclick = () => this.setStage(!this.stage);
+     $('.in-pass', r).value = s.passStep;
+     $('.in-pass', r).onchange = (e) => { s.passStep = +e.target.value; this.save(); };
+@@ -599,15 +623,36 @@ export class Player {
+     lb.disabled = !this.loop && !this.sel;
+     if (this.s.view === 'page') { this.drawPages(view); return; }
+     const p = this.prep, song = this.song, barLen = p.barLen;
++    const staff = this.s.notes !== 'roll', func = this.s.chordMode === 'func';
++    if (func && !this.roman) this.roman = romanize(song.bars, song.key || 0);
++    // the staff: bar height, and the written pitch for the reader (key change and transposing instrument)
++    const barH = this.stage ? Math.max(120, Math.min(230, Math.round(innerHeight * 0.21))) : (view.clientWidth || innerWidth) < 700 ? 104 : 116;
++    const horn = HORNS.find(x => x[0] === this.s.horn) || HORNS[0];
++    let shift = this.s.key + horn[1];
++    if (staff) {                                           // keep the transposed line on the staff
++      let sum = 0, cnt = 0;
++      for (const b of song.bars) for (let k = 2; k < b.n.length; k += 3) if (b.n[k]) { sum += (b.n[k] & 127) + shift; cnt++; }
++      while (cnt && sum / cnt > 78) { shift -= 12; sum -= 12 * cnt; }
++      while (cnt && sum / cnt < 60) { shift += 12; sum += 12 * cnt; }
++    }
++    const keyAt = []; { let k = song.key || 0; song.bars.forEach((b, i) => { if (b.k !== undefined) k = b.k; keyAt[i] = transposeKey(k, this.s.key + horn[1]); }); }
+     // pitch range for the little melody rolls
+     let lo = 127, hi = 0;
+     for (const b of song.bars) for (let k = 2; k < b.n.length; k += 3) if (b.n[k]) { const q = b.n[k] & 127; lo = Math.min(lo, q); hi = Math.max(hi, q); }
+     if (lo > hi) { lo = 60; hi = 72; }
+     const span = Math.max(8, hi - lo + 1);
+-    const barHTML = (b, i, cls, len) => {
++    const barHTML = (b, i, cls, len, k) => {
+       const L = len || barLen;
+-      const chords = b.c.map(c => `<span style="left:${(c[0] / L * 100).toFixed(1)}%">${esc(this.chordLabel(c[1]))}</span>`).join('');
++      const chords = b.c.map((c, ci) => `<span style="left:${(c[0] / L * 100).toFixed(1)}%">${esc(func ? this.roman[k][ci] : this.chordLabel(c[1]))}</span>`).join('');
+       let rects = '';
++      if (staff) {
++        const nx = song.bars[k + 1], last = b.n.length ? b.n[b.n.length - 1] & 127 : 0;
++        const tieOut = !!(nx && nx.n.length && nx.n[2] >= 128 && (nx.n[2] & 127) === last && last);
++        const tags = [b.sg && b.sg.includes('segno') ? '𝄋' : '', b.sg && b.sg.includes('coda') ? '𝄌' : '', b.ds ? 'D.S.' : '', b.dc ? 'D.C.' : '', b.fn ? 'Fine' : ''].filter(Boolean).join(' ');
++        const volta = b.e ? `<div class="volta">${b.e.join(', ')}.</div>` : '';
++        const classes = ['bar', cls, b.rs ? 'rs' : '', b.re ? 're' : '', b.db ? 'db' : ''].filter(Boolean).join(' ');
++        return `<div class="${classes}" data-src="${i}">${volta}${staffBar(b.n, L, keyAt[k], shift, barH, tieOut, rowKey)}<div class="chords">${chords}</div>${tags ? `<span class="tag">${tags}</span>` : ''}</div>`;
++      }
+       for (let k = 0; k < b.n.length; k += 3) {
+         const t = b.n[k], d = b.n[k + 1], q = b.n[k + 2];
+         if (!q) continue;
+@@ -641,14 +686,15 @@ export class Player {
+         cur.push(k);
+       });
+     }
+-    let html = '<div class="chart">';
++    let html = '<div class="chart">', rowKey = 0;
+     for (const row of rows) {
+       const first = row.find(k => k >= bodyStart) - bodyStart;
+       const sec = first >= 0 && p.section[first] ? String.fromCharCode(p.section[first]) : '';
+-      html += `<div class="chart-row"><span class="sec">${sec}</span>`;
++      rowKey = keyAt[row[0]];
++      html += `<div class="chart-row"><span class="sec">${sec}</span>${staff ? rowHead(rowKey, barH).html : ''}`;
+       for (const k of row) {
+-        if (k < bodyStart) html += barHTML(song.bars[k], 'pickup', 'pickup', song.bars[k].len || barLen);
+-        else html += barHTML(song.bars[k], k - bodyStart, '');
++        if (k < bodyStart) html += barHTML(song.bars[k], 'pickup', 'pickup', song.bars[k].len || barLen, k);
++        else html += barHTML(song.bars[k], k - bodyStart, '', 0, k);
+       }
+       if (per) for (let f = row.filter(k => k >= bodyStart).length; f < per; f++) html += '<div class="bar filler" aria-hidden="true"></div>';
+       html += '</div>';
+@@ -656,6 +702,8 @@ export class Player {
+     html += '</div>';
+     view.innerHTML = html;
+     view.querySelector('.chart').classList.toggle('flow', !!per);
++    view.querySelector('.chart').classList.toggle('staffed', staff);
++    view.querySelector('.chart').style.setProperty('--barh', barH + 'px');
+     view.querySelectorAll('.bar:not(.filler)').forEach(el => el.onclick = (e) => this.barClick(el.dataset.src, e.shiftKey));
+     this.markSelection();
+     this.fitChords();
+diff --git a/studio.css b/studio.css
+index 59d4a62..4e1693f 100644
+--- a/studio.css
++++ b/studio.css
+@@ -37,16 +37,50 @@ body.browsing #songs header{display:none}body.browsing #lib-strip,body.browsing
+ .takes{padding:0 12px 8px}.take{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 0;border-bottom:1px solid var(--border);font:14px system-ui;color:var(--text)}.take audio{flex:1 1 240px;height:40px;min-width:0}.take a{color:var(--gold)}
+ .takes-empty,.keys-help{padding:0 12px 12px;font:14px/1.5 system-ui;color:var(--muted)}.setup-sheet .pl-grid input[type=number]{width:90px}
+ /* stage: only the chart, large, with the transport underneath */
+-body.stage.playing-view #player{grid-template-rows:auto 0 minmax(0,1fr) auto;max-width:none;padding-inline:max(10px,env(safe-area-inset-left))}
+-body.stage .song-head,body.stage .pl-tabs,body.stage .pl-transport label,body.stage .quick label,body.stage .btn-rec,body.stage .score-panel>small{display:none!important}
+-body.stage .pl-transport{justify-content:center}body.stage .pl-status{font-size:15px}body.stage .quick{justify-content:flex-end;margin:0 0 4px}
+-body.stage .chart{gap:.5rem}body.stage .chart .bar{height:clamp(104px,19svh,210px)}
++body.stage.playing-view #player{max-width:none;padding-inline:max(10px,env(safe-area-inset-left))}
++body.stage .song-head h2,body.stage .song-meta,body.stage .head-buttons,body.stage .pl-tabs,body.stage .quick label,body.stage .btn-rec,body.stage .btn-func,body.stage .score-panel>small{display:none!important}
++body.stage .pl-status{font-size:15px}body.stage .toolbar{justify-content:flex-end}
++body.stage .chart{gap:.5rem}
+ body.stage .bar .chords{height:auto;top:6px}body.stage .bar .chords span{font-size:clamp(1.45rem,4.4vw,3rem);line-height:1.05}
+-body.stage .bar .roll{top:46%;height:calc(54% - 8px)}body.stage .chart-row .sec{font-size:1.5rem;width:1.7rem}
++body.stage .bar .roll{top:46%;height:calc(54% - 8px)}body.stage .chart:not(.staffed) .bar{height:clamp(104px,19svh,210px)}body.stage .chart-row .sec{font-size:1.5rem;width:1.7rem}
+ body.stage .bar.now{outline-width:3px}
+-@media(max-height:480px){.quick{display:none}body.stage .quick{display:flex}}
++
+ /* my list, on the songs screen */
+ #my-list{max-width:680px;margin:1.2rem auto 0;padding:0 1rem}#my-list h2{font:normal 1.5rem Georgia,serif;color:var(--cream);margin-bottom:.4rem}
+ #my-list .ml-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border)}#my-list .ml-title{flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ #my-list button{min-height:44px;font:500 16px system-ui;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--cream);padding:0 12px}#my-list .ml-small{width:44px;padding:0}
+ #my-list label{display:flex;align-items:center;gap:8px;min-height:44px;color:var(--muted);font:14px system-ui}#my-list input{width:20px;height:20px;accent-color:var(--gold)}
++
++/* three rows: a compact head (title, then what the band is doing), the panel, the dock */
++body.playing-view #player{grid-template-rows:auto minmax(0,1fr) auto;gap:4px}
++.panel{grid-row:2}.dock{grid-row:3}
++.song-head .pl-status:empty{display:none}#player.has-status .song-meta{display:none}
++.song-head h2{font-size:clamp(20px,4.6vw,34px)}.song-head p{line-height:18px}
++.out-meter{float:right;font:12px system-ui;color:var(--muted);white-space:nowrap}
++/* one toolbar above the chart: practice controls, then view and loop */
++.toolbar{flex:none;display:flex;align-items:center;gap:6px;overflow-x:auto;margin:0 0 4px;scrollbar-width:none}.toolbar::-webkit-scrollbar{display:none}
++#player .toolbar .quick,#player .toolbar .pl-tabs{display:contents}.toolbar>*>*{flex-shrink:0}
++#player .btn-func[aria-pressed=true]{box-shadow:inset 0 -3px var(--gold);color:var(--gold)}#player .btn-func{font-family:Georgia,serif}
++/* transport symbols */
++.dock svg{width:26px;height:26px;fill:currentColor;display:block;margin:auto}#player .dock .pl-play svg{width:30px;height:30px}
++.dock{grid-template-columns:1.25fr 1fr repeat(3,minmax(0,1.1fr))}
++/* the melody on a staff */
++.chart.staffed .bar{height:var(--barh,110px)}.bar .staff{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
++.chart-row .rowhead{flex:none;background:#1b2933;overflow:visible}
++.staff .sl{stroke:#8fa3a5;stroke-width:1}.staff .stem{stroke:var(--cream);stroke-width:1.3;stroke-linecap:round}.staff .beam{stroke:var(--cream)}
++.staff .nh,.staff .flag{fill:var(--cream)}.staff .nho{fill:none;stroke:var(--cream)}.staff .rest{fill:none;stroke:var(--cream);stroke-width:1.6;stroke-linejoin:round}
++.staff .clef{fill:none;stroke:var(--cream);stroke-width:1.5;stroke-linecap:round}.staff .tie{fill:none;stroke:var(--cream);stroke-width:1.3}
++.staff .acc,.staff .tup{fill:var(--cream);font-family:"Noto Music","Segoe UI Symbol","Apple Symbols",system-ui,serif}.staff .tup{font-style:italic;font-family:Georgia,serif}
++.bar.now .staff .nh,.bar.now .staff .flag{fill:var(--gold)}.bar.now .staff .stem,.bar.now .staff .beam,.bar.now .staff .nho,.bar.now .staff .tie{stroke:var(--gold)}
++.chart.staffed .bar .chords{z-index:1}.chart.staffed .bar .chords span{text-shadow:0 0 4px #1b2933,0 0 4px #1b2933}
++/* phones: every pixel to the chart */
++@media(max-width:640px){
++  body.playing-view #player{padding:max(4px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));gap:3px}
++  #player .song-head h2{font-size:19px}.song-head p{font-size:12px;line-height:15px}
++  #player .song-head button{min-height:36px;padding:0 10px;font-size:14px}#player .pl-fav{width:36px;padding:0;font-size:19px}
++  #player .toolbar button,#player .toolbar select{min-height:38px;font-size:14px;padding:0 9px}#player .tempo-step button{width:36px;padding:0}
++  .toolbar{margin-bottom:2px}.panel{padding:3px 0;border-top:0}
++  .dock button{min-height:46px!important}.chart{gap:.25rem}.chart.flow .chart-row .sec{width:.9rem;font-size:.85rem}
++  .follow-control{min-height:38px}
++}
++@media(max-height:480px){body.playing-view #player{grid-template-rows:auto minmax(0,1fr) auto;gap:2px}#player .toolbar .quick label{display:none}.dock button{min-height:40px!important}}
+diff --git a/sw.js b/sw.js
+index de41e3a..b5ac2e2 100644
+--- a/sw.js
++++ b/sw.js
+@@ -1,10 +1,10 @@
+ // Service worker: the app, the song library and the instruments are kept on the device, so Jazz Play-Along opens
+ // from the home screen and plays without a connection. The book PDFs (the "Original page" view) are large and are
+ // not kept: that view needs a connection.
+-const VERSION = 'play-along-v1';
+-const SHELL = ['./', 'index.html', 'player.js', 'songform.js', 'studio.css', 'app/player.css', 'manifest.webmanifest',
++const VERSION = 'play-along-v2';
++const SHELL = ['./', 'index.html', 'player.js', 'notation.js', 'songform.js', 'studio.css', 'app/player.css', 'manifest.webmanifest',
+   'icons/icon-192.png', 'songs.json', 'books.json', 'leads/462jazz.json', 'engine/worklet.js', 'engine/jazzband.wasm',
+-  'engine/packs/jbdrums.jbp', 'engine/packs/jbbass.jbp', 'engine/packs/jbpiano.jbp', 'engine/packs/jbguitar.jbp'];
++  'engine/packs/jbdrums.jbp', 'engine/packs/jbbass.jbp', 'engine/packs/jbpiano.jbp', 'engine/packs/jbguitar.jbp', 'engine/packs/jblead.jbp'];
+ const BINARY = /\.(wasm|jbp|png|woff2?)$|\/vendor\//;        // never change under the same name within a version
+ 
+ self.addEventListener('install', (e) => {
+diff --git a/worklet.js b/worklet.js
+index 78142f9..959d4be 100644
+--- a/worklet.js
++++ b/worklet.js
+@@ -53,7 +53,8 @@ class JazzBand extends AudioWorkletProcessor {
+       case 'loop': X.jbw_loop(d.from, d.to, d.kstep || 0); break;
+       case 'leadmask': X.jbw_lead_mask(d.mask >>> 0); break;
+       case 'leadsound': X.jbw_lead_sound(d.sound, d.level, d.oct); break;
+-      case 'packs': this.port.postMessage({ t: 'packs', ok: [0, 1, 2, 3].map(i => X.jbw_pack_ok(i)) }); break;
++      case 'human': X.jbw_human?.(d.amount); break;
++      case 'packs': this.port.postMessage({ t: 'packs', ok: [0, 1, 2, 3, 5].map(i => X.jbw_pack_ok(i)) }); break;
+     }
+   }
+   process(inputs, outputs) {
+-- 
+2.43.0
+

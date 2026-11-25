@@ -1,8 +1,8 @@
 From 142e3c96189ff6d0876e5db76181410d353073b8 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Wed, 25 Nov 2026 08:27:33 +0000
-Subject: [PATCH] Practice experience: instant start, stage view, cues, keys,
- loop speed-up, recording, my list, room, offline
+Subject: [PATCH 1/2] Practice experience: instant start, stage view, cues,
+ keys, loop speed-up, recording, my list, room, offline
 
 The engine and instruments preload when the page opens. Tempo, key and
 feel are remembered per tune. A quick row above the chart holds You play,
