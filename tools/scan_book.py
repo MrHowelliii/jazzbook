@@ -27,6 +27,14 @@ def layout_page(args):
     if os.path.exists(out):
         return out
     try:
+        return _layout_page(pdf, page, work, out)
+    except Exception as e:                               # one odd page must not stop the book
+        json.dump({'page': page, 'error': repr(e), 'staves': [], 'titles': [], 'pieces': []}, open(out, 'w'))
+        return out
+
+
+def _layout_page(pdf, page, work, out):
+    try:
         img, sts, titles = L.analyse(pdf, page)
     except Exception as e:                               # an empty or odd page
         json.dump({'page': page, 'error': str(e), 'staves': [], 'titles': []}, open(out, 'w')); return out
@@ -45,6 +53,8 @@ def layout_page(args):
             continue
         top = max(0, int(sts[group[0]]['top'] - sts[group[0]]['sp'] * 7))
         bot = min(img.height, int(sts[group[-1]]['bot'] + sts[group[-1]]['sp'] * 6))
+        if bot - top < 50:
+            continue
         name = f'piece-{page:03d}-{len(pieces)}.png'
         img.crop((0, top, img.width, bot)).save(os.path.join(work, name))
         pieces.append({'title': t['text'] if t else None, 'staves': group, 'image': name, 'y': top})

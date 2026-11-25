@@ -211,6 +211,9 @@ def chords_above(img, st, prev_bot=None):
         y0 = max(y0, prev_bot + sp * 5)
     y1 = st['top'] - sp * 0.6
     x0, x1 = max(0, st['x0'] - int(sp * 3)), min(img.width, st['x1'] + int(sp * 2))
+    y0 = max(0, y0)
+    if y1 - y0 < sp * 1.5 or x1 - x0 < sp * 4:
+        return []                                       # no room above this staff
     crop = img.crop((x0, int(y0), x1, int(y1)))
     a = np.array(crop) < 150
     # rows of text: the tallest dark row band is the chord line (tuplet brackets and marks are thin)
