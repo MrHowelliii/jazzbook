@@ -1593,5 +1593,236 @@
    "13": "Dm69"
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-63b": {
+  "title": "Blue Champagne",
+  "chords": {
+   "1": "F . . Abdim7",
+   "2": "C7/G . C7 .",
+   "3": "F",
+   "4": "Db7 . Gm7b5 C7",
+   "5": "F . Abdim7 .",
+   "6": "Gm7b5 . C7 .",
+   "7": "F . Dm7 .",
+   "8": "Gm7 . C7 .",
+   "9": "F . Bb .",
+   "10": "F",
+   "11": "A7 . Dm Dm(maj7)",
+   "12": "Dm7 . G9 .",
+   "13": "F . Gm7 C7#5",
+   "14": "F . A7 .",
+   "15": "Dm . Dm(maj7) .",
+   "16": "Dm7 . G9 .",
+   "17": "F . G9 .",
+   "18": "Db7 . Gm7 C7",
+   "19": "F . Abdim7 .",
+   "20": "C7/G . C7 .",
+   "21": "F",
+   "22": "Db7 . Gm7b5 .",
+   "23": "C7 F . D7",
+   "24": "Gm7b5",
+   "25": "C9 . . F",
+   "26": "F"
+  },
+  "notes": {
+   "11": "D4/8 E4/8 F4/8 G4/8 A4/8 A4/4 F4/8"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-64": {
+  "title": "Blue Haze",
+  "chords": {
+   "1": "BbM7",
+   "2": "Cm7",
+   "3": "BbM7",
+   "4": "Bb7",
+   "5": "EbM7",
+   "6": "Ebm6",
+   "7": "Dm6",
+   "8": "Ddim7",
+   "9": "EbM7",
+   "11": "Ebm",
+   "12": "F7",
+   "13": "BbM7",
+   "14": "Cm7",
+   "15": "BbM7",
+   "16": "Bb7",
+   "17": "EbM7",
+   "18": "Ebm6",
+   "19": "Dm7",
+   "20": "Ddim7",
+   "21": "EbM7",
+   "23": "Ebm",
+   "24": "Bb"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-66": {
+  "title": "Body And Soul",
+  "skip": "the 462 Jazz Standards chart of Body And Soul plays instead",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-64b": {
+  "title": "Blueberry Hill",
+  "chords": {
+   "1": "Eb7",
+   "2": "Ab",
+   "4": "Eb",
+   "6": "Bb7",
+   "8": "Eb . EbM7 .",
+   "9": "Eb6 . Eb7 .",
+   "10": "Ab",
+   "12": "Eb",
+   "14": "Bb7",
+   "16": "Eb . Db7 .",
+   "17": "Eb . Ab6 .",
+   "18": "Eb",
+   "19": "EbM7 . Ab6 .",
+   "20": "Eb EbM7 Eb7 .",
+   "21": "D7",
+   "22": "Gm . D7 .",
+   "23": "Gm . D7 .",
+   "24": "G . . Bb7",
+   "25": "Eb7",
+   "26": "Ab",
+   "28": "Eb",
+   "30": "Bb7",
+   "32": "Eb . Db7 .",
+   "33": "Eb . Eb7 .",
+   "34": "Eb . Ab6 .",
+   "35": "Eb"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-65": {
+  "title": "Blues In The Closet",
+  "insert": [
+   2
+  ],
+  "chords": {
+   "1": "G",
+   "4": "G7",
+   "5": "C7",
+   "7": "G",
+   "8": "E7",
+   "9": "Am7",
+   "10": "D7",
+   "11": "G"
+  },
+  "notes": {
+   "2": "C5/4 B4/8. G4/16 G4/8. D4/16 r/8. G4/16",
+   "3": "G4/4 B4/8. G4/16 C5/4 B4/8. G4/16",
+   "7": "G4/4 B4/16t C5/16t B4/16t G4/8 C5/4 B4/8. G4/16",
+   "8": "G4/8. D4/16 E4/4 F4/8 F4/16t G4/16t F4/16t E4/8. Eb4/16"
+  },
+  "bars": {
+   "1": {
+    "rs": true
+   },
+   "12": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-67": {
+  "title": "Boogie Woogie",
+  "read": "chords read by eye from the page (homr notes; the grace-note runs are left out)",
+  "chords": {
+   "2": "F",
+   "6": "Bb",
+   "8": "F",
+   "9": "Bb6",
+   "10": "C7",
+   "11": "Bb7",
+   "12": "F",
+   "14": "F7",
+   "18": "Bb7",
+   "20": "F",
+   "21": ". . F7 .",
+   "22": "C7",
+   "23": "Bb7 . C7 .",
+   "24": "F . Bb7 .",
+   "25": "F Bb7 F6 .",
+   "26": "F6",
+   "30": "Bb7",
+   "32": "F6",
+   "34": "C7",
+   "35": "Bb9",
+   "36": "F . Bb Bb9",
+   "37": "F"
+  }
+ },
+ "Jazz-Fakebook-69": {
+  "title": "Blues For Pablo",
+  "chords": {
+   "1": "Gm",
+   "7": ". D7b9#5",
+   "8": "G6",
+   "10": "Gm",
+   "15": "Cm . Fm7b5 .",
+   "16": "Gm . F6 .",
+   "17": "EbM7 . D7b9 .",
+   "18": "Gm"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-69b": {
+  "title": "Boplicity (Bebop Lives)",
+  "chords": {
+   "1": "Fm7 . Gm7 .",
+   "2": "AbM7 . Bb7 .",
+   "3": "EbM7",
+   "4": "Bbm7 . Eb7#5#9 .",
+   "5": "AbM7",
+   "6": "Fm7 . EbM7/G .",
+   "7": "AbM7 . Bb7sus .",
+   "8": "EbM7#11",
+   "9": "Fm7 . Gm7 .",
+   "10": "AbM7 . Bb7 .",
+   "11": "EbM7",
+   "12": "Bbm7 . Eb7#5#9 .",
+   "13": "AbM7",
+   "14": "Fm7 . EbM7/G .",
+   "15": "AbM7 . Bb7sus .",
+   "16": "EbM7#11",
+   "17": "Bbm7 . Eb7#5#9 .",
+   "18": "Bbm7 . Eb7#5#9 .",
+   "19": "AbM7",
+   "21": "Abm7 . Db7#5#9 .",
+   "22": "Abm7 . Db7#5#9 .",
+   "23": "GbM7 . Gbm7 .",
+   "24": "Fm7 . Bb13#11 .",
+   "25": "Fm7 . Gm7 .",
+   "26": "AbM7 . Bb7 .",
+   "27": "EbM7",
+   "28": "Bbm7 . Eb7#5#9 .",
+   "29": "AbM7",
+   "30": "Fm7 . EbM7/G .",
+   "31": "AbM7 . Bb7 .",
+   "32": "EbM7#11"
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }

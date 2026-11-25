@@ -110,8 +110,14 @@ VALUE = {'1': 192, '2': 96, '4': 48, '8': 24, '16': 12, '32': 6}
 
 def apply_override(meas, ov):
     """Chords (one token per beat, '.' = none) and corrected bars from leads-overrides/<book>.json.
-    'bars_total' adds empty bars the notes reader missed (filled by 'notes'); 'drop' removes bars it made up;
-    both use the numbering after the added bars, before any are dropped."""
+    'insert' adds an empty bar after each listed bar and 'bars_total' adds empty bars at the end (both filled by
+    'notes'); 'drop' removes bars the reader made up. Bar numbers in the other keys count the added bars, before
+    any are dropped."""
+    for k in sorted(ov.get('insert', []), reverse=True):    # an empty bar after bar k (the reader ran two together)
+        m = dict(meas[k - 1]); m.update(n=[], c=[], filled=0)
+        for f in ('rs', 're', 'e', 'ds', 'dc', 'fn', 'sg', 'db', 'tie_out', 'newsys'):
+            m[f] = None
+        meas.insert(k, m)
     while len(meas) < ov.get('bars_total', 0):
         m = dict(meas[-1]); m.update(n=[], c=[], filled=0)
         for f in ('rs', 're', 'e', 'ds', 'dc', 'fn', 'sg', 'db', 'tie_out', 'newsys'):
