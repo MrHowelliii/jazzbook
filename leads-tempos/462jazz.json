@@ -1,0 +1,2774 @@
+{
+ "462jazz-35": {
+  "title": "A Child Is Born",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-36": {
+  "title": "After You've Gone",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-37": {
+  "title": "Afternoon In Paris",
+  "tempo": 122,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-38": {
+  "title": "Ain't Misbehavin'",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-39": {
+  "title": "Ain't She Sweet",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-40": {
+  "title": "Airegin",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-41": {
+  "title": "Alice In Wonderland",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-42": {
+  "title": "All God's Chillun Got Rhythm",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-43": {
+  "title": "All Of Me",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-44": {
+  "title": "All Of You",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-45": {
+  "title": "All The Things You Are",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-46": {
+  "title": "Almost Like Being In Love",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-47": {
+  "title": "Alone Together",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-48": {
+  "title": "Along Came Betty",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-49": {
+  "title": "Always",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-50": {
+  "title": "Am I Blue",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-51": {
+  "title": "Angel Eyes",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-52": {
+  "title": "Anything Goes",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-53": {
+  "title": "April In Paris",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-54": {
+  "title": "April Showers",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-55": {
+  "title": "Are You Real",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-56": {
+  "title": "As Long As I Live",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-57": {
+  "title": "As Time Goes By",
+  "tempo": 70,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-58": {
+  "title": "At Long Last Love",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-59": {
+  "title": "Autumn In New York",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-60": {
+  "title": "Autumn Leaves",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-61": {
+  "title": "Baubles, Bangles, and Beads",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-62": {
+  "title": "Be My Love",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-63": {
+  "title": "Beautiful Friendship, A",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-64": {
+  "title": "Beautiful Love",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-65": {
+  "title": "Best Thing For You (Would Be Me), The",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-66": {
+  "title": "Between the Devil and the Deep Blue Sea",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-67": {
+  "title": "Bewitched, Bothered and Bewildered",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-68": {
+  "title": "Bidin' My Time",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-69": {
+  "title": "Bitter Sweet",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "guess"
+ },
+ "462jazz-70": {
+  "title": "Black and Blue",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-71": {
+  "title": "Black Orheus (Manha De Carnaval)",
+  "tempo": 120,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-72": {
+  "title": "Blue and Broken Hearted",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-73": {
+  "title": "Blue And Sentimental",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-74": {
+  "title": "Blue Bossa",
+  "tempo": 150,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-75": {
+  "title": "Blue Lou",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-76": {
+  "title": "Blue Moon",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-77": {
+  "title": "Blue Room",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-78": {
+  "title": "Blue Skies",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-79": {
+  "title": "Blues In The Night",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-81": {
+  "title": "Bluesette",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-83": {
+  "title": "Body And Soul",
+  "tempo": 70,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-84": {
+  "title": "Born To Be Blue",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-85": {
+  "title": "Boy Next Door, The",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-86": {
+  "title": "But Beautiful",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-87": {
+  "title": "But Not For Me",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-88": {
+  "title": "Bye, Bye Blackbird",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-89": {
+  "title": "Bye, Bye, Blues",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-90": {
+  "title": "Cabin In The Sky",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-91": {
+  "title": "Can't We Be Friends",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-92": {
+  "title": "Can't We Talk It Over",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-93": {
+  "title": "Candy",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-94": {
+  "title": "Caravan",
+  "tempo": 200,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-95": {
+  "title": "Cheek To Cheek",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-96": {
+  "title": "Chelsea Bridge",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-97": {
+  "title": "Cherokee",
+  "tempo": 300,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-98": {
+  "title": "Come Rain Or Come Shine",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-99": {
+  "title": "Come Sunday",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-100": {
+  "title": "Con Alma",
+  "tempo": 96,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-101": {
+  "title": "Cotton Tail",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-102": {
+  "title": "Crazy Rhythm",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-103": {
+  "title": "Daahoud",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-104": {
+  "title": "Dancing In The Dark",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-105": {
+  "title": "Dancing On the Ceiling",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-106": {
+  "title": "Darn That Dream",
+  "tempo": 70,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-107": {
+  "title": "Day By Day",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-108": {
+  "title": "Day Dream",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-109": {
+  "title": "Days of Wine and Roses, The",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-110": {
+  "title": "Dear Old Stockholm",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-111": {
+  "title": "Dearly Beloved",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-112": {
+  "title": "Deep Purple",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-113": {
+  "title": "Desfinado",
+  "tempo": 140,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-115": {
+  "title": "Didn't We",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-116": {
+  "title": "Django",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-117": {
+  "title": "Do Nothin' Till You Hear From Me",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-118": {
+  "title": "Dolphin Dance",
+  "tempo": 140,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-119": {
+  "title": "Don't Be That Way",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-120": {
+  "title": "Don't Blame Me",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-121": {
+  "title": "Don't Explain",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-122": {
+  "title": "Don't Get Around Much Anymore",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-123": {
+  "title": "Don't Worry 'Bout Me",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-124": {
+  "title": "Early Autumn",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-125": {
+  "title": "East of the Sun (and West of the Moon)",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-126": {
+  "title": "Easy Living",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-127": {
+  "title": "Easy Street",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-128": {
+  "title": "(You'd be So) Easy To Love",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-129": {
+  "title": "Embraceable You",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-130": {
+  "title": "Emily",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-131": {
+  "title": "Ev'ry Time We Say Goodbye",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-132": {
+  "title": "Everything Happens To Me",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-134": {
+  "title": "Everything I Have Is Yours",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-135": {
+  "title": "Exactly Like You",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-136": {
+  "title": "Falling In Love With Love",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-137": {
+  "title": "Fascinating Rhythm",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-138": {
+  "title": "A Felicidade",
+  "tempo": 160,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-139": {
+  "title": "Fine and Dandy",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-140": {
+  "title": "Fine Romance, A",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-141": {
+  "title": "Flamingo",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-142": {
+  "title": "Fly Me To The Moon",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-143": {
+  "title": "Flying Home-Instumental",
+  "tempo": 210,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-144": {
+  "title": "Foggy Day, A",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-145": {
+  "title": "Fools Rush In (Where Angels Fear To Tread)",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-146": {
+  "title": "For All We know",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-147": {
+  "title": "For Heaven's Sake",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-148": {
+  "title": "For Minors Only",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-149": {
+  "title": "Four Brothers",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-150": {
+  "title": "Four",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-151": {
+  "title": "Frankie and Johnny",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-152": {
+  "title": "Fried Bananas",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-153": {
+  "title": "From This Moment On",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-154": {
+  "title": "Gal In Calico, A",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-155": {
+  "title": "Gee, Baby Ain't I Good To You",
+  "tempo": 90,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-156": {
+  "title": "Georgia On My Mind",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-157": {
+  "title": "Get Happy",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-158": {
+  "title": "Get Out Of Town",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-159": {
+  "title": "Giant Steps",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-160": {
+  "title": "Girl From Ipanema, The",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-161": {
+  "title": "Girl Of My Dreams",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-162": {
+  "title": "Girl Talk",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-163": {
+  "title": "God Bless The Child",
+  "tempo": 70,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-164": {
+  "title": "Gone With The Wind",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-165": {
+  "title": "Good Bait",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-166": {
+  "title": "Good Morning Heartache",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-167": {
+  "title": "Green Dolphin Street, On",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-168": {
+  "title": "Gypsy, The",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-169": {
+  "title": "Handful Of Stars",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-171": {
+  "title": "Have You Met Miss Jones",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-172": {
+  "title": "Heart And Soul",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-173": {
+  "title": "Here's That Rainy Day",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-174": {
+  "title": "High-Fly",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-175": {
+  "title": "Honeysuckle Rose",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-176": {
+  "title": "How About You",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-177": {
+  "title": "How Deep Is The Ocean",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-178": {
+  "title": "How High The Moon",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-179": {
+  "title": "How Insensitive",
+  "tempo": 120,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-180": {
+  "title": "How Long Has This Been Going On",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-181": {
+  "title": "I Apologize",
+  "tempo": 90,
+  "feel": "ballad",
+  "basis": "guess"
+ },
+ "462jazz-182": {
+  "title": "I Can't Believe That You're In Love With Me",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-183": {
+  "title": "I Can't Get Started",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-184": {
+  "title": "I Can't Give You Anything But Love, Baby",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-185": {
+  "title": "I Concentrate On You",
+  "tempo": 160,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-186": {
+  "title": "I Could Write A Book",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-187": {
+  "title": "I Cover The Waterfront",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-188": {
+  "title": "I Didn't Know About You",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-189": {
+  "title": "I Didn't Know What Time It Was",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-190": {
+  "title": "I Don't Stand A Ghost Of A Chance With You",
+  "tempo": 70,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-191": {
+  "title": "I Fall In Love Too Easily",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-192": {
+  "title": "I Get A Kick Out Of You",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-193": {
+  "title": "I Got It Bad (And That Ain't Good)",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-194": {
+  "title": "I Got Rhythm",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-195": {
+  "title": "I Hear A Rhapsody",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-196": {
+  "title": "I Hear Music",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-197": {
+  "title": "I Know That You Know",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-198": {
+  "title": "I Let A Song Go Out Of My Heart",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-199": {
+  "title": "I Love You",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-200": {
+  "title": "I Never Knew",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-201": {
+  "title": "I Only Have Eyes For You",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-202": {
+  "title": "I Remember Clifford",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-204": {
+  "title": "I Remember You",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-205": {
+  "title": "I Should Care",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-206": {
+  "title": "I Surrender Dear",
+  "tempo": 90,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-207": {
+  "title": "I Thought About You",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-208": {
+  "title": "I Want A Little Girl",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-209": {
+  "title": "I Want To Be Happy",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-210": {
+  "title": "I Wish I Were In Love Again",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-211": {
+  "title": "I Wished On The Moon",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-212": {
+  "title": "I'll Never Be The Same",
+  "tempo": 90,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-213": {
+  "title": "I'll Never Smile Again",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-214": {
+  "title": "I'll Never Stop Loving You",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-215": {
+  "title": "I'll Remember April",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-216": {
+  "title": "I'll Take Romance",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-217": {
+  "title": "I'm Afraid The Masquerade Is Over",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-218": {
+  "title": "I'm Beginning To See The Light",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-219": {
+  "title": "I'm Confessin' That I Love You",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-220": {
+  "title": "I'm Getting Sentimental Over You",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-221": {
+  "title": "I'm In The Mood For Love",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-222": {
+  "title": "Im Just A Lucky So And So",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-223": {
+  "title": "I'm Old Fashioned",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-224": {
+  "title": "I've Got A Crush On You",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-225": {
+  "title": "I've Got The World On A String",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-226": {
+  "title": "I've Got You Under My Skin",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-228": {
+  "title": "I've Grown Accustomed To Her Face",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-229": {
+  "title": "I've Told Ev'ry Little Star",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-230": {
+  "title": "If I Could Be With You One Hour Tonight",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-231": {
+  "title": "If I Had You",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-232": {
+  "title": "If I Love Again",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-233": {
+  "title": "If I Should Lose You",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-234": {
+  "title": "If I Were A Bell",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-235": {
+  "title": "If You Could See Me Now",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-236": {
+  "title": "Ill Wind",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-237": {
+  "title": "Imagination",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-238": {
+  "title": "In A Mellow Tone",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-239": {
+  "title": "In A Sentimental Mood",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-240": {
+  "title": "In Love In Vain",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "guess"
+ },
+ "462jazz-241": {
+  "title": "In The Chapel In The Moonlight",
+  "tempo": 90,
+  "feel": "ballad",
+  "basis": "guess"
+ },
+ "462jazz-242": {
+  "title": "In The Sign Of Libra",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-243": {
+  "title": "In Your Own Sweet Way",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-244": {
+  "title": "Inchworm, The",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-245": {
+  "title": "Indian Summer",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-246": {
+  "title": "(Back Home In) Indiana",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-247": {
+  "title": "Isn't It Romantic",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-248": {
+  "title": "It Ain't Necessarily So",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-250": {
+  "title": "It Could Happen To You",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-251": {
+  "title": "It Don't Mean A Thing",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-252": {
+  "title": "It Might As Well Be Spring",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-253": {
+  "title": "It Never Entered My Mind",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-254": {
+  "title": "It's A Blue World",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-255": {
+  "title": "It's All Right With Me",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-257": {
+  "title": "It's Always You",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-258": {
+  "title": "It's Only A Paper Moon",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-259": {
+  "title": "It's You Or No One",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-260": {
+  "title": "Jeepers Creepers",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-261": {
+  "title": "Jersey Bounce",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-262": {
+  "title": "Jordu",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-263": {
+  "title": "Joy Spring",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-264": {
+  "title": "Jumpin' At The Woodside",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-265": {
+  "title": "Just Friends",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-266": {
+  "title": "Just In Time",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-267": {
+  "title": "Just One Of Those Things",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-269": {
+  "title": "Just Squeeze Me (But Please Don't Tease Me)",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-270": {
+  "title": "Just You, Just Me",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-271": {
+  "title": "Keepin' Out Of Mischief Now",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-272": {
+  "title": "Lady Bird",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-273": {
+  "title": "Lady Is A Tramp, The",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-274": {
+  "title": "Laura",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-275": {
+  "title": "Li'l Darlin'",
+  "tempo": 70,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-276": {
+  "title": "Like Someone In Love",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-277": {
+  "title": "Line for Lyons",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-278": {
+  "title": "Little Girl Blue",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-279": {
+  "title": "Little Girl",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-280": {
+  "title": "Liza (All the Clouds'll Roll Away)",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-281": {
+  "title": "Long Ago And Far Away",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-282": {
+  "title": "Love For Sale",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-284": {
+  "title": "Love Is Here To Stay",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-285": {
+  "title": "Love Is Just Around The Corner",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-286": {
+  "title": "Love Letters",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-287": {
+  "title": "Love Walked In",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-288": {
+  "title": "Lover Man (Oh, Where Can You Be)",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-289": {
+  "title": "Lover, Come Back To Me",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-290": {
+  "title": "Lover",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-291": {
+  "title": "Lullaby Of Birdland",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-292": {
+  "title": "Lulu's Back In Town",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-293": {
+  "title": "Lush Life",
+  "tempo": 60,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-294": {
+  "title": "Mack The Knife",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-296": {
+  "title": "Makin' Whoopee",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-297": {
+  "title": "Man I Love, The",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-298": {
+  "title": "Manhattan (We'll Have Manhattan)",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-299": {
+  "title": "Margie",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-300": {
+  "title": "Mean To Me",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-301": {
+  "title": "Meditation",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-302": {
+  "title": "Memories Of You",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-303": {
+  "title": "Mercy, Mercy, Mercy",
+  "tempo": 90,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-304": {
+  "title": "Misty",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-305": {
+  "title": "Moment's Notice",
+  "tempo": 250,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-306": {
+  "title": "Mood Indigo",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-307": {
+  "title": "Moon River",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-308": {
+  "title": "Moonglow (And Love)",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-309": {
+  "title": "Moonlight In Vermont",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-310": {
+  "title": "More I See You, The",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-311": {
+  "title": "More Than You Know",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-312": {
+  "title": "Mountain Greenery",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-313": {
+  "title": "My Buddy",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-314": {
+  "title": "My Favorite Things",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-315": {
+  "title": "My Foolish Heart",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-316": {
+  "title": "My Funny Valentine",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-317": {
+  "title": "My Heart Belongs To Daddy",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-318": {
+  "title": "My Heart Stood Still",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-319": {
+  "title": "My Ideal",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-320": {
+  "title": "My Little Boat",
+  "tempo": 160,
+  "feel": "latin",
+  "basis": "guess"
+ },
+ "462jazz-321": {
+  "title": "My Melancholy Baby",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-322": {
+  "title": "My Old Flame",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-323": {
+  "title": "My One And Only Love",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-324": {
+  "title": "My Romance",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-325": {
+  "title": "My Shining Hour",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-326": {
+  "title": "My Ship",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-327": {
+  "title": "My Silent Love",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "guess"
+ },
+ "462jazz-328": {
+  "title": "Namely You",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-329": {
+  "title": "Nancy (With The Laughing Face)",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-330": {
+  "title": "Nature Boy",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-331": {
+  "title": "Nearness Of You, The",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-332": {
+  "title": "Nica's Dream",
+  "tempo": 220,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-333": {
+  "title": "Nice Work If You Can Get It",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-334": {
+  "title": "Night And Day",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-335": {
+  "title": "Night Has A Thousand Eyes, The",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-336": {
+  "title": "Night In Tunisia, A",
+  "tempo": 180,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-338": {
+  "title": "Nightingale Sang In Berkeley Square, A",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-339": {
+  "title": "No Moon At All",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-340": {
+  "title": "Nuages",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-341": {
+  "title": "Oh, Lady Be Good",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-342": {
+  "title": "Old Devil Moon",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-343": {
+  "title": "Old Folks",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-344": {
+  "title": "On A Clear Day (You Can See Forever)",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-345": {
+  "title": "(I'd Like To Get You) On A Slow Boat To China",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-346": {
+  "title": "On The Street Where You Live",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-348": {
+  "title": "On The Sunny Side Of The Street",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-349": {
+  "title": "On the Trail (Grand Canyon Suite)",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-350": {
+  "title": "Once I Loved (O Amor em Paz)",
+  "tempo": 120,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-351": {
+  "title": "Once In A While",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-352": {
+  "title": "One For My Baby (and One More for the Road)",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-354": {
+  "title": "One Note Samba",
+  "tempo": 150,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-356": {
+  "title": "Our Delight",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-357": {
+  "title": "Out Of Nowhere",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-358": {
+  "title": "Over The Rainbow",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-359": {
+  "title": "Party's Over, The",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-360": {
+  "title": "Peace",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-361": {
+  "title": "Pennies From Heaven",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-362": {
+  "title": "Pent Up House",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-363": {
+  "title": "People",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-365": {
+  "title": "Perdido",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-367": {
+  "title": "Pick Yourself Up",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-368": {
+  "title": "Please Don't Talk About Me When I'm Gone",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-369": {
+  "title": "Polka Dots and Moonbeams",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-370": {
+  "title": "Poor Butterfly",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-371": {
+  "title": "Portrait Of Jennie",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-372": {
+  "title": "The Preacher",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-373": {
+  "title": "Prelude To A Kiss",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-374": {
+  "title": "Quiet Nights of Quiet Stars (Corcovado)",
+  "tempo": 120,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-375": {
+  "title": "Ray's Song",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-376": {
+  "title": "Red Top",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-377": {
+  "title": "Remember",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-378": {
+  "title": "Robbin's Nest",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-379": {
+  "title": "Rockin' Chair",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-380": {
+  "title": "Rose Room",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-381": {
+  "title": "Rosetta",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-382": {
+  "title": "Ruby My Dear",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-383": {
+  "title": "Ruby",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-384": {
+  "title": "'S Wonderful",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-385": {
+  "title": "Saint James Infirmary Blues",
+  "tempo": 80,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-386": {
+  "title": "San Francisco Holiday (Worry Later)",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-387": {
+  "title": "Satin Doll",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-388": {
+  "title": "Secret Love",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-389": {
+  "title": "September In The Rain",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-390": {
+  "title": "September Song",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-391": {
+  "title": "Shadow of Your Smile, The",
+  "tempo": 100,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-392": {
+  "title": "She's Funny That Way",
+  "tempo": 90,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-393": {
+  "title": "Shiny Stockings",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-394": {
+  "title": "Since I Fell For You",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-395": {
+  "title": "Skylark",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-396": {
+  "title": "Small Fry",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-398": {
+  "title": "Smile",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-399": {
+  "title": "Smoke Gets In Your Eyes",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-400": {
+  "title": "Smooth One, A",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-401": {
+  "title": "Soft Winds",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-402": {
+  "title": "Softly As A Morning Sunrise",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-403": {
+  "title": "Solar",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-404": {
+  "title": "(In My) Solitude",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-405": {
+  "title": "Some Of These Days",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-406": {
+  "title": "Somebody Loves Me",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-407": {
+  "title": "Someday My Prince Will Come",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-408": {
+  "title": "Someone To Watch Over Me",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-409": {
+  "title": "Sometimes I'm Happy (Sometimes I'm Blue)",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-410": {
+  "title": "Song Is You, The",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-412": {
+  "title": "Sonny Boy",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-413": {
+  "title": "Soon",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-414": {
+  "title": "Sophisticated Lady",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-415": {
+  "title": "Soul Eyes",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-416": {
+  "title": "Speak Low",
+  "tempo": 180,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-417": {
+  "title": "Spring Can Really Hang You Up The Most",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-419": {
+  "title": "Spring Is Here",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-420": {
+  "title": "St. Thomas",
+  "tempo": 200,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-421": {
+  "title": "Stairway To The Stars",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-422": {
+  "title": "Star Eyes",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-423": {
+  "title": "Stardust",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-425": {
+  "title": "Stars Fell On Alabama",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-426": {
+  "title": "Stella By Starlight",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-427": {
+  "title": "Stompin' At The Savoy",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-428": {
+  "title": "Stormy Weather",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-430": {
+  "title": "Strike Up The Band",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-431": {
+  "title": "Strode Rode",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-432": {
+  "title": "Strollin'",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-433": {
+  "title": "Sugar",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-434": {
+  "title": "Summer Samba",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-435": {
+  "title": "Summertime",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-436": {
+  "title": "Sunday",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-437": {
+  "title": "Sunny",
+  "tempo": 110,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-438": {
+  "title": "Surrey With The Fringe On Top",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-439": {
+  "title": "Sweet And Lovely",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-440": {
+  "title": "Sweet Georgia Brown",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-441": {
+  "title": "Sweet Lorraine",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-442": {
+  "title": "Sweet Sue (Just You)",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-443": {
+  "title": "Swingin' Along On Broadway",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-444": {
+  "title": "Take Five",
+  "tempo": 170,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-445": {
+  "title": "Take The A Train",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-446": {
+  "title": "Taking A Chance On Love",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-447": {
+  "title": "Tangerine",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-448": {
+  "title": "Tea For Two",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-449": {
+  "title": "Teach Me Tonight",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-450": {
+  "title": "Tenderly",
+  "tempo": 70,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-451": {
+  "title": "Thanks For The Memory",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-452": {
+  "title": "That Old Black Magic",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-454": {
+  "title": "That Old Feeling",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-455": {
+  "title": "That's All",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-456": {
+  "title": "Them There Eyes",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-457": {
+  "title": "There Is No Greater Love",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-458": {
+  "title": "There Will Never Be Another You",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-459": {
+  "title": "There's A Small Hotel",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-460": {
+  "title": "These Foolish Things (Remind Me Of You)",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-461": {
+  "title": "They Can't Take That Away From Me",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-463": {
+  "title": "Things We Did Last Summer",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-464": {
+  "title": "Thinking Of You",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-465": {
+  "title": "This Can't Be Love",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-466": {
+  "title": "Thou Swell",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-467": {
+  "title": "Three Little Words",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-468": {
+  "title": "Till The Clouds Roll By",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "guess"
+ },
+ "462jazz-469": {
+  "title": "Till There Was You",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-470": {
+  "title": "Time After Time",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-471": {
+  "title": "Time On My Hands",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-472": {
+  "title": "'Tis Autumn",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-473": {
+  "title": "Too Close For Comfort",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-474": {
+  "title": "Too Marvelous For Words",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-475": {
+  "title": "Toot, Toot, Tootsie (Goo' Bye)",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-476": {
+  "title": "Topsy",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-477": {
+  "title": "Touch Of Your Lips, The",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-478": {
+  "title": "Tricotism",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-479": {
+  "title": "Triste",
+  "tempo": 140,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-480": {
+  "title": "Tune Up",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-481": {
+  "title": "Two Sleepy People",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-483": {
+  "title": "Undecided",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-484": {
+  "title": "Upper Manhattan Medical Group",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-485": {
+  "title": "Very Thought Of You, The",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-486": {
+  "title": "Violets For Your Furs",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-487": {
+  "title": "Waltz For Debby",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-489": {
+  "title": "Watch What Happens",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-490": {
+  "title": "Wave",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "usual"
+ },
+ "462jazz-491": {
+  "title": "Way You Look Tonight, The",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-492": {
+  "title": "We'll Be Together Again",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-493": {
+  "title": "Weaver Of Dreams",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-494": {
+  "title": "What A Difference A Day Made (Makes)",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-495": {
+  "title": "What Am I Here For",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-496": {
+  "title": "What Are You Doing For The Rest Of Your Life",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-498": {
+  "title": "What Is There To Say",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-499": {
+  "title": "What Is This Thing Called Love",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-500": {
+  "title": "What's New",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-501": {
+  "title": "When I Fall In Love",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-502": {
+  "title": "When Lights Are Low",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-503": {
+  "title": "When Sunny Gets Blue",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-504": {
+  "title": "When You Wish Upon A Star",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-505": {
+  "title": "When Your Lover Has Gone",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-506": {
+  "title": "Where Are You",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-507": {
+  "title": "Where Or When",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-508": {
+  "title": "Whisper Not",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-510": {
+  "title": "Who Can I Turn To",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-511": {
+  "title": "Will You Still Be Mine",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-512": {
+  "title": "Willow Weep For Me",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-514": {
+  "title": "Witchcraft",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-515": {
+  "title": "With A Song In My Heart",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-516": {
+  "title": "Without A Song",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-518": {
+  "title": "Woody 'n You",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-519": {
+  "title": "Work Song",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-520": {
+  "title": "Wrap Your Troubles In Dreams",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-521": {
+  "title": "Yardbird Suite",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-522": {
+  "title": "Yes Sir, That's My Baby",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-523": {
+  "title": "Yesterdays",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-524": {
+  "title": "You Are My Sunshine",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "usual"
+ },
+ "462jazz-525": {
+  "title": "You Are Too Beautiful",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-526": {
+  "title": "You Don't Know What Love Is",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "usual"
+ },
+ "462jazz-527": {
+  "title": "You'd Be So Nice To Come Home To",
+  "tempo": 150,
+  "feel": "swing",
+  "basis": "usual"
+ }
+}
