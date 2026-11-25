@@ -2765,5 +2765,305 @@
    }
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-90b": {
+  "title": "Cute",
+  "chords": {
+   "1": "Dm7",
+   "2": "G9",
+   "3": "C6",
+   "4": "Em7b5 . A7b9 .",
+   "5": "Dm7",
+   "6": "G9",
+   "7": "Gm7 . C7 .",
+   "8": "Gm7 . C9 .",
+   "9": "FM7",
+   "10": "Bb9",
+   "11": "C",
+   "12": "Am7",
+   "13": "F#m7b5",
+   "14": "B7",
+   "15": "EM7",
+   "16": "Em7b5 . A7b9 .",
+   "17": "Dm7",
+   "18": "G9",
+   "19": "C6",
+   "20": "Em7b5 . A7b9 .",
+   "21": "Dm7",
+   "22": "G9",
+   "23": "Gm7 . C7 .",
+   "24": "Gm7 . C9 .",
+   "25": "FM7",
+   "26": "Bb9",
+   "27": "C",
+   "28": "Am7",
+   "29": "Dm7",
+   "30": "G7b9",
+   "31": "C6"
+  },
+  "notes": {
+   "21": "r/8 D4/4. E4/4 F4/4"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-91": {
+  "title": "Cry Me A River",
+  "chords": {
+   "1": "Cm . C+ .",
+   "2": "Cm6 . Cm7 .",
+   "3": "Fm7 . Bb7 Bb7#5",
+   "4": "EbM7 . Dm7 G7",
+   "5": "Gm7 . C7#5 .",
+   "6": "F9",
+   "7": "Fm7 . Fm7/Bb .",
+   "8": "Eb6 . D7b9 G7",
+   "9": "Cm . C+ .",
+   "10": "Cm6 . Cm7 .",
+   "11": "Fm7 . Bb7 Bb7#5",
+   "12": "EbM7 . Dm7 G7",
+   "13": "Gm7 . C7#5 .",
+   "14": "F9",
+   "15": "Fm7 . Fm7/Bb .",
+   "16": "Eb6 . Am7b5 D7b9",
+   "17": "Gm",
+   "18": "Cm6 . . D7",
+   "19": "Gm . Em7b5 .",
+   "20": "Cm6/Eb . D7 .",
+   "21": "Gm",
+   "22": "Cm6/Eb . D7sus D7",
+   "23": "G",
+   "24": "Dm7 . G7 .",
+   "25": "Cm . C+ .",
+   "26": "Cm6 . Cm7 .",
+   "27": "Fm7 . Bb7 Bb7#5",
+   "28": "EbM7 . Dm7 G7",
+   "29": "Gm7 . C7#5 .",
+   "30": "F9",
+   "31": "Fm7 . Fm7/Bb .",
+   "32": "Eb6 . G7#5b9 .",
+   "33": "Eb6"
+  },
+  "notes": {
+   "5": "C5/4~ C5/8t Db5/8t C5/8t Db5/8 C5/4."
+  },
+  "bars": {
+   "32": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "33": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-92": {
+  "title": "D.C. Farewell",
+  "skip": "up to five chords a bar, a key change and D.C. al Coda, and homr dropped bars; needs writing out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-94": {
+  "title": "Dewey Square",
+  "chords": {
+   "1": "Eb",
+   "2": "Abm",
+   "3": "Eb7 . Db7 .",
+   "4": "C7",
+   "5": "F7",
+   "6": "Fm7 . Bb7 .",
+   "7": "Eb . C7 .",
+   "8": "Fm7 . Bb7 .",
+   "9": "Eb",
+   "10": "Eb7 . Eb7#5 .",
+   "11": "AbM7",
+   "12": "Abm7 . Db7 .",
+   "13": "Eb",
+   "14": ". . C7 .",
+   "15": "F7",
+   "17": "Fm7",
+   "18": "Bb7",
+   "19": "Eb",
+   "20": "Abm",
+   "21": "Eb7 . Db7 .",
+   "22": "C7",
+   "23": "F7",
+   "24": "Fm7 . Bb7 .",
+   "25": "Eb",
+   "26": "EbM7"
+  },
+  "notes": {
+   "1": "r/8 D5/4 C5/8 Bb4/8 G4/8 Eb4/8 C4/8"
+  },
+  "bars": {
+   "7": {
+    "e": [
+     1
+    ]
+   },
+   "8": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-93b": {
+  "title": "A Day In The Life Of A Fool",
+  "chords": {
+   "2": "Am",
+   "3": "Bm7b5 . E7b9 .",
+   "4": "Am",
+   "5": "Bm7b5 . E7b9 .",
+   "6": "Am",
+   "7": "Dm7 . G7 .",
+   "8": "CM7",
+   "9": "Em7b5 . A7b9 .",
+   "10": "Dm7",
+   "11": "G7",
+   "12": "CM7",
+   "13": "FM7",
+   "14": "Bm7b5",
+   "15": "E7b9",
+   "16": "Am",
+   "17": "Bm7b5 . E7b9 .",
+   "18": "Am",
+   "19": "Bm7b5 . E7b9 .",
+   "20": "Am",
+   "21": "Bm7b5 . E7b9 .",
+   "22": "Em7b5",
+   "23": "A7b9",
+   "24": "Dm",
+   "26": "Dm/C",
+   "27": "Bm7b5 . E7b9 .",
+   "28": "Am . Am/G .",
+   "29": "FM7",
+   "30": "Bm7b5",
+   "31": "E7",
+   "32": "Am . Dm7 .",
+   "33": "Am",
+   "34": "Dm7 . Am7 .",
+   "35": "Dm7 . Am7 .",
+   "36": "Dm7 . Em7 .",
+   "37": "Am6"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-96": {
+  "title": "Desafinado",
+  "chords": {
+   "1": "F",
+   "3": "G7b5",
+   "5": "Gm7",
+   "6": "C7 . C7/Bb .",
+   "7": "Am7b5",
+   "8": "D7b9",
+   "9": "Gm7",
+   "10": "A7b9",
+   "11": "D7",
+   "12": "D7b9",
+   "13": "G7b9",
+   "15": "GbM7",
+   "17": "F",
+   "19": "G7b5",
+   "21": "Gm7",
+   "22": "C7 . C7/Bb .",
+   "23": "Am7b5",
+   "24": "D7b9",
+   "25": "Gm7",
+   "26": "Bbm7 . Eb7 .",
+   "27": "FM7",
+   "28": "Bm7b5 . E7b9 .",
+   "29": "AM7",
+   "30": "Bbdim7",
+   "31": "Bm7",
+   "32": "E7",
+   "33": "A",
+   "34": "Bbdim7",
+   "35": "Bm7",
+   "36": "E7",
+   "37": "A",
+   "38": "F#m7",
+   "39": "Bm7",
+   "40": "E7",
+   "41": "CM7",
+   "42": "C#dim7",
+   "43": "Dm7",
+   "44": "G7",
+   "45": "Gm7",
+   "46": "F#dim7",
+   "47": "G7 . C7 .",
+   "48": "C7b5",
+   "49": "F",
+   "51": "G7b5",
+   "53": "Gm7",
+   "54": "C7 . C7/Bb .",
+   "55": "Am7b5",
+   "56": "D7b9",
+   "57": "Gm7",
+   "58": "Bbm . Eb7 .",
+   "59": "FM7",
+   "60": "Dm7",
+   "61": "G7",
+   "63": "Bbm7",
+   "64": "Eb9",
+   "65": "G7",
+   "66": "Gm7 . C7 .",
+   "67": "F6"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-97b": {
+  "title": "Dizzy Atmosphere",
+  "skip": "triplet figures homr misread in most bars and chord symbols cut off in the scan; needs writing out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-99b": {
+  "title": "Do You Know What It Means To Miss New Orleans?",
+  "chords": {
+   "2": "C6 . G7#5 .",
+   "3": "CM7 . Am7 .",
+   "4": "Em7 . Am7 .",
+   "5": "D9",
+   "6": "Dm7 . D#dim7 .",
+   "7": "Em7 . A7 .",
+   "8": "Dm7 . Ab7 .",
+   "9": "G7",
+   "10": "C . G7#5 .",
+   "11": "CM7 . Am7 .",
+   "12": "Em7 . Am7 .",
+   "13": "D9",
+   "14": "Dm7 . D#dim7 .",
+   "15": "Em7 . A7 .",
+   "16": "Dm7 . G7 .",
+   "17": "C . Cm7b5 F7",
+   "18": "Bbm7 . Eb9 .",
+   "19": "Ab . F7 .",
+   "20": "Bbm7 . Eb9 .",
+   "21": "Ab",
+   "22": "Am7 . D9 .",
+   "23": "G6 . Em7 .",
+   "24": "Am7 . D9 .",
+   "25": "Dm7 . G7 .",
+   "26": "C6 . G7#5 .",
+   "27": "CM7 . Am7 .",
+   "28": "Em7 . Am7 .",
+   "29": "D9",
+   "30": "Dm7 . D#dim7 .",
+   "31": "Em7 . A7 .",
+   "32": "D9 . . G7b9",
+   "33": "C"
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
