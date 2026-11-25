@@ -1,0 +1,494 @@
+{
+ "Jazz-Fakebook-31": {
+  "title": "After Hours",
+  "tempo": 70,
+  "feel": "shuffle",
+  "basis": "book: Slow blues"
+ },
+ "Jazz-Fakebook-33": {
+  "title": "Across The Alley From The Alamo",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-34": {
+  "title": "AC-DC Current",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: Medium bounce"
+ },
+ "Jazz-Fakebook-35": {
+  "title": "Ah-Leu-Cha",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright tempo"
+ },
+ "Jazz-Fakebook-37": {
+  "title": "Air Mail Special",
+  "tempo": 210,
+  "feel": "swing",
+  "basis": "book: Bright tempo"
+ },
+ "Jazz-Fakebook-37b": {
+  "title": "All About Ronnie",
+  "tempo": 84,
+  "feel": "ballad",
+  "basis": "book: Moderately with feeling"
+ },
+ "Jazz-Fakebook-40": {
+  "title": "All Or Nothing At All",
+  "tempo": 96,
+  "feel": "swing",
+  "basis": "book: Moderately slow"
+ },
+ "Jazz-Fakebook-41": {
+  "title": "Alright, Okay, You Win",
+  "tempo": 130,
+  "feel": "shuffle",
+  "basis": "book: Moderate boogie woogie"
+ },
+ "Jazz-Fakebook-42b": {
+  "title": "Amapola",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: With pep"
+ },
+ "Jazz-Fakebook-43": {
+  "title": "Amazing Grace",
+  "tempo": 84,
+  "feel": "ballad",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-43b": {
+  "title": "Among My Souvenirs",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-45": {
+  "title": "And All That Jazz",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Quickly"
+ },
+ "Jazz-Fakebook-46": {
+  "title": "Apple Core",
+  "tempo": 170,
+  "feel": "swing",
+  "basis": "book: Medium fast"
+ },
+ "Jazz-Fakebook-47": {
+  "title": "Apple Honey",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: Medium jump"
+ },
+ "Jazz-Fakebook-47b": {
+  "title": "Aren't You Glad You're You",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-48": {
+  "title": "As Catch Can",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-49": {
+  "title": "Au Privave",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-49c": {
+  "title": "Baby, Won't You Please Come Home",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: Medium bounce tempo"
+ },
+ "Jazz-Fakebook-50": {
+  "title": "Bags' Groove",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium swing"
+ },
+ "Jazz-Fakebook-50b": {
+  "title": "Bags' New Groove",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: Moderately bright"
+ },
+ "Jazz-Fakebook-51b": {
+  "title": "Barbados",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-52": {
+  "title": "Ballin' The Jack",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-54": {
+  "title": "Bernie's Tune",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Moderately, with a beat"
+ },
+ "Jazz-Fakebook-55": {
+  "title": "Bess You Is My Woman",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-55b": {
+  "title": "The Best Is Yet To Come",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-56": {
+  "title": "The Best Things In Life Are Free",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Brightly"
+ },
+ "Jazz-Fakebook-57": {
+  "title": "Bewitched",
+  "tempo": 96,
+  "feel": "swing",
+  "basis": "book: Moderately slow"
+ },
+ "Jazz-Fakebook-57b": {
+  "title": "Big P",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: Bounce tempo"
+ },
+ "Jazz-Fakebook-58": {
+  "title": "Bill Bailey",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Brightly"
+ },
+ "Jazz-Fakebook-58b": {
+  "title": "Bird Feathers",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Brightly"
+ },
+ "Jazz-Fakebook-60": {
+  "title": "Billie's Bounce",
+  "tempo": 170,
+  "feel": "swing",
+  "basis": "book: Medium up blues"
+ },
+ "Jazz-Fakebook-60b": {
+  "title": "Birds Of A Feather",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "Jazz-Fakebook-61": {
+  "title": "The Blessing",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium swing"
+ },
+ "Jazz-Fakebook-61b": {
+  "title": "Bloomdido",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-63": {
+  "title": "Blue In Green",
+  "tempo": 60,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-63b": {
+  "title": "Blue Champagne",
+  "tempo": 70,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-64": {
+  "title": "Blue Haze",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-64b": {
+  "title": "Blueberry Hill",
+  "tempo": 110,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-65": {
+  "title": "Blues In The Closet",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium swing"
+ },
+ "Jazz-Fakebook-67": {
+  "title": "Boogie Woogie",
+  "tempo": 160,
+  "feel": "shuffle",
+  "basis": "book: Moderately bright"
+ },
+ "Jazz-Fakebook-69": {
+  "title": "Blues For Pablo",
+  "tempo": 56,
+  "feel": "ballad",
+  "basis": "book: Very slowly"
+ },
+ "Jazz-Fakebook-69b": {
+  "title": "Boplicity (Bebop Lives)",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium swing"
+ },
+ "Jazz-Fakebook-71": {
+  "title": "The Breeze And I",
+  "tempo": 120,
+  "feel": "latin",
+  "basis": "book: Rhumba"
+ },
+ "Jazz-Fakebook-71b": {
+  "title": "Bud's Blues",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-72": {
+  "title": "Budo",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium swing"
+ },
+ "Jazz-Fakebook-72b": {
+  "title": "Button Up Your Overcoat",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-73b": {
+  "title": "Buzzy",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-75": {
+  "title": "Caldonia (What Makes Your Big Head So Hard?)",
+  "tempo": 150,
+  "feel": "shuffle",
+  "basis": "book: Medium boogie woogie"
+ },
+ "Jazz-Fakebook-75b": {
+  "title": "Can't Help Lovin' Dat Man",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "book: Moderately and rather freely"
+ },
+ "Jazz-Fakebook-77": {
+  "title": "C.C. Rider",
+  "tempo": 110,
+  "feel": "shuffle",
+  "basis": "book: Moderate blues"
+ },
+ "Jazz-Fakebook-78": {
+  "title": "Carioca",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "book: Moderate Latin beat"
+ },
+ "Jazz-Fakebook-78b": {
+  "title": "Carolina Moon",
+  "tempo": 96,
+  "feel": "swing",
+  "basis": "book: Moderately slow"
+ },
+ "Jazz-Fakebook-79b": {
+  "title": "Charmaine",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "book: Slowly with expression"
+ },
+ "Jazz-Fakebook-80": {
+  "title": "The Champ",
+  "tempo": 280,
+  "feel": "swing",
+  "basis": "book: Very fast"
+ },
+ "Jazz-Fakebook-80b": {
+  "title": "Chasing The Bird",
+  "tempo": 240,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-81": {
+  "title": "Chega De Saudade (No More Blues)",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "book: Bossa nova"
+ },
+ "Jazz-Fakebook-83": {
+  "title": "Cheryl",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-83b": {
+  "title": "Choo Choo Ch' Boogie",
+  "tempo": 150,
+  "feel": "shuffle",
+  "basis": "book: Medium boogie"
+ },
+ "Jazz-Fakebook-84": {
+  "title": "The Christmas Song (Chestnuts Roasting On An Open Fire)",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-87": {
+  "title": "Comes Love",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-87b": {
+  "title": "Confirmation",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-88": {
+  "title": "Count Every Star",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slowly and expressively"
+ },
+ "Jazz-Fakebook-89": {
+  "title": "A Cottage For Sale",
+  "tempo": 80,
+  "feel": "ballad",
+  "basis": "book: Moderately slow"
+ },
+ "Jazz-Fakebook-90b": {
+  "title": "Cute",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium swing"
+ },
+ "Jazz-Fakebook-91": {
+  "title": "Cry Me A River",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "book: Slowly and rhythmically"
+ },
+ "Jazz-Fakebook-93b": {
+  "title": "A Day In The Life Of A Fool",
+  "tempo": 110,
+  "feel": "latin",
+  "basis": "book: Slow bossa nova"
+ },
+ "Jazz-Fakebook-94": {
+  "title": "Dewey Square",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: Fast"
+ },
+ "Jazz-Fakebook-96": {
+  "title": "Desafinado",
+  "tempo": 140,
+  "feel": "latin",
+  "basis": "book: Medium bossa nova"
+ },
+ "Jazz-Fakebook-97": {
+  "title": "Dinah",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium swing"
+ },
+ "Jazz-Fakebook-99b": {
+  "title": "Do You Know What It Means To Miss New Orleans?",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-100": {
+  "title": "Don't Let The Sun Catch You Cryin'",
+  "tempo": 76,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-103": {
+  "title": "Don't Take Your Love From Me",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slow ballad"
+ },
+ "Jazz-Fakebook-103b": {
+  "title": "Down By The Riverside",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-105": {
+  "title": "The Duke",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: With a relaxed beat"
+ },
+ "Jazz-Fakebook-105b": {
+  "title": "The Earl",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright"
+ },
+ "Jazz-Fakebook-109": {
+  "title": "The End Of A Love Affair",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slow ballad"
+ },
+ "Jazz-Fakebook-110": {
+  "title": "Everybody Loves My Baby",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Quickly"
+ },
+ "Jazz-Fakebook-117": {
+  "title": "Fine And Mellow",
+  "tempo": 80,
+  "feel": "swing",
+  "basis": "book: Moderately slow blues"
+ },
+ "Jazz-Fakebook-122": {
+  "title": "For Every Man There's A Woman",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-123": {
+  "title": "For Sentimental Reasons",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-123b": {
+  "title": "For You, For Me, For Evermore",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-126": {
+  "title": "Frosty The Snow Man",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ }
+}

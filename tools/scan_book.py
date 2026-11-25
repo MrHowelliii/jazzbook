@@ -321,7 +321,8 @@ if __name__ == '__main__':
             for i, f in enumerate(ex.map(layout_page, [(a.pdf, p, a.work) for p in range(a.first, last + 1)])):
                 print('layout', f, flush=True)
     if '2' in a.phase:
-        imgs = sorted(os.path.join(a.work, f) for f in os.listdir(a.work) if f.startswith('page-') and f.endswith('.png'))
+        imgs = sorted(os.path.join(a.work, f) for f in os.listdir(a.work)       # the pages (not homr's own *_teaser.png)
+                      if re.fullmatch(r'page-\d{3}\.png', f) and a.first <= int(f[5:8]) <= last)
         with ProcessPoolExecutor(a.homr_jobs) as ex:
             for f in ex.map(homr_piece, imgs):
                 print('homr', f, flush=True)
@@ -336,5 +337,11 @@ if __name__ == '__main__':
             json.dump(songs, open(a.out, 'w'), separators=(',', ':'))
         if a.publish:
             keep = [s for s in songs if publishable(s)]
+            tf = os.path.join(root, 'leads-tempos', os.path.basename(a.publish))   # the book's tempo marks (apply_tempos.py)
+            tempos = json.load(open(tf)) if os.path.exists(tf) else {}
+            for s in keep:
+                if s['id'] in tempos:
+                    s['tempo'] = tempos[s['id']]['tempo']
+                    s['feel'] = {'swing': 0, 'ballad': 1, 'latin': 2, 'shuffle': 5, 'samba': 6}[tempos[s['id']]['feel']]
             json.dump(keep, open(a.publish, 'w'), separators=(',', ':'))
             print(f'{len(keep)} songs published to {a.publish} ({sum(1 for s in keep if s.get("reviewed"))} with chords read by eye)')
