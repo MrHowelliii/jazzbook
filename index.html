@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jazz Library Search</title>
+  <title>Jazz Library Play-Along</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
   <style>
@@ -309,7 +309,10 @@
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .result-row.has-play { grid-template-columns: 1fr max-content max-content; }
+    .pill.play-pill.on { background: var(--gold); color: var(--bg); border-color: var(--gold); }
   </style>
+  <link rel="stylesheet" href="app/player.css">
 </head>
 <body>
 
@@ -317,7 +320,7 @@
   <div class="header-inner">
     <span class="treble">𝄞</span>
     <h1>Jazz <em>Library</em> Search</h1>
-    <p class="tagline">Pre-indexed · Instant search</p>
+    <p class="tagline">Pre-indexed · Instant search · Play along with the band</p>
   </div>
 </header>
 
@@ -336,12 +339,16 @@
       <button class="pill" data-f="title">Title</button>
       <button class="pill" data-f="composer">Composer</button>
       <div class="pill-sep"></div>
+      <button class="pill play-pill" type="button" id="play-pill" title="Only songs the band can play along with">▶ Play-along</button>
+      <div class="pill-sep"></div>
       <span class="filter-label">Book</span>
       <button class="pill on" data-f="all-books">All books</button>
       <!-- per-book pills injected here -->
     </div>
   </div>
 </div>
+
+<section id="player" aria-label="Play-along player"></section>
 
 <div id="results-wrap">
   <div class="state-box">
@@ -350,7 +357,11 @@
   </div>
 </div>
 
-<script>
+<script type="module">
+import { Player, normTitle } from './app/player.js';
+let playableOnly = false;
+const leadsById = {};
+let player = null;
 // ── State ─────────────────────────────────────────────────────────────────────
 let allSongs    = [];
 let fieldFilter = 'all';
@@ -374,6 +385,7 @@ function attachPillListeners() {
   document.querySelectorAll('.pill').forEach(p => {
     p.addEventListener('click', () => {
       const f = p.dataset.f;
+      if (!f) return;                       /* the play-along pill has its own handler */
       const isField = ['all','title','composer'].includes(f);
       const isBook  = f === 'all-books' || f.startsWith('book:');
 
@@ -434,6 +446,7 @@ function doSearch() {
   const q    = document.getElementById('q').value.trim();
   const wrap = document.getElementById('results-wrap');
 
+  if (!q && playableOnly) return showResults(allSongs.filter(s => s.lead).sort((a, b) => a.title.localeCompare(b.title)), '');
   if (!q) {
     wrap.innerHTML = `
       <div class="state-box">
@@ -448,6 +461,7 @@ function doSearch() {
   const bookId = bookFilter.startsWith('book:') ? bookFilter.slice(5) : null;
 
   const results = allSongs.filter(s => {
+    if (playableOnly && !s.lead) return false;
     if (bookId && s.bookId !== bookId) return false;
     const inTitle    = words.every(w => s.title.toLowerCase().includes(w));
     const inComposer = s.composer && words.every(w => s.composer.toLowerCase().includes(w));
@@ -464,11 +478,16 @@ function doSearch() {
     return as !== bs ? as - bs : a.title.localeCompare(b.title);
   });
 
+  showResults(results, q);
+}
+
+function showResults(results, q) {
+  const wrap = document.getElementById('results-wrap');
   if (results.length === 0) {
     wrap.innerHTML = `
       <div class="state-box">
         <span class="icon">𝄽</span>
-        <p>No results for <em>${esc(q)}</em>.<br>Try a different spelling.</p>
+        <p>${q ? `No results for <em>${esc(q)}</em>.<br>Try a different spelling.` : 'No play-along songs yet.'}</p>
       </div>`;
     return;
   }
@@ -482,7 +501,7 @@ function doSearch() {
   }
 
   const multiBook = groupOrder.length > 1;
-  let html = `<div class="result-meta-bar"><strong>${results.length}</strong> result${results.length!==1?'s':''} for "${esc(q)}"</div>`;
+  let html = `<div class="result-meta-bar"><strong>${results.length}</strong> ${q ? `result${results.length!==1?'s':''} for "${esc(q)}"` : 'play-along songs'}</div>`;
 
   for (const bid of groupOrder) {
     const g = groups[bid];
@@ -491,18 +510,25 @@ function doSearch() {
       const pdfUrl  = s.file ? encodeURI(s.file) : '';
       const pageNum = s.page ? s.page + (s.offset || 0) : null;
       const href    = pdfUrl && pageNum ? `${pdfUrl}#page=${pageNum}` : pdfUrl;
-      const tag     = href ? 'a' : 'div';
-      const linkAttr = href ? `href="${href}" target="_blank" rel="noopener"` : '';
+      const play    = !!s.lead;
+      const tag     = href && !play ? 'a' : 'div';
+      const linkAttr = href && !play ? `href="${href}" target="_blank" rel="noopener"` : play ? `data-lead="${esc(s.lead)}" role="button" tabindex="0"` : '';
       html += `
-        <${tag} class="result-row" ${linkAttr} style="animation-delay:${Math.min(i,20)*18}ms">
+        <${tag} class="result-row${play ? ' has-play' : ''}" ${linkAttr} style="animation-delay:${Math.min(i,20)*18}ms">
           <div class="result-title">${highlight(s.title, q)}</div>
-          <div class="result-page"><span>page</span>${s.page||'—'}</div>
+          <div class="result-page">${play && href ? `<a href="${href}" target="_blank" rel="noopener" title="Open the PDF page" onclick="event.stopPropagation()"><span>page</span>${s.page||'—'}</a>` : `<span>page</span>${s.page||'—'}`}</div>
           ${s.composer ? `<div class="result-composer">${highlight(s.composer, q)}</div>` : ''}
+          ${play ? '<button class="play-badge" type="button">▶ Play along</button>' : ''}
         </${tag}>`;
     });
   }
 
   wrap.innerHTML = html;
+  wrap.querySelectorAll('[data-lead]').forEach(el => {
+    const go = () => openSong(el.dataset.lead);
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  });
 }
 
 // ── Load songs.json ───────────────────────────────────────────────────────────
@@ -537,6 +563,39 @@ async function init() {
     }
   }
 
+  // lead sheets (melody + chords) parsed from the PDFs: attach them to the index, add the ones it lacks
+  const books = {};
+  for (const b of data) books[b.id] = { title: b.title, file: b.file, offset: b.offset || 0 };
+  try {
+    const lr = await fetch('leads/462jazz.json');
+    if (lr.ok) {
+      const leads = await lr.json();
+      const book = data.find(b => b.id === '462jazz');
+      const byPage = {};
+      for (const L of leads) { leadsById[L.id] = L; for (const pg of L.pages.slice(0, 1)) byPage[pg] = L; }
+      const matched = new Set();
+      for (const s of allSongs) {
+        if (s.bookId !== '462jazz' || !s.page) continue;
+        const L = byPage[s.page + (s.offset || 0)];
+        if (L) { s.lead = L.id; matched.add(L.id); }
+      }
+      for (const L of leads) {
+        if (matched.has(L.id) || !book) continue;
+        allSongs.push({ title: L.title, composer: L.composer, page: L.page - (book.offset || 0), bookId: book.id,
+                        bookTitle: book.title, file: book.file, offset: book.offset || 0, lead: L.id });
+      }
+    }
+  } catch (err) { console.warn('lead sheets not loaded', err); }
+  player = new Player(document.getElementById('player'), books);
+  player.onclose = () => { document.getElementById('q').focus(); };
+  window.addEventListener('popstate', route);
+
+  document.getElementById('play-pill').addEventListener('click', e => {
+    playableOnly = !playableOnly;
+    e.currentTarget.classList.toggle('on', playableOnly);
+    doSearch();
+  });
+
   buildLibStrip(data);
   addBookPills(data.filter(b => !b.error));
 
@@ -548,11 +607,24 @@ async function init() {
     <div class="state-box">
       <span class="icon">♩</span>
       <p><em>${allSongs.length.toLocaleString()}</em> songs across <em>${data.length}</em> books.<br>
+      <em>${allSongs.filter(s => s.lead).length}</em> of them play along with a band: try <em>▶ Play-along</em>.<br>
       Start typing to search.</p>
     </div>`;
 }
 
-init();
+function openSong(id) {
+  const L = leadsById[id];
+  if (!L || !player) return;
+  if (location.hash !== '#play=' + id) history.pushState(null, '', '#play=' + encodeURIComponent(id));
+  player.open(L);
+}
+function route() {
+  const m = location.hash.match(/^#play=(.+)$/);
+  if (m && leadsById[decodeURIComponent(m[1])]) player.open(leadsById[decodeURIComponent(m[1])]);
+  else if (player) player.close();
+}
+
+init().then(() => { if (player) route(); });
 </script>
 </body>
 </html>
