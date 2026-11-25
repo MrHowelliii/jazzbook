@@ -2148,5 +2148,298 @@
    }
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-77b": {
+  "title": "The Cape Verdean Blues",
+  "skip": "a samba in 2/4 with a coda; the band counts four or three beats to the bar",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-78": {
+  "title": "Carioca",
+  "time": [
+   4,
+   4
+  ],
+  "chords": {
+   "2": "Cm",
+   "4": "G7",
+   "8": "Cm",
+   "9": "G7",
+   "10": "Cm",
+   "12": "G7",
+   "16": "C",
+   "19": "C#dim7",
+   "20": "Dm7",
+   "21": "G7",
+   "22": "Dm7",
+   "23": "G7",
+   "24": "C",
+   "27": "C#dim7",
+   "28": "Dm7",
+   "29": "G7",
+   "30": "Dm7",
+   "31": "G7",
+   "32": "C"
+  },
+  "notes": {
+   "1": "r/8 G4/8 Ab4/8 G4/8 Bb4/8 A4/8 Ab4/8 G4/8"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-78b": {
+  "title": "Carolina Moon",
+  "chords": {
+   "1": "G",
+   "2": "G/B",
+   "3": "C",
+   "4": "Cm6",
+   "5": "G",
+   "6": "D7",
+   "7": "G",
+   "8": "Am7 . D7",
+   "9": "G",
+   "10": "G/B",
+   "11": "C",
+   "12": "Cm6",
+   "13": "G",
+   "14": "D7",
+   "15": "G",
+   "17": "C",
+   "19": "G",
+   "21": "A7",
+   "23": "Am7",
+   "24": "D7#5",
+   "25": "G",
+   "26": "G/B",
+   "27": "C",
+   "28": "Cm6",
+   "29": "G",
+   "30": "A7 . D7",
+   "31": "G . C",
+   "32": "G6"
+  },
+  "notes": {
+   "17": "G4/8t F#4/8t F4/8t E4/2",
+   "19": "F#4/8t E4/8t Eb4/8t D4/2",
+   "21": "E4/8t D#4/8t D4/8t C#4/2",
+   "22": "E4/8t F4/8t F#4/8t G4/4 B4/4"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-79": {
+  "title": "The Cat Walk",
+  "skip": "segno, coda and short bars that homr ran together (26 bars read of about 38); needs the notes written out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-79b": {
+  "title": "Charmaine",
+  "bars_total": 35,
+  "chords": {
+   "2": "Eb",
+   "4": "EbM7",
+   "5": "Eb6",
+   "6": "Eb",
+   "7": "Edim7",
+   "8": "Fm7",
+   "9": "Bb7",
+   "10": "Fm7",
+   "11": "Bb7",
+   "12": "Fm7",
+   "13": "Bb7",
+   "15": ". . Bb7#5",
+   "16": "Eb",
+   "17": "Edim7 Fm7 Bb7",
+   "18": "Eb",
+   "20": "Gm7b5",
+   "21": "C7",
+   "22": "Fm",
+   "23": "C7",
+   "24": "Fm",
+   "25": ". . C7b9",
+   "26": "Fm",
+   "27": "Db9",
+   "28": "Eb",
+   "29": "C7#5",
+   "30": "F9",
+   "31": "Fm7 Bb7 Bb7#5",
+   "32": "Eb",
+   "33": "Fm7 . Bb7#5",
+   "34": "Eb",
+   "35": "Eb"
+  },
+  "notes": {
+   "32": "Eb5/2.~",
+   "33": "~Eb5/4 r/4 Bb4/4",
+   "34": "Eb5/2.~",
+   "35": "~Eb5/2 r/4"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "32": {
+    "e": [
+     1
+    ]
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-80": {
+  "title": "The Champ",
+  "chords": {
+   "2": "AbM7",
+   "6": "Db",
+   "8": "Ab",
+   "10": "Bbm7",
+   "11": "Eb7#5",
+   "12": "Ab",
+   "14": "Am7",
+   "18": "Dm7",
+   "20": "Am7"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "13": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-80b": {
+  "title": "Chasing The Bird",
+  "chords": {
+   "1": "F",
+   "2": "Gm7 . C7 .",
+   "3": "F . D7 .",
+   "4": "Gm7 . C7 .",
+   "5": "F7",
+   "6": "Bb . Bdim7 .",
+   "7": "F . D7 .",
+   "8": "Gm7 . C7 .",
+   "9": "Gm7 . C7 .",
+   "10": "F",
+   "11": "Em7",
+   "12": "A7",
+   "13": "D7",
+   "15": "G7",
+   "17": "Gm7",
+   "18": "C7",
+   "19": "F",
+   "20": "Gm7 . C7 .",
+   "21": "F . D7 .",
+   "22": "Gm7 . C7 .",
+   "23": "F7",
+   "24": "Bb . Bdim7 .",
+   "25": "Gm7 . C7 .",
+   "26": "F"
+  },
+  "bars": {
+   "7": {
+    "e": [
+     1
+    ]
+   },
+   "8": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-81": {
+  "title": "Chega De Saudade (No More Blues)",
+  "chords": {
+   "1": "Dm",
+   "2": "Dm/C",
+   "3": "Bm7b5",
+   "4": "E7b9",
+   "5": "Em7b5",
+   "6": "A7b9",
+   "7": "Dm",
+   "8": "Em7b5 . A7b9 .",
+   "9": "Dm . Dm/C .",
+   "10": "Bm7b5 . E7 .",
+   "11": "Am",
+   "13": "BbM7",
+   "15": "Em7b5",
+   "16": "A7b9",
+   "17": "Dm",
+   "18": "Dm/C",
+   "19": "Bm7b5",
+   "20": "E7b9",
+   "21": "Em7b5",
+   "22": "A7b9",
+   "23": "Dm",
+   "24": "D7",
+   "25": "Gm . Gm/F .",
+   "26": "A7/E . A7 .",
+   "27": "Dm",
+   "28": "Dm/C",
+   "29": "Bm7b5 . E7b9 .",
+   "30": "A7b9",
+   "31": "Dm",
+   "32": "Em7 . A7#5 .",
+   "33": "DM7",
+   "34": "D#dim7",
+   "35": "Em7",
+   "37": "A7",
+   "39": "Ddim7",
+   "40": "DM7",
+   "41": "F#m7",
+   "42": "Fdim7",
+   "43": "Em7",
+   "45": "E7",
+   "47": "Em7b5",
+   "48": "A7b9 . DM7 .",
+   "49": "Dm7/C# . Bm7 .",
+   "50": "E7",
+   "52": "F#",
+   "53": "F#7",
+   "54": "Bm7",
+   "55": "Bbm7",
+   "56": "Am7 . D7b9 .",
+   "57": "GM7",
+   "58": "C9",
+   "59": "F#m7",
+   "60": "B7 . B7#5 .",
+   "61": "E7",
+   "62": "Em7/A",
+   "63": "A7/G . F#m7 .",
+   "64": "B7b9",
+   "65": "E7",
+   "66": "Em7/A",
+   "67": "A7 . D .",
+   "68": "D"
+  },
+  "notes": {
+   "10": "B4/2. D5/4"
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
