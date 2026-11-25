@@ -1359,5 +1359,239 @@
    }
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-58": {
+  "title": "Bill Bailey",
+  "chords": {
+   "1": "G",
+   "6": ". . G#dim7 .",
+   "7": "D7/A . D7 .",
+   "14": ". . D9#5 .",
+   "15": "G",
+   "22": ". . Bdim .",
+   "23": "Am . E7 .",
+   "24": "Am",
+   "25": "C",
+   "26": "C#dim7",
+   "27": "G/D",
+   "28": "E7",
+   "29": "A7",
+   "30": "D9 . D7 .",
+   "31": "G",
+   "32": "A7 . D7 .",
+   "33": "G"
+  },
+  "bars": {
+   "31": {
+    "e": [
+     1
+    ]
+   },
+   "32": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "33": {
+    "e": [
+     2
+    ]
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-58b": {
+  "title": "Bird Feathers",
+  "chords": {
+   "1": "BbM7 . Bb6 .",
+   "4": "Bb7#5",
+   "5": "Eb6",
+   "6": "Ab7",
+   "7": "BbM7",
+   "8": "G7 Ab7 G7 .",
+   "9": "Cm7",
+   "10": "F9",
+   "11": "Dm7 . C#dim7 .",
+   "12": "Cm7 . F7#5#9 .",
+   "13": "BbM7 . Bb6 .",
+   "16": "Bb7#5",
+   "17": "Eb6",
+   "18": "Ab7",
+   "19": "BbM7 . Bb6 .",
+   "20": "G7 Ab7 G7 .",
+   "21": "Cm7",
+   "22": "F9",
+   "23": "Dm7 . C#dim7 .",
+   "24": "Cm7 . F7#5#9 Bb6"
+  },
+  "bars": {
+   "1": {
+    "rs": true
+   },
+   "24": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-60": {
+  "title": "Billie's Bounce",
+  "chords": {
+   "2": "F7 . F7/A .",
+   "3": "Bb7 . Bdim7 .",
+   "4": "F7",
+   "6": "Bb7",
+   "8": "F7",
+   "9": "Am7 . D7 .",
+   "10": "Gm7 . Gm(maj7) .",
+   "11": "C7sus . C7 .",
+   "12": "F7 . D7#9 .",
+   "13": "Gm7 . C7sus ."
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "13": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-60b": {
+  "title": "Birds Of A Feather",
+  "chords": {
+   "1": "Bb",
+   "2": "Eb9",
+   "3": "Bb . G7b9 .",
+   "4": "Cm7 . F7b9 .",
+   "5": "Bb",
+   "6": "Eb9",
+   "7": "Bb . G7b9 F7",
+   "8": "Bb6 . G7b9 .",
+   "9": "Eb . Cm7 .",
+   "10": "Bm7 . Am7 .",
+   "11": "Bb . Gm .",
+   "12": "Cm7 . F7#5b9 .",
+   "13": "Bb",
+   "14": "Eb9",
+   "15": "Bb . F7 .",
+   "16": "Bb . G7b9 .",
+   "17": "Eb . Cm7 .",
+   "18": "Bm7 . Am7 .",
+   "19": "Bb",
+   "20": "Gm . A7#9 .",
+   "21": "C",
+   "22": "Em7 . Ebm7 .",
+   "23": "Dm7",
+   "24": ". . G7#5b9 .",
+   "25": "Bb",
+   "26": "Dm7 . Dbm7 .",
+   "27": "Cm7",
+   "28": ". . F7#5b9 .",
+   "29": "Bb",
+   "30": "Eb9",
+   "31": "Bb . . F7",
+   "32": ". . F7#5b9 .",
+   "33": "Eb . Cm7 .",
+   "34": "Bm7 . Am7 .",
+   "35": "Bb"
+  },
+  "notes": {
+   "33": "r/8. D4/16 Eb4/8t G4/8t Bb4/8t D5/8 r/8 D5/8 C#5/8"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-61": {
+  "title": "The Blessing",
+  "chords": {
+   "1": "F#m7",
+   "2": "B7",
+   "3": "F#m7b5",
+   "4": "B7",
+   "5": "Em7",
+   "6": "Am7 . D7 .",
+   "7": "G6/D . D7/F# .",
+   "8": "G6",
+   "9": "F#m7b5",
+   "10": "B7b9",
+   "11": "Bm7b5",
+   "12": "E7b5",
+   "13": "Em7b5",
+   "14": "A7#9",
+   "15": "Am7 . D7 .",
+   "16": "Gm7 . C7 .",
+   "17": "F#m7",
+   "18": "B7",
+   "19": "F#m7b5",
+   "20": "B7",
+   "21": "Em7",
+   "22": "Am7 . D7 .",
+   "23": "G6/D . D7/F# .",
+   "24": "G6"
+  },
+  "notes": {
+   "3": "B4/8 G4/8 D#4/8 B3/8 G4/8 D#4/8 G4/8t A4/8t F#4/8t~",
+   "19": "B4/8 G4/8 D#4/8 B3/8 G4/8 D#4/8 G4/8t A4/8t F#4/8t~"
+  },
+  "bars": {
+   "8": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-61b": {
+  "title": "Bloomdido",
+  "chords": {
+   "1": "Bb",
+   "2": "Bb7",
+   "5": "Eb7",
+   "7": "Bb7",
+   "8": "Dbm7",
+   "9": "Cm7",
+   "10": "F7",
+   "11": "Bb7",
+   "12": "Cm7 . F7 ."
+  },
+  "bars": {
+   "1": {
+    "rs": true
+   },
+   "12": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-61c": {
+  "title": "Blue 'N Boogie",
+  "skip": "fast triplet lines homr misread in most bars, and the book marks only a few chords; needs the notes written out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-63": {
+  "title": "Blue In Green",
+  "chords": {
+   "1": "BbM7#11",
+   "2": "A7#9",
+   "3": "Dm9 . Db7 .",
+   "4": "Cm9 . F7b9 .",
+   "5": "BbM7",
+   "6": "A7#5#9",
+   "7": "Dm69",
+   "8": "E7#5#9",
+   "9": "Am9",
+   "10": "Dm9",
+   "11": "BbM7#11",
+   "12": "A7#9 . A7b9 .",
+   "13": "Dm69"
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
