@@ -4215,5 +4215,346 @@
    }
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-137b": {
+  "title": "Groovin' High",
+  "chords": {
+   "2": "Eb6",
+   "4": "Am . E7#5 .",
+   "5": "Am7 . D9 .",
+   "6": "Eb6",
+   "8": "Gm . D7#5 .",
+   "9": "Gm7 . C9 .",
+   "10": "F7",
+   "12": "Fm . C7#5 .",
+   "13": "Fm7 . Bb9 .",
+   "14": "EbM7 . Gm7 .",
+   "15": "F#m7",
+   "16": "Fm7",
+   "17": "E7",
+   "18": "Eb6",
+   "20": "Am . E7 .",
+   "21": "Am7 . D9 .",
+   "22": "Eb6",
+   "24": "Gm . D7#5 .",
+   "25": "Gm7 . C9 .",
+   "26": "F7",
+   "28": "Fm . C7#5 .",
+   "29": "Fm7 . Bb9 .",
+   "30": "Fm",
+   "31": "Db7 . Bb7b9 .",
+   "32": "Gm7 . F#m7 .",
+   "33": "Fm7 . E7 ."
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "33": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)",
+  "notes": {
+   "15": "E5/8t F5/8t E5/8t C#5/8 r/8 r/2",
+   "21": "G4/8 F4/8 F#4/8 D5/8 D5/4~ D5/8t C5/8t A4/8t"
+  }
+ },
+ "Jazz-Fakebook-138": {
+  "read": "chords read by eye from the page (homr notes)",
+  "title": "Guess Who I Saw Today",
+  "chords": {
+   "1": "Gm7 . C7b9 .",
+   "2": "F . Dm7 .",
+   "3": "Gm7 . C7 .",
+   "4": "F",
+   "5": "Gm7 . C7 .",
+   "6": "A7 . D7 .",
+   "7": "Gm7 . C7b9 .",
+   "8": "F . Dm7 .",
+   "9": "Gm7 . C7 .",
+   "10": "F",
+   "11": "Gm7 . C7 .",
+   "12": "A7 . D7 .",
+   "13": "Gm7 . C7b9 .",
+   "14": "F . GbM7 F",
+   "15": "Bbm7 . Eb7 .",
+   "16": "Ab",
+   "17": "Bbm7 . Eb7 .",
+   "18": "AbM7 . Ab6 .",
+   "19": "Am7 . D9 .",
+   "20": "GM7 . G6 .",
+   "21": "Am7 . D9 .",
+   "22": "G7",
+   "23": "Gm7 . C7b9 .",
+   "24": "F . Dm7 .",
+   "25": "Gm7 . C9 C7/Bb",
+   "26": "Am7 . D7 .",
+   "27": "Gm . C7 A7",
+   "28": "Dm . G7 Db9",
+   "29": "F/C Dm7 Gm7 C7b9",
+   "30": "Db7 . F6 ."
+  }
+ },
+ "Jazz-Fakebook-139b": {
+  "title": "Half Nelson",
+  "chords": {
+   "1": "C",
+   "3": "Fm7 . Bb7 .",
+   "4": "Fm7 . Bb7 .",
+   "5": "C",
+   "7": "Bm7",
+   "8": "Bbm7 . Eb7 .",
+   "9": "Ab",
+   "11": "Am7",
+   "12": "D7",
+   "13": "Dm7 . G7 .",
+   "14": "Dm7 . G7 .",
+   "15": "C . EbM7 .",
+   "16": "AbM7 . DbM7 ."
+  },
+  "bars": {
+   "1": {
+    "rs": true
+   },
+   "16": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-140": {
+  "title": "Hallelujah I Love Her So",
+  "chords": {
+   "1": "F . F/A .",
+   "2": "Bb . Bdim7 C7",
+   "3": "F . F/A .",
+   "4": "Bb . Bdim7 C7",
+   "5": "F",
+   "6": "F7 . F7#5 .",
+   "7": "Bb",
+   "8": "Bdim7",
+   "9": "F . A7 .",
+   "10": "Dm . Bb7 .",
+   "11": "G7 . C7sus .",
+   "12": "F",
+   "13": "Bb6",
+   "14": "Bdim7",
+   "15": "F",
+   "16": "F7",
+   "17": "Bb9",
+   "18": "Ab9",
+   "19": "G7",
+   "20": "C7",
+   "21": "F . F/A .",
+   "22": "Bb . Bdim7 C7",
+   "23": "F . F/A .",
+   "24": "Bb . Bdim7 C7",
+   "25": "F",
+   "26": "F7 . F7#5 .",
+   "27": "Bb",
+   "28": "Bdim7",
+   "29": "F . A7 .",
+   "30": "Dm . Bb7 .",
+   "31": "G7 . C7sus .",
+   "32": "F . Bb7 .",
+   "33": "F"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-141": {
+  "title": "Harald's House Of Jazz",
+  "skip": "homr's bars drift from the page (pickup and rests misread) through two key changes; needs laying out by hand"
+ },
+ "Jazz-Fakebook-142": {
+  "title": "Happy Talk",
+  "skip": "the bar overlay is a bar off from the page, with a trio and D.C. al Fine; needs laying out by hand"
+ },
+ "Jazz-Fakebook-143": {
+  "title": "Harlem Nocturne",
+  "skip": "homr's bars run a bar off the page from the start (pickup read as a bar), with endings; needs laying out by hand"
+ },
+ "Jazz-Fakebook-144": {
+  "title": "Hello, Dolly!",
+  "chords": {
+   "2": "Bb",
+   "4": "Gm",
+   "6": "BbM7/D",
+   "7": "Dbdim7",
+   "8": "Cm7",
+   "9": "F7",
+   "10": "Cm7",
+   "12": "Ab/C",
+   "14": "Cm7",
+   "15": "F7",
+   "16": "Dm7 . Dbdim7 .",
+   "17": "Cm7 . F7 .",
+   "18": "Bb",
+   "20": "Gm",
+   "22": "Fm7",
+   "23": "Bb7",
+   "24": "EbM7",
+   "25": "Am7b5 . D7 .",
+   "26": "Gm",
+   "27": "Dm7",
+   "28": "Gm",
+   "29": "Dm7",
+   "30": "C9 . C9#5 .",
+   "31": "Cm7 . F9 .",
+   "32": "Bb . Dbdim7 .",
+   "33": "Cm7 . F7 .",
+   "34": "Cm7 . F9 .",
+   "35": "C9 . C9#5 .",
+   "36": "Cm7 . F9 .",
+   "37": "C9 . C9#5 .",
+   "38": "Cm7 . F9 .",
+   "39": "Bb Bb7/D Eb Edim7",
+   "40": "Bb/F F7 Bb6 ."
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "31": {
+    "e": [
+     1
+    ]
+   },
+   "32": {
+    "e": [
+     1
+    ]
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   },
+   "36": {
+    "e": [
+     2
+    ]
+   },
+   "37": {
+    "e": [
+     2
+    ]
+   },
+   "38": {
+    "e": [
+     2
+    ]
+   },
+   "39": {
+    "e": [
+     2
+    ]
+   },
+   "40": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-143b": {
+  "title": "Haunted Heart",
+  "skip": "homr's bars drift from the page in the second half (rests read as bars), three chords to many bars; needs laying out by hand"
+ },
+ "Jazz-Fakebook-145": {
+  "title": "Hello, Young Lovers",
+  "chords": {
+   "2": "CM9",
+   "3": "Dm7",
+   "4": "Em7",
+   "5": "Dm7",
+   "6": "CM7",
+   "7": "A7b9",
+   "8": "Dm7",
+   "9": "G7",
+   "10": "Dm7b5",
+   "11": "G7",
+   "12": "EbM7",
+   "13": "G7",
+   "14": "Dm7",
+   "15": "G7sus . G7",
+   "16": "C",
+   "17": "Dm7 . G7",
+   "18": "C",
+   "19": "C7",
+   "20": "F",
+   "21": "Gm7",
+   "22": "Am7",
+   "23": "Gm7",
+   "24": "FM9",
+   "25": "Gm7",
+   "26": "FM7",
+   "27": "F6",
+   "28": "Bm7",
+   "29": "E7",
+   "30": "Am9",
+   "31": "D7",
+   "32": "Dm7",
+   "33": "A7#5",
+   "34": "Dm7",
+   "35": "G7",
+   "36": "CM9",
+   "37": "Dm7",
+   "38": "Em7",
+   "39": "Dm7",
+   "40": "CM7",
+   "41": "A7b9",
+   "42": "Dm7",
+   "43": "G7",
+   "44": "Dm7b5",
+   "45": "G7",
+   "46": "EbM7",
+   "47": "G7",
+   "48": "Dm7",
+   "49": "G7",
+   "50": "Gm",
+   "51": "C7",
+   "52": "F",
+   "53": "Fm",
+   "54": "E7",
+   "55": "A7",
+   "56": "Dm7",
+   "57": "Ab9 . G7b9",
+   "58": "C"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "16": {
+    "e": [
+     1
+    ]
+   },
+   "17": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "18": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
