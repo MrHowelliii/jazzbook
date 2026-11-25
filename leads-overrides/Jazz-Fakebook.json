@@ -3894,5 +3894,326 @@
    }
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-128": {
+  "title": "I Don't Stand A Ghost Of A Chance With You",
+  "skip": "the 462 Jazz Standards chart plays instead"
+ },
+ "Jazz-Fakebook-131": {
+  "title": "The Girl From Ipanema",
+  "skip": "the 462 Jazz Standards chart plays instead"
+ },
+ "Jazz-Fakebook-129": {
+  "title": "Getting To Know You",
+  "chords": {
+   "2": "C . CM7 .",
+   "3": "C6",
+   "4": "Dm7",
+   "5": "G7",
+   "6": "Dm7 . G7 .",
+   "7": "Dm7 . G7 .",
+   "8": "CM7 . Am7 .",
+   "9": "Dm9 . G7 .",
+   "10": "C . CM7 .",
+   "11": "C6 . C7 .",
+   "12": "FM7 . F6 .",
+   "13": "FM7",
+   "14": "Am7",
+   "15": "D7",
+   "16": "Dm7",
+   "17": "G7",
+   "18": "C . CM7 .",
+   "19": "C6",
+   "20": "Dm7",
+   "21": "G7",
+   "22": "Dm7 . G7 .",
+   "23": "Dm7 . G7 .",
+   "24": "C7",
+   "26": "FM7 . F6 .",
+   "27": "Dm7 . G7 .",
+   "28": "CM7 . C7 .",
+   "29": "F",
+   "30": "CM9 . A7 .",
+   "31": "Dm7 . G7 .",
+   "32": "C6",
+   "33": "Am7 . D7 .",
+   "34": "Dm7",
+   "35": "G7",
+   "36": "C6"
+  },
+  "read": "chords read by eye from the page (homr notes)",
+  "notes": {
+   "5": "G4/2 F4/4t G4/4t A4/4t",
+   "7": "F4/8t G4/8t A4/8t D5/4 D5/4. F4/8",
+   "9": "~E4/2. E4/8t F4/8t G4/8t",
+   "11": "E4/8t F4/8t G4/8t C5/4 C5/4. E4/8",
+   "13": "~A4/2. A4/8t B4/8t C5/8t",
+   "27": "B4/8t C5/8t D5/8t D5/4 D5/4. B4/8",
+   "33": "A4/8t B4/8t C5/8t C5/4 C5/2"
+  }
+ },
+ "Jazz-Fakebook-132": {
+  "title": "The Glory Of Love",
+  "chords": {
+   "2": "G",
+   "3": "D7",
+   "4": "G . G7 .",
+   "5": "C",
+   "6": "G . Em7 .",
+   "7": "Am7 . D7 .",
+   "8": "G . Em7 .",
+   "9": "Am7 . D7 .",
+   "10": "G",
+   "11": "D7",
+   "12": "G . G7 .",
+   "13": "C",
+   "14": "G . Em7 .",
+   "15": "Am7 . D7 .",
+   "16": "G . C Cm",
+   "17": "G . G7 .",
+   "18": "C",
+   "20": "G . Gdim7 .",
+   "21": "G . Dm7 G7",
+   "22": "Cm",
+   "23": ". . Cm/Bb .",
+   "24": "A7",
+   "25": "Am7b5 . D7 .",
+   "26": "G",
+   "27": "D7",
+   "28": "G . G7 .",
+   "29": "C",
+   "30": "G . Em7 .",
+   "31": "Am7 . D7 .",
+   "32": "G . G#dim7 .",
+   "33": "Am7 . D9 .",
+   "34": "G . Cm6 .",
+   "35": "G"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "32": {
+    "e": [
+     1
+    ]
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-137": {
+  "title": "Greensleeves",
+  "skip": "in 6/8; the band counts four or three beats to the bar",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-133": {
+  "read": "chords read by eye from the page (homr notes)",
+  "title": "The Glow Worm",
+  "chords": {
+   "1": "C",
+   "2": "G7",
+   "4": "C",
+   "5": "C/E . Ebdim7 .",
+   "6": "G7/D",
+   "7": "Dm7 . G7 .",
+   "8": "C",
+   "10": "G7",
+   "12": "C",
+   "14": "D7",
+   "15": "G7",
+   "16": "C",
+   "17": "C/G",
+   "19": "Db9",
+   "21": "C",
+   "22": "Dm7 . Db7#9 .",
+   "23": "C",
+   "25": "G7",
+   "26": "C"
+  },
+  "bars": {
+   "15": {
+    "e": [
+     1
+    ]
+   },
+   "16": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "17": {
+    "e": [
+     2
+    ]
+   }
+  }
+ },
+ "Jazz-Fakebook-133b": {
+  "title": "Goin' Out Of My Head",
+  "chords": {
+   "2": "Cm7",
+   "3": "CM7",
+   "4": "Cm7",
+   "5": "CM7 . C7#5 .",
+   "6": "FM7",
+   "8": "Fm7",
+   "9": "Bb9",
+   "10": "EbM7",
+   "11": "Gm7",
+   "12": "EbM7 . Gm7 .",
+   "13": "Ab . Bb9 .",
+   "14": "CM7",
+   "16": "CM7",
+   "17": "Dm7 . G7 .",
+   "18": "CM7",
+   "19": "FM7",
+   "20": "CM7",
+   "21": "Dm7",
+   "22": "CM7 . F6 CM7",
+   "23": "F6 . CM7 F6",
+   "24": "CM7 . F6 CM7",
+   "26": "D/F#",
+   "27": "Fm",
+   "28": "C/E",
+   "29": "Ebdim7",
+   "30": "G7/D",
+   "31": "Am7/D . D7 .",
+   "32": "G7sus . G7 .",
+   "34": "Cm7",
+   "35": "CM7"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "14": {
+    "e": [
+     1
+    ]
+   },
+   "15": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "16": {
+    "e": [
+     2
+    ]
+   },
+   "34": {
+    "rs": true
+   },
+   "35": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-135b": {
+  "title": "The Good Life",
+  "chords": {
+   "2": "Ab",
+   "4": "Gm7",
+   "5": "C7",
+   "6": "Fm",
+   "8": "Dm7b5",
+   "9": "G7",
+   "10": "Bbm7",
+   "11": "Gb7",
+   "12": "Ab",
+   "13": "C7",
+   "14": "Fm",
+   "15": "Fm7",
+   "16": "Bbm7",
+   "17": "Eb7",
+   "18": "Ab",
+   "20": "Gm7",
+   "21": "C7",
+   "22": "Fm",
+   "24": "Dm7b5",
+   "25": "G7",
+   "26": "Bbm7",
+   "27": "Gb7",
+   "28": "Ab",
+   "29": "F7",
+   "30": "Bbm7",
+   "31": "Bbm7/Eb . Eb7b9 .",
+   "32": "Ab . Db Dbm",
+   "33": "Ab6"
+  },
+  "read": "chords read by eye from the page (homr notes)",
+  "notes": {
+   "28": "C5/8 C5/4.~ C5/4~ C5/8t B4/8t C5/8t",
+   "29": "Eb5/2.~ Eb5/8t Db5/8t C5/8t"
+  }
+ },
+ "Jazz-Fakebook-136": {
+  "read": "chords read by eye from the page (homr notes)",
+  "title": "A Good Man Is Hard To Find",
+  "chords": {
+   "2": "A7",
+   "4": "D7",
+   "5": ". . . D7#5",
+   "6": "G7",
+   "8": "C",
+   "9": "C . G7 C",
+   "10": "A7",
+   "12": "D7",
+   "13": ". . G7 .",
+   "14": "C . Ebdim7 .",
+   "15": "Dm7 . G7 .",
+   "16": "C",
+   "19": "Am7",
+   "20": "D7",
+   "21": "Dm7 . G7 .",
+   "22": "C . Dm7 G7b9",
+   "23": "C"
+  }
+ },
+ "Jazz-Fakebook-136b": {
+  "title": "Goodbye Pork Pie Hat",
+  "chords": {
+   "2": "F7#9 . Db9 .",
+   "3": "GbM7 . B7b5 .",
+   "4": "Eb7 . Db7 .",
+   "5": "Eb7 . F7 .",
+   "6": "Bbm7 . Db7 .",
+   "7": "G7b5",
+   "8": "C7 D7 . G7",
+   "9": "Db7 . GbM7 .",
+   "10": "B7 . Bb7 .",
+   "11": "C7 . Eb7 .",
+   "12": "F7#9 . Db7 .",
+   "13": "GbM7 . B7 .",
+   "14": "Fm11"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "13": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }

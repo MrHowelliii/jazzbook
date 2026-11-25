@@ -490,5 +490,47 @@
   "tempo": 140,
   "feel": "swing",
   "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-129": {
+  "title": "",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-132": {
+  "title": "",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Medium beat"
+ },
+ "Jazz-Fakebook-133": {
+  "title": "",
+  "tempo": 170,
+  "feel": "swing",
+  "basis": "book: Medium jump"
+ },
+ "Jazz-Fakebook-133b": {
+  "title": "",
+  "tempo": 90,
+  "feel": "even",
+  "basis": "book: Moderately slow rock"
+ },
+ "Jazz-Fakebook-135b": {
+  "title": "",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "Jazz-Fakebook-136": {
+  "title": "",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: Moderately"
+ },
+ "Jazz-Fakebook-136b": {
+  "title": "",
+  "tempo": 60,
+  "feel": "ballad",
+  "basis": "book: Slow ballad"
  }
 }

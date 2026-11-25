@@ -342,6 +342,6 @@ if __name__ == '__main__':
             for s in keep:
                 if s['id'] in tempos:
                     s['tempo'] = tempos[s['id']]['tempo']
-                    s['feel'] = {'swing': 0, 'ballad': 1, 'latin': 2, 'shuffle': 5, 'samba': 6}[tempos[s['id']]['feel']]
+                    s['feel'] = {'swing': 0, 'ballad': 1, 'latin': 2, 'shuffle': 5, 'samba': 6, 'even': 7}[tempos[s['id']]['feel']]
             json.dump(keep, open(a.publish, 'w'), separators=(',', ':'))
             print(f'{len(keep)} songs published to {a.publish} ({sum(1 for s in keep if s.get("reviewed"))} with chords read by eye)')
