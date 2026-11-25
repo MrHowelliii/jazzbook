@@ -63,9 +63,11 @@ def measures(root):
     if part is None:
         return []
     out, div, key, time = [], 1, 0, (4, 4)
+    pending_newsys = False
     for m in part.findall('measure'):
         pr = m.find('print')
-        newsys = pr is not None and pr.get('new-system') == 'yes'
+        newsys = (pr is not None and pr.get('new-system') == 'yes') or pending_newsys
+        pending_newsys = False
         pos, events, harms = 0, [], []
         rs = re_ = False; ending = None
         for e in m:
@@ -116,6 +118,10 @@ def measures(root):
                     ending = [int(x) for x in re.findall(r'\d+', en.get('number') or '')] or None
         bar_len = time[0] * TPQ * 4 // time[1]
         q = lambda x: round(x * TPQ / div)
+        if not events and not harms:                     # homr adds an empty bar at some repeat signs: not a bar
+            if newsys and out is not None:
+                pending_newsys = True
+            continue
         # top line: voice 1; a chord keeps its highest note
         top = {}
         for (st, d, midi, voice, chord, tie) in events:

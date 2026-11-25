@@ -109,7 +109,59 @@ def chord_tok(sym):
     return root + '7'
 
 
-def assemble(work, book, index, offset):
+NOTE_RE = re.compile(r'^(r|[A-G](?:#|b)?-?\d)/(1|2|4|8|16|32)(\.?)(t?)(~?)$')
+VALUE = {'1': 192, '2': 96, '4': 48, '8': 24, '16': 12, '32': 6}
+
+
+def apply_override(meas, ov):
+    """Chords (one token per beat, '.' = none) and corrected bars from leads-overrides/<book>.json."""
+    if 'chords' in ov:
+        for m in meas:
+            m['c'] = []
+        for bar, line in ov['chords'].items():
+            k = int(bar) - 1
+            if not 0 <= k < len(meas):
+                continue
+            m = meas[k]
+            toks = line.split()
+            unit = m['len'] // max(1, len(toks))               # the tokens divide the bar evenly
+            for i, tok in enumerate(toks):
+                if tok != '.' and chord_tok(tok):
+                    m['c'].append([i * unit, tok, chord_tok(tok)])
+    for bar, flags in ov.get('bars', {}).items():           # repeats and endings the notes reader missed
+        k = int(bar) - 1
+        if 0 <= k < len(meas):
+            for f, v in flags.items():
+                meas[k][f] = v
+    for bar, line in ov.get('notes', {}).items():
+        k = int(bar) - 1
+        if not 0 <= k < len(meas):
+            continue
+        n, t, tied = [], 0, None
+        for tok in line.split():
+            mm = NOTE_RE.match(tok)
+            if not mm:
+                raise ValueError(f'bad note {tok!r} in bar {bar}')
+            d = VALUE[mm.group(2)] * (3 if mm.group(3) else 2) // 2
+            if mm.group(4):
+                d = d * 2 // 3
+            p = 0
+            if mm.group(1) != 'r':
+                pm = re.match(r'([A-G])(#|b)?(-?\d)', mm.group(1))
+                p = 12 * (int(pm.group(3)) + 1) + M.STEP_PC[pm.group(1)] + {'#': 1, 'b': -1, None: 0}[pm.group(2)]
+                if (k and t == 0 and meas[k - 1].get('tie_out') == p) or (tied == p and t > 0):
+                    p += 128
+            n += [t, d, p]
+            tied = (p & 127) if mm.group(5) else None
+            if mm.group(5):
+                meas[k]['tie_out'] = p & 127
+            t += d
+        meas[k]['n'] = n
+        meas[k]['filled'] = t
+
+
+def assemble(work, book, index, offset, overrides=None):
+    overrides = overrides or {}
     pages = sorted(f for f in os.listdir(work) if f.startswith('layout-'))
     songs, cur = [], None
     for f in pages:
@@ -153,13 +205,31 @@ def assemble(work, book, index, offset):
                 meas += sysm
         if not meas:
             continue
+        sid = f"{book}-{s['page']}"
+        ov = overrides.get(sid)
+        if ov:
+            apply_override(meas, ov)
         song = M.to_song(meas, s['title'], s['composer'], book, s['page'], s['pages'])
+        if ov:
+            song['reviewed'] = ov.get('read', True)
+            song['problems'] = [p for p in song['problems'] if not p.startswith('only ') and 'placed by position' not in p]
+            if ov.get('title'):
+                song['title'] = ov['title']
         for b, m in zip(song['bars'], meas):
             b['box'] = m.get('box')
         song['problems'] = problems + song['problems']
+        if ov:                                           # chords read by eye: their placement is not a problem
+            song['problems'] = [p for p in song['problems'] if 'placed by position' not in p and not p.startswith('only ')]
         song['scanned'] = True
         out.append(song)
     return out
+
+
+def publishable(s):
+    """Offered in the app: enough bars, nearly every bar adds up, chords read by eye (Tesseract alone misses too many)."""
+    n = len(s['bars'])
+    bad = sum(1 for p in s['problems'] if p.startswith('bar'))
+    return bool(s.get('reviewed')) and n >= 8 and bad <= max(1, n // 20) and not any('no notes read' in p for p in s['problems'])
 
 
 def place_chords(sysm, st, page, problems):
@@ -200,6 +270,7 @@ if __name__ == '__main__':
     ap.add_argument('--first', type=int, default=1); ap.add_argument('--last', type=int, default=0)
     ap.add_argument('--phase', default='123'); ap.add_argument('--jobs', type=int, default=3)
     ap.add_argument('--homr-jobs', type=int, default=2); ap.add_argument('--out')
+    ap.add_argument('--publish', help='write the songs that pass the checks here (leads/<book>.json)')
     a = ap.parse_args()
     os.makedirs(a.work, exist_ok=True)
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -217,8 +288,14 @@ if __name__ == '__main__':
                 print('homr', f, flush=True)
     if '3' in a.phase:
         idx = next(b for b in json.load(open(os.path.join(root, 'songs.json'))) if b['id'] == a.book)['songs']
-        songs = assemble(a.work, a.book, idx, binfo.get('offset', 0))
+        ovf = os.path.join(root, 'leads-overrides', a.book + '.json')
+        ovs = json.load(open(ovf)) if os.path.exists(ovf) else {}
+        songs = assemble(a.work, a.book, idx, binfo.get('offset', 0), ovs)
         ok = sum(1 for s in songs if not [p for p in s['problems'] if p.startswith('bar')])
         print(f'{len(songs)} songs, {ok} with every bar adding up', flush=True)
         if a.out:
             json.dump(songs, open(a.out, 'w'), separators=(',', ':'))
+        if a.publish:
+            keep = [s for s in songs if publishable(s)]
+            json.dump(keep, open(a.publish, 'w'), separators=(',', ':'))
+            print(f'{len(keep)} songs published to {a.publish} ({sum(1 for s in keep if s.get("reviewed"))} with chords read by eye)')
