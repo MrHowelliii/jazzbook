@@ -76,8 +76,10 @@ export function prepare(song, opts = {}) {
   const pick = song.pickup ? song.bars[0] : null;
   const body = song.pickup ? song.bars.slice(1) : song.bars.slice();
   const meter = song.time || [4, 4];
-  const beats = meter[0] === 3 ? 3 : 4;                 // the band plays 4 or 3 beats a bar
-  const beatLen = TPQ * 4 / (meter[1] || 4);
+  // the band counts quarter notes, 4 or 3 to the bar: 2/2 is four quarters, 6/8 three
+  const written = meter[0] * TPQ * 4 / (meter[1] || 4);
+  const beats = written === 3 * TPQ ? 3 : 4;
+  const beatLen = TPQ;
   const barLen = beats * beatLen;
   const form = unroll(body);
   // chords: one per beat, carried over bar lines; the first chord also fills the start

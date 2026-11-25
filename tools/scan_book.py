@@ -39,8 +39,8 @@ def _layout_page(pdf, page, work, out):
     except Exception as e:                               # an empty or odd page
         json.dump({'page': page, 'error': str(e), 'staves': [], 'titles': []}, open(out, 'w')); return out
     prev = None
-    for st in sts:
-        st['chords'] = L.chords_above(img, st, prev)
+    for st in sts:                                       # SCAN_OCR_CHORDS=0: chords are read by eye (leads-overrides)
+        st['chords'] = L.chords_above(img, st, prev) if os.environ.get('SCAN_OCR_CHORDS', '1') != '0' else []
         prev = st['bot']
     # song pieces: staves under each title; staves above the first title continue the previous page's song
     titles = sorted(titles, key=lambda t: t['y0'])
@@ -176,15 +176,24 @@ def page_systems(work, page):
     return _SYS[page]
 
 
-def assemble(work, book, index, offset, overrides=None):
+def assemble(work, book, index, offset, overrides=None, by_index=False):
+    """by_index: songs start at the pages the book's index gives (for books whose titles the layout cannot read)."""
     overrides = overrides or {}
+    starts = {}
+    if by_index:
+        for e in sorted(index, key=lambda e: e['page']):
+            starts.setdefault(e['page'] + offset, e)
     pages = sorted(f for f in os.listdir(work) if f.startswith('layout-'))
     songs, cur = [], None
     for f in pages:
         lay = json.load(open(os.path.join(work, f)))
-        for pc in lay.get('pieces', []):
+        pieces = lay.get('pieces', [])
+        if by_index:                                     # one piece per page; a new song where the index says so
+            pieces = [{'title': starts[lay['page']]['title'] if lay['page'] in starts else None,
+                       'staves': list(range(len(lay.get('staves', []))))}] if lay.get('staves') else []
+        for pc in pieces:
             if pc['title']:
-                hit = match_title(pc['title'], index)
+                hit = starts.get(lay['page']) if by_index else match_title(pc['title'], index)
                 nth = sum(1 for x in songs if x['page'] == lay['page'])
                 cur = {'title': hit['title'] if hit else pc['title'].title(), 'composer': hit.get('composer') if hit else None,
                        'page': lay['page'], 'pages': [], 'parts': [], 'sid': f"{book}-{lay['page']}" + 'bcdef'[nth - 1:nth]}
@@ -224,6 +233,7 @@ def assemble(work, book, index, offset, overrides=None):
         for b, m in zip(song['bars'], meas):
             b['box'] = m.get('box')
         song['id'] = sid
+        song['parts'] = [[lay['page'], pc['staves']] for lay, pc in s['parts']]
         song['problems'] = problems + song['problems']
         if ov:                                           # chords read by eye: their placement is not a problem
             song['problems'] = [p for p in song['problems'] if 'placed by position' not in p and not p.startswith('only ')]
@@ -278,6 +288,7 @@ if __name__ == '__main__':
     ap.add_argument('--phase', default='123'); ap.add_argument('--jobs', type=int, default=3)
     ap.add_argument('--homr-jobs', type=int, default=2); ap.add_argument('--out')
     ap.add_argument('--publish', help='write the songs that pass the checks here (leads/<book>.json)')
+    ap.add_argument('--by-index', action='store_true', help='song boundaries from the index pages (no readable titles)')
     a = ap.parse_args()
     os.makedirs(a.work, exist_ok=True)
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -297,7 +308,7 @@ if __name__ == '__main__':
         idx = next(b for b in json.load(open(os.path.join(root, 'songs.json'))) if b['id'] == a.book)['songs']
         ovf = os.path.join(root, 'leads-overrides', a.book + '.json')
         ovs = json.load(open(ovf)) if os.path.exists(ovf) else {}
-        songs = assemble(a.work, a.book, idx, binfo.get('offset', 0), ovs)
+        songs = assemble(a.work, a.book, idx, binfo.get('offset', 0), ovs, by_index=a.by_index)
         ok = sum(1 for s in songs if not [p for p in s['problems'] if p.startswith('bar')])
         print(f'{len(songs)} songs, {ok} with every bar adding up', flush=True)
         if a.out:

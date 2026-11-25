@@ -56,6 +56,30 @@ def song_lines(work, page, nth=0):
     return out
 
 
+def parts_lines(work, parts):
+    """The same as song_lines, for a song given as [(page, [staff indices])] (scan_book.assemble's song['parts'])."""
+    import scan_book as B
+    out, bar = [], 0
+    for page, staves in parts:
+        lay = json.load(open(os.path.join(work, f'layout-{page:03d}.json')))
+        systems = B.page_systems(work, page) or []
+        for k in staves:
+            if k >= len(systems):
+                continue
+            sysm, st = systems[k], lay['staves'][k]
+            n = len(sysm)
+            start = st['x0'] + st['sp'] * 5
+            edges = [b for b in st['bars'] if b > start]
+            if not edges or edges[-1] < st['x1'] - st['sp'] * 2:
+                edges.append(st['x1'])
+            if len(edges) != n:
+                w = (st['x1'] - start) / n
+                edges = [start + w * (i + 1) for i in range(n)]
+            out.append((lay, st, list(range(bar + 1, bar + n + 1)), [start] + edges))
+            bar += n
+    return out
+
+
 def render(pdf, lines, outdir):
     os.makedirs(outdir, exist_ok=True)
     pages = {}
@@ -80,6 +104,20 @@ def render(pdf, lines, outdir):
         f = os.path.join(outdir, f'line-{i + 1:02d}.png')
         crop.save(f)
         files.append((f, bars[0], bars[-1]))
+    return files
+
+
+def render_stacked(pdf, lines, path, width=1500):
+    """All lines of a song in one image (each line scaled to `width`), for reading the whole song at a glance."""
+    tmp = os.path.splitext(path)[0] + '-lines'
+    files = render(pdf, lines, tmp)
+    ims = [Image.open(f) for f, _, _ in files]
+    ims = [im.resize((width, int(im.height * width / im.width))) for im in ims]
+    out = Image.new('RGB', (width, sum(im.height for im in ims) + 4 * len(ims)), (255, 255, 255))
+    y = 0
+    for im in ims:
+        out.paste(im, (0, y)); y += im.height + 4
+    out.save(path)
     return files
 
 
