@@ -113,6 +113,9 @@ def apply_override(meas, ov):
     'insert' adds an empty bar after each listed bar and 'bars_total' adds empty bars at the end (both filled by
     'notes'); 'drop' removes bars the reader made up. Bar numbers in the other keys count the added bars, before
     any are dropped."""
+    if ov.get('time'):                                      # the reader misread the time signature
+        for m in meas:
+            m['time'] = list(ov['time']); m['len'] = ov['time'][0] * 192 // ov['time'][1]
     for k in sorted(ov.get('insert', []), reverse=True):    # an empty bar after bar k (the reader ran two together)
         m = dict(meas[k - 1]); m.update(n=[], c=[], filled=0)
         for f in ('rs', 're', 'e', 'ds', 'dc', 'fn', 'sg', 'db', 'tie_out', 'newsys'):

@@ -1824,5 +1824,329 @@
    "32": "EbM7#11"
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-71": {
+  "title": "The Breeze And I",
+  "insert": [
+   9
+  ],
+  "chords": {
+   "2": "Eb6",
+   "6": "E6",
+   "8": "Eb6",
+   "9": ". . Bb7 .",
+   "10": ". . . Cm7",
+   "11": "Fm7",
+   "12": "Fm7/Bb",
+   "13": "Gm7",
+   "14": "Cm7",
+   "15": "Fm7",
+   "16": "Bb7",
+   "17": "Eb",
+   "18": ". . C7b9 .",
+   "19": "Fm7",
+   "20": "Fm7/Bb . Bb7 .",
+   "21": "Eb",
+   "22": ". . Cm7 .",
+   "23": "Fm7",
+   "24": "Bb7",
+   "25": "Eb6",
+   "26": "Fm7 . Bb7 .",
+   "27": "Eb6"
+  },
+  "notes": {
+   "10": "~Bb3/2. r/4"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "9": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "10": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-71b": {
+  "title": "Bud's Blues",
+  "drop": [
+   10
+  ],
+  "chords": {
+   "1": "Ab",
+   "3": "Bbm7",
+   "4": "Eb7",
+   "5": "Bb7 . Ddim7 .",
+   "6": "Ebm7 F7 . .",
+   "7": "Bbm7 . Eb7 .",
+   "8": "AbM7",
+   "9": "Bbm7 . Eb7 .",
+   "11": "AbM7",
+   "12": "Cm7",
+   "13": "F7",
+   "14": "Bb",
+   "16": "Dbm7 . Gb7 .",
+   "17": "Cm7 . F7 .",
+   "18": "Bbm7 . E7 .",
+   "19": "Bbm7 . Eb7 .",
+   "20": "Ab",
+   "22": "Bbm7",
+   "23": "Eb7",
+   "24": "Db7 . Ddim7 .",
+   "25": "Ebm7 F7 . .",
+   "26": "Bbm7 . Eb7 .",
+   "27": "AbM7"
+  },
+  "notes": {
+   "7": "~Eb4/8 C4/8 Db4/8t F4/8t Ab4/8t C5/8 Eb5/8 C5/8 G4/8~",
+   "8": "~G4/2. r/4",
+   "11": "~Eb5/2. r/4"
+  },
+  "bars": {
+   "7": {
+    "e": [
+     1
+    ]
+   },
+   "8": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "9": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-72": {
+  "title": "Budo",
+  "chords": {
+   "1": "Bb",
+   "2": "Eb7",
+   "3": "Bb",
+   "4": "Bb7",
+   "5": "Eb7",
+   "7": "Bb . Cm7 .",
+   "8": "Dm7 . G7 .",
+   "9": "Cm7",
+   "10": "F7",
+   "11": "Bb"
+  },
+  "bars": {
+   "1": {
+    "rs": true
+   },
+   "12": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-72b": {
+  "title": "Button Up Your Overcoat",
+  "chords": {
+   "1": "G",
+   "2": "E7",
+   "3": "A7",
+   "5": "D7",
+   "6": "Ddim7 . D7 .",
+   "7": "G6 . Em7 .",
+   "8": "Am7 . D7 .",
+   "9": "G",
+   "10": "E7",
+   "11": "A7",
+   "13": "D7",
+   "14": "Ddim7 . D7 .",
+   "15": "G6",
+   "16": "Dm7 . G7 .",
+   "17": "C6",
+   "19": "G6",
+   "21": "Em7",
+   "22": "A9",
+   "23": "D7 . Em7/D .",
+   "24": "GM7/D . Am7/D C#dim7/D",
+   "25": "G",
+   "26": "E7",
+   "27": "A7",
+   "29": "D7",
+   "30": "Ddim7 . D7 .",
+   "31": "G . . C7",
+   "32": "G . Am7 D7",
+   "33": "G"
+  },
+  "bars": {
+   "32": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "33": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-73b": {
+  "title": "Buzzy",
+  "chords": {
+   "1": "Bb7",
+   "5": "Eb7",
+   "7": "Bb7",
+   "8": "G7",
+   "9": "Cm7",
+   "10": "F7",
+   "11": "Bb7",
+   "12": "Cm7 . F7 ."
+  },
+  "bars": {
+   "1": {
+    "rs": true
+   },
+   "12": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-75": {
+  "title": "Caldonia (What Makes Your Big Head So Hard?)",
+  "chords": {
+   "1": "G",
+   "5": "C7",
+   "7": "G",
+   "9": "D7",
+   "11": "G",
+   "17": "C",
+   "19": "G",
+   "21": "D7",
+   "23": "G",
+   "25": "G",
+   "29": "C9",
+   "31": "G",
+   "33": "Am7",
+   "34": "D7",
+   "35": "G"
+  },
+  "notes": {
+   "25": "r/1",
+   "26": "r/1",
+   "27": "r/1",
+   "28": "r/1",
+   "29": "r/1",
+   "30": "r/1",
+   "31": "r/1",
+   "32": "r/1",
+   "33": "r/1",
+   "34": "r/1",
+   "35": "r/1"
+  },
+  "bars": {
+   "24": {
+    "re": true
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-75b": {
+  "title": "Can't Help Lovin' Dat Man",
+  "drop": [
+   17
+  ],
+  "chords": {
+   "1": "CM7 . Am7 .",
+   "2": "Dm7 . G7 .",
+   "3": "CM7 . Gm7 C7b9",
+   "4": "F6 . Bb9 .",
+   "5": "Em7 . Am7 .",
+   "6": "Ab7 . D7b9 G7b9",
+   "7": "CM7 . Ebdim7 .",
+   "8": "Dm7 . G7#5 .",
+   "9": "CM7 . Am7 .",
+   "10": "Dm7 . G7 .",
+   "11": "CM7 . Gm7 C7b9",
+   "12": "F6 . Bb9 .",
+   "13": "Em7 . Am7 .",
+   "14": "Ab7 . D7b9 G7b9",
+   "15": "CM7",
+   "16": "Dm7 . Gm7 C7b9",
+   "18": "F6",
+   "19": "F#dim7",
+   "20": "CM7",
+   "21": "D7",
+   "22": "Em7 . EbM7 .",
+   "23": "Dm7 . D9 .",
+   "24": "Dm7/G",
+   "25": "G7",
+   "26": "CM7 . Am7 .",
+   "27": "Dm7 . G7 .",
+   "28": "CM7 . Gm7 C7b9",
+   "29": "F6 . Bb9 .",
+   "30": "Em7 . Am7 .",
+   "31": "Ab7 . D7b9 G7b9",
+   "32": "CM7 . Eb9 .",
+   "33": "AbM7 . DbM7 .",
+   "34": "CM7"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-77": {
+  "title": "C.C. Rider",
+  "time": [
+   4,
+   4
+  ],
+  "chords": {
+   "2": "Eb",
+   "5": "Eb7",
+   "6": "Ab",
+   "7": "Ab7",
+   "8": "Eb",
+   "10": "Bb7",
+   "12": "Eb . Ab9 .",
+   "13": "Eb . . Bb7",
+   "14": "Eb"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "12": {
+    "e": [
+     1
+    ]
+   },
+   "13": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "14": {
+    "e": [
+     2
+    ]
+   },
+   "15": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
