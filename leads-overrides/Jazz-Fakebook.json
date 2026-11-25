@@ -3407,5 +3407,230 @@
    }
   },
   "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-107b": {
+  "title": "Ecaroh",
+  "skip": "two altered chords to most bars and a key change; the bar overlay drifts from the page, so the chords need placing by hand"
+ },
+ "Jazz-Fakebook-108": {
+  "title": "Elsa",
+  "skip": "slash-chord waltz with key changes and a D.S. into a vamp of rests; the bar overlay drifts, so it needs laying out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-109": {
+  "title": "The End Of A Love Affair",
+  "bars_total": 37,
+  "chords": {
+   "2": "Gm7 . C7 .",
+   "3": "FM7",
+   "4": "Fm7 . Bb7 .",
+   "5": "EbM7",
+   "6": "Ebm7 . Ab7 .",
+   "7": "Ebm7 . Ab7 .",
+   "8": "DbM7 . C7sus C7",
+   "9": "F . Dm7 .",
+   "10": "F",
+   "11": "Dm7",
+   "12": "G7",
+   "13": "Dm7 . G7 .",
+   "14": "Dm7 . G7 .",
+   "15": "Dm7 . G7 .",
+   "16": "CM7",
+   "17": "Am7 . D7 .",
+   "18": "Dm7 . G7 .",
+   "19": "Gm7 . C7 .",
+   "20": "Gm7 . C7 .",
+   "21": "FM7",
+   "22": "Fm7 . Bb7 .",
+   "23": "EbM7",
+   "24": "Ebm7 . Ab7 .",
+   "25": "Ebm7 . Ab7 .",
+   "26": "DbM7 . C7sus C7",
+   "27": "Cm7 . F7 .",
+   "28": "BbM7",
+   "29": "Eb9",
+   "30": "F",
+   "31": "C#dim7",
+   "32": "Gm7 . C7 .",
+   "33": "Gm7 . C9 .",
+   "34": "F6 . Dm7 .",
+   "35": "Gm7 . C7 .",
+   "36": "F",
+   "37": "F"
+  },
+  "notes": {
+   "12": "F4/4 D4/8 F4/8 A4/4 F4/8 D4/8",
+   "33": "D4/4 F4/8 Bb4/8 D5/4. E4/8",
+   "34": "F4/1",
+   "35": "r/2 r/4 F4/8 G4/8",
+   "36": "F4/1~",
+   "37": "~F4/2. r/4",
+   "2": "A4/4. A4/8 A4/4t G4/4t F4/4t"
+  },
+  "bars": {
+   "2": {
+    "rs": true,
+    "sg": [
+     "segno"
+    ]
+   },
+   "9": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "10": {
+    "e": [
+     2
+    ]
+   },
+   "33": {
+    "sg": [
+     "coda"
+    ]
+   },
+   "35": {
+    "ds": "coda"
+   },
+   "36": {
+    "sg": [
+     "coda"
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-110": {
+  "title": "Everybody Loves My Baby",
+  "chords": {
+   "1": "Dm6",
+   "5": "G7",
+   "6": "C7 . . C7#5",
+   "7": "F6",
+   "8": "A7",
+   "9": "Dm6",
+   "13": "A . A#dim7 .",
+   "14": "E7/B . E7 .",
+   "15": "A . Abdim7 .",
+   "16": "C7/G . C7 .",
+   "17": "F7 . Fdim7 .",
+   "18": "F7 . Fdim7 F7",
+   "19": ". . Fdim7 .",
+   "20": "F7",
+   "21": "Bb . F+ .",
+   "22": "Bb . G7 .",
+   "24": "C7 . A7 .",
+   "25": "Dm6",
+   "29": "G7",
+   "30": "C7",
+   "31": "F . Bb9 .",
+   "32": "A7",
+   "33": "F"
+  },
+  "bars": {
+   "31": {
+    "e": [
+     1
+    ]
+   },
+   "32": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "33": {
+    "e": [
+     2
+    ]
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-112": {
+  "title": "Everything's Coming Up Roses",
+  "skip": "long half-note-triplet passages homr read as plain rests and wrong lengths, with endings; needs writing out by hand"
+ },
+ "Jazz-Fakebook-115": {
+  "title": "Festive Minor",
+  "skip": "endings, D.S. and coda with bars homr missed (21 read of about 28); needs laying out by hand",
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-117": {
+  "title": "Fine And Mellow",
+  "chords": {
+   "1": "Fm6",
+   "2": "Bb7",
+   "3": "F",
+   "4": "F7",
+   "5": "Bb7",
+   "6": "Bb9",
+   "7": "F",
+   "8": ". . Cdim7 .",
+   "9": "C7",
+   "10": "Bb7",
+   "11": "F",
+   "12": ". . C7 C7#5",
+   "13": "Fm6",
+   "14": "Bb7",
+   "15": "F",
+   "16": "F7",
+   "17": "Bb7",
+   "19": "F",
+   "20": ". . Cdim7 .",
+   "21": "C7",
+   "22": "Bb7",
+   "23": "F",
+   "24": ". . C7#5 .",
+   "25": "Fm6",
+   "26": "Bb7",
+   "27": "F",
+   "28": "F7",
+   "29": "Bb7",
+   "31": "F",
+   "33": "C7#5",
+   "34": "Bb7",
+   "35": "F",
+   "36": "C7",
+   "37": "F",
+   "38": "Bb7",
+   "39": "F",
+   "40": "F7",
+   "41": "Bb7",
+   "43": "F",
+   "45": "C7#5 . C7 .",
+   "46": "Bb7",
+   "47": "F",
+   "48": ". . C7#5 .",
+   "49": "Fm6",
+   "50": "Bb7",
+   "51": "F",
+   "52": "F7",
+   "53": "Bb7",
+   "54": "Bb9",
+   "55": "F",
+   "56": ". . Cdim7 .",
+   "57": "C7",
+   "58": "Bb7",
+   "59": "F"
+  },
+  "notes": {
+   "9": "Bb4/8 A4/8 Bb4/2.",
+   "25": "Ab4/8 G4/8 G4/8 G4/8 G4/8 G4/8 G4/4",
+   "43": "D4/8 C4/8 C4/2.",
+   "45": "Ab4/4 G4/8 G4/8 G4/8. G4/16 G4/4",
+   "52": "r/1"
+  },
+  "read": "chords read by eye from the page (homr notes)"
+ },
+ "Jazz-Fakebook-116": {
+  "title": "Fiesta In Blue",
+  "skip": "big-band chart with up to four chords a bar, grace notes and two key changes; needs writing out by hand"
  }
 }
