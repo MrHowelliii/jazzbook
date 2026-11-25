@@ -64,6 +64,8 @@ def measures(root):
         return []
     out, div, key, time = [], 1, 0, (4, 4)
     for m in part.findall('measure'):
+        pr = m.find('print')
+        newsys = pr is not None and pr.get('new-system') == 'yes'
         pos, events, harms = 0, [], []
         rs = re_ = False; ending = None
         for e in m:
@@ -136,7 +138,7 @@ def measures(root):
             if t < bar_len:
                 chords.append([t, sym, tok])
         out.append({'c': chords, 'n': notes, 'key': key, 'time': list(time), 'len': bar_len, 'filled': filled,
-                    'rs': rs, 're': re_, 'e': ending})
+                    'rs': rs, 're': re_, 'e': ending, 'newsys': newsys})
     return out
 
 

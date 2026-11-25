@@ -612,6 +612,19 @@ async function init() {
                         bookTitle: book.title, file: book.file, offset: book.offset || 0, lead: L.id });
       }
     }
+    // songs read from the scanned books (homr + Tesseract), when they passed the checks
+    for (const file of ['leads/jazzfake.json']) {
+      const r = await fetch(file);
+      if (!r.ok) continue;
+      for (const L of await r.json()) {
+        leadsById[L.id] = L;
+        const book = data.find(b => b.id === L.book);
+        const s = allSongs.find(x => x.bookId === L.book && !x.leadScan && normTitle(x.title) === normTitle(L.title));
+        if (s) { if (!s.lead) { s.lead = L.id; s.leadScan = true; } }     // an exact 462 chart of the tune wins
+        else if (book) allSongs.push({ title: L.title, composer: L.composer, page: L.page - (book.offset || 0), bookId: book.id,
+                                       bookTitle: book.title, file: book.file, offset: book.offset || 0, lead: L.id, leadScan: true });
+      }
+    }
   } catch (err) { console.warn('lead sheets not loaded', err); }
   player = new Player(document.getElementById('player'), books);
   player.onclose = () => { document.getElementById('q').focus(); };

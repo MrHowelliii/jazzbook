@@ -205,7 +205,8 @@ export class Player {
           <div class="meta">${esc(song.composer || '')}${song.composer ? ' · ' : ''}${esc(book.title || song.book)}, page
             <a href="${encodeURI(book.file || '')}#page=${song.page}" target="_blank" rel="noopener">${song.page - (book.offset || 0)}</a>
             · ${song.time[0]}/${song.time[1]} · ${this.prep ? '' : ''}${song.bars.length} bars
-            ${problems ? `<span class="warn" title="${esc(song.problems.join('\n'))}"> · ${problems} bar${problems > 1 ? 's' : ''} may be misread</span>` : ''}</div>
+            ${song.scanned ? `<span class="warn" title="${esc((song.problems || []).join('\n'))}"> · read from a scan: notes and chords may contain mistakes</span>`
+              : problems ? `<span class="warn" title="${esc(song.problems.join('\n'))}"> · ${problems} bar${problems > 1 ? 's' : ''} may be misread</span>` : ''}</div>
         </div>
       </div>
       <div class="pl-bar pl-transport">
@@ -349,7 +350,7 @@ export class Player {
     } else {
       let cur = null, lastKey = '';
       song.bars.forEach((b, k) => {
-        const key = b.box[0] + ':' + b.box[2];
+        const key = b.box ? b.box[0] + ':' + b.box[2] : 'n' + Math.floor(k / 4);
         if (key !== lastKey) { cur = []; rows.push(cur); lastKey = key; }
         cur.push(k);
       });
@@ -462,7 +463,7 @@ export class Player {
         // clickable bars on the page
         const bodyStart = song.pickup ? 1 : 0;
         song.bars.forEach((b, k) => {
-          if (b.box[0] !== pg || k < bodyStart) return;
+          if (!b.box || b.box[0] !== pg || k < bodyStart) return;
           const el = document.createElement('div'); el.className = 'clickbar'; el.dataset.src = k - bodyStart;
           place(el, b.box, vp1.width, vp1.height);
           el.onclick = (e) => this.barClick(k - bodyStart, e.shiftKey);
@@ -479,7 +480,7 @@ export class Player {
     Object.values(this.pageEls).forEach(p => { const h = p.box.querySelector('.hl'); if (h) h.remove(); });
     if (src === -1 || src === -2) return;
     const bar = src === 'pickup' ? this.song.bars[0] : this.prep.body[src];
-    if (!bar) return;
+    if (!bar || !bar.box) return;
     const p = this.pageEls[bar.box[0]]; if (!p) return;
     const h = document.createElement('div'); h.className = 'hl';
     place(h, bar.box, p.w, p.h);
