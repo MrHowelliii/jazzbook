@@ -3632,5 +3632,267 @@
  "Jazz-Fakebook-116": {
   "title": "Fiesta In Blue",
   "skip": "big-band chart with up to four chords a bar, grace notes and two key changes; needs writing out by hand"
+ },
+ "Jazz-Fakebook-119": {
+  "title": "Flying Home",
+  "skip": "the 462 Jazz Standards chart of Flying Home plays instead"
+ },
+ "Jazz-Fakebook-127b": {
+  "title": "Gee Baby, Ain't I Good To You",
+  "skip": "the 462 Jazz Standards chart plays instead"
+ },
+ "Jazz-Fakebook-120": {
+  "title": "Fool That I Am",
+  "skip": "homr lost the second half and the coda (rests and stray notes); needs writing out by hand"
+ },
+ "Jazz-Fakebook-121": {
+  "title": "Footprints",
+  "skip": "in 6/4; the band counts four or three beats to the bar"
+ },
+ "Jazz-Fakebook-122": {
+  "title": "For Every Man There's A Woman",
+  "chords": {
+   "2": "Fm . Fm/Ab .",
+   "3": "C7/G . C7 .",
+   "4": "Ab+ . Ab .",
+   "5": "Gm . C7 .",
+   "6": "Fm",
+   "7": "Bb7",
+   "8": "Abm C7 Db7 C7",
+   "9": "Fm",
+   "10": "G7#5 . C9 .",
+   "11": "Fm",
+   "12": "C7",
+   "13": "Fm",
+   "14": "Db7 . C7 .",
+   "15": "Db7 . C7 .",
+   "16": "Ab . Adim7 .",
+   "17": "Bbm7 . Eb7 .",
+   "18": "Ab . Bb7 .",
+   "19": "Db9 . C9 .",
+   "20": "Fm . Fm/Ab .",
+   "21": "C7/G . C7 .",
+   "22": "Fm . Fm/Eb .",
+   "23": "Bb/D . Db7 .",
+   "24": "C7",
+   "25": "G7#5 . C9 .",
+   "26": "Fm",
+   "27": "C7",
+   "28": "Fm",
+   "29": "G7#5#9 . C9 .",
+   "30": "Fm",
+   "31": "C9",
+   "32": "Fm"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "14": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "15": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)",
+  "notes": {
+   "12": "r/8 Bb4/4 Bb4/8 G4/2",
+   "27": "r/8 Bb4/4 Bb4/8 G4/2"
+  }
+ },
+ "Jazz-Fakebook-123": {
+  "read": "chords read by eye from the page (homr notes)",
+  "title": "For Sentimental Reasons",
+  "chords": {
+   "2": "F . Dm7 .",
+   "3": "Gm7 . C7 .",
+   "4": "F . Dm7 .",
+   "5": "Gm7 . C7 .",
+   "6": "F . Dm7 .",
+   "7": "G9 . C7 .",
+   "8": "F . D7 .",
+   "9": "Gm7 . C7 C9#5",
+   "10": "F . Dm7 .",
+   "11": "Gm7 . C7 .",
+   "12": "F . Dm7 .",
+   "13": "Gm7 . C7 .",
+   "14": "F . Dm7 .",
+   "15": "Gm7 . C7 .",
+   "16": "F . Gm7 .",
+   "17": "Abdim7 . F/A .",
+   "18": "Gm7 . C7 .",
+   "19": "F . F#dim7 .",
+   "20": "Gm7 . C7 .",
+   "21": "F",
+   "22": "Em7b5 . A7 .",
+   "23": "Dm7",
+   "24": "G9",
+   "25": "C7 . C9#5 .",
+   "26": "F . Dm7 .",
+   "27": "Gm7 . C7 .",
+   "28": "F . Dm7 .",
+   "29": "Gm7 . C7 .",
+   "30": "F",
+   "31": "Dm7 G9 C7 .",
+   "32": "F . Abdim7 .",
+   "33": "Gm7 C7 C9#5 .",
+   "34": "F . Bbm7 .",
+   "35": "Eb9 . F ."
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "32": {
+    "e": [
+     1
+    ]
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "notes": {
+   "18": "D5/4t D5/4t D5/4t E5/4. D5/8",
+   "22": "G4/4t G4/4t G4/4t Bb4/4. A4/8"
+  }
+ },
+ "Jazz-Fakebook-123b": {
+  "read": "chords read by eye from the page (homr notes)",
+  "title": "For You, For Me, For Evermore",
+  "chords": {
+   "2": "Eb",
+   "3": "F7",
+   "4": "Fm7 . Bb7 .",
+   "5": "Fm7 . Bb7 .",
+   "6": "Eb",
+   "7": "F7",
+   "8": "Fm7 . Bb7 .",
+   "9": "Fm7 . Bb7 .",
+   "10": "Bbm7",
+   "11": "Eb7",
+   "12": "Bbm7 . Eb7 .",
+   "13": "Ab",
+   "14": "Cm7",
+   "15": "F7",
+   "16": "B7",
+   "17": "Bb7#5 . Bb13 .",
+   "18": "Eb",
+   "19": "F7",
+   "20": "Fm7 . Bb7 .",
+   "21": "Fm7 . Bb7 .",
+   "22": "Bbm7",
+   "23": "Eb7",
+   "24": "Ab",
+   "25": "Db9",
+   "26": "Eb . Gm7 .",
+   "27": "Fm7 . Bb7 .",
+   "28": "Eb . Cm7 .",
+   "29": "F9 . F7 .",
+   "30": "Fm7",
+   "31": "Eb/Bb . Fm7/Bb Bb7",
+   "32": "Eb . Gbdim7 F7",
+   "33": "Bb7",
+   "34": "Eb6"
+  },
+  "bars": {
+   "2": {
+    "rs": true
+   },
+   "32": {
+    "e": [
+     1
+    ]
+   },
+   "33": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "34": {
+    "e": [
+     2
+    ]
+   },
+   "35": {
+    "e": [
+     2
+    ]
+   }
+  }
+ },
+ "Jazz-Fakebook-126": {
+  "title": "Frosty The Snow Man",
+  "chords": {
+   "1": "C",
+   "2": "C7",
+   "3": "F . F#dim7 .",
+   "4": "C/G",
+   "5": "F . F#dim7 .",
+   "6": "C/G",
+   "7": "G7",
+   "8": "C . G7 .",
+   "9": "C",
+   "10": "C7",
+   "11": "F . F#dim7 .",
+   "12": "C/G",
+   "13": "F . F#dim7 .",
+   "14": "C/G . A7 .",
+   "15": "Dm7 . G7 .",
+   "16": "C",
+   "17": "F . F#dim7 .",
+   "18": "C/G",
+   "19": "Dm7 . G7 .",
+   "20": "C",
+   "21": "G",
+   "22": "E7b9",
+   "23": "Am7 . D7 .",
+   "24": "Dm7 . G7 .",
+   "25": "C",
+   "26": "C7",
+   "27": "F . F#dim7 .",
+   "28": "C/G",
+   "29": "F . F#dim7 .",
+   "30": "C/G . A7 .",
+   "31": "Dm7 . G7 .",
+   "32": "C",
+   "33": "C",
+   "37": "G7",
+   "41": "C"
+  },
+  "bars": {
+   "32": {
+    "e": [
+     1
+    ],
+    "re": true
+   },
+   "33": {
+    "e": [
+     2
+    ]
+   }
+  },
+  "read": "chords read by eye from the page (homr notes)"
  }
 }
