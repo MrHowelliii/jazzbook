@@ -1,0 +1,1679 @@
+From 142e3c96189ff6d0876e5db76181410d353073b8 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 25 Nov 2026 08:27:33 +0000
+Subject: [PATCH] Practice experience: instant start, stage view, cues, keys,
+ loop speed-up, recording, my list, room, offline
+
+The engine and instruments preload when the page opens. Tempo, key and
+feel are remembered per tune. A quick row above the chart holds You play,
+tempo steps, Record and Stage. The count-in is shown large and a cue
+announces when the melody leaves or returns. Stage view shows only a
+large chart with the current line on top, fullscreen with the screen kept
+awake. Keys and page-turner pedals drive the transport and tempo. Loops
+can speed up each pass. Takes record the band with the microphone,
+aligned by output latency. Starred tunes form a list that can play in
+order. A small-room reverb, a speaker-delay setting and pause on audio
+interruptions are added. A manifest and service worker make the app
+installable and usable offline. feature-test.cjs covers these in Chromium.
+
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01MFtnqVmArJUVScHreHoD7y
+---
+ README.md                   |  33 +++-
+ build.sh                    |   2 +
+ feature-test.cjs            | 147 ++++++++++++++++++
+ icons/icon-180.png          | Bin 0 -> 4966 bytes
+ icons/icon-192.png          | Bin 0 -> 7834 bytes
+ icons/icon-512.png          | Bin 0 -> 20123 bytes
+ icons/icon-maskable-512.png | Bin 0 -> 10227 bytes
+ index.html                  |  39 +++++
+ manifest.webmanifest        |  16 ++
+ player.js                   | 301 +++++++++++++++++++++++++++++++-----
+ studio.css                  |  26 ++++
+ sw.js                       |  30 ++++
+ 12 files changed, 551 insertions(+), 43 deletions(-)
+ create mode 100644 feature-test.cjs
+ create mode 100644 icons/icon-180.png
+ create mode 100644 icons/icon-192.png
+ create mode 100644 icons/icon-512.png
+ create mode 100644 icons/icon-maskable-512.png
+ create mode 100644 manifest.webmanifest
+ create mode 100644 sw.js
+
+diff --git a/README.md b/README.md
+index e4d6927..07dad55 100644
+--- a/README.md
++++ b/README.md
+@@ -1,2 +1,33 @@
+ # jazz-play-along
+-Standalone jazz combo and melody player for lead sheets.
++Standalone jazz combo and melody player for lead sheets: a band (drums, bass, piano, guitar) plays the changes and a
++lead voice plays the tune, for the 462 standards parsed in [jazzbook](https://github.com/MrHowelliii/jazzbook), on the
++Jazz Band engine from [jazzband-op1r](https://github.com/MrHowelliii/jazzband-op1r).
++
++## Practising with it
++
++| | |
++|---|---|
++| **Starts at once** | The engine and the instruments download as the page opens, not when Play is pressed |
++| **Remembers** | Tempo, key and feel per tune; your instrument, band, mixer and "You play" choice for all tunes |
++| **You play** | Above the chart: just listen, or take the melody, piano, guitar, bass or drums (that part drops out). Tempo − / + next to it |
++| **Cues** | The count-in is shown large; "Solos next" / "Melody next" appears a bar before the melody leaves or returns |
++| **Stage** | A large chart for a music stand: only the chart and the transport, the line being played at the top, fullscreen where the browser allows it. The screen stays awake while the band plays |
++| **Keys and pedals** | Space, → or Page Down: play / pause · ← or Page Up: stop · ↑ ↓: tempo (Shift: by 1) · L: loop · S: stage · R: record. Bluetooth page-turner pedals send these keys |
++| **Loops** | Tap a bar, Loop, tap the last bar. Setup › Loop speed-up makes each pass 2, 4 or 8 BPM faster; Stop brings the tempo back |
++| **Record** | ● Rec records the band and your microphone together (the band is delayed by the output latency so they line up); takes are in Setup, with Save file |
++| **My list** | ☆ adds the tune to your list on the Songs screen: reorder it, and optionally play it in order (after a tune's ending the next one starts) |
++| **Room** | Mixer › Room: a small-room reverb around the band (0 turns it off) |
++| **Speaker delay** | Setup: for Bluetooth speakers, delays the moving bar (and aligns recordings) by the milliseconds you set |
++| **Interruptions** | A call or a route change pauses the band at the beat; Resume carries on from there |
++| **Offline, installable** | A web app manifest and a service worker (`sw.js`): add it to the home screen; the app, the library and the instruments are kept on the device. The "Original page" view (the book PDFs) still needs a connection |
++
++## Build and tests
++
++`build.sh` (run by the Pages workflow) assembles `site/` from this repository, the pinned jazzbook commit (library,
++form code, PDF viewer) and the pinned jazzband-op1r commit (engine), then runs `mobile-test.cjs` in WebKit.
++
++`feature-test.cjs` covers the practice features above against a served `site/`:
++`BROWSER=chromium node feature-test.cjs` (Chromium, because it uses a fake microphone for the recording check).
++It is not part of `build.sh`.
++
++When `engine/` files or icons change without changing name, bump `VERSION` in `sw.js` so devices fetch them again.
+diff --git a/build.sh b/build.sh
+index 3874e79..73bcbf3 100644
+--- a/build.sh
++++ b/build.sh
+@@ -4,6 +4,8 @@ root=$(pwd)
+ site="$root/site"
+ mkdir -p "$site/engine/packs"
+ cp index.html player.js studio.css "$site/"
++cp sw.js manifest.webmanifest "$site/"
++cp -R icons "$site/"
+ cp catalog/app/songform.js "$site/"
+ cp -R catalog/{app,books,leads,vendor} "$site/"
+ cp catalog/{books.json,songs.json,practice.html} "$site/"
+diff --git a/feature-test.cjs b/feature-test.cjs
+new file mode 100644
+index 0000000..ff00304
+--- /dev/null
++++ b/feature-test.cjs
+@@ -0,0 +1,147 @@
++// Practice features, end to end in a real browser against the built site (python3 -m http.server 8765 -d site):
++//   BROWSER=chromium node feature-test.cjs
++// Covers: instruments preloaded before Play, per-tune tempo memory, count-in and "Solos next" cues, keyboard / pedal
++// keys, loop speed-up, stage view, recording a take, my list with auto-advance, room control, offline start.
++const pw = require('playwright');
++const assert = require('node:assert/strict');
++const engine = process.env.BROWSER || 'chromium';
++const URL = process.env.SITE || 'http://127.0.0.1:8765/';
++
++(async () => {
++  const browser = await pw[engine].launch(engine === 'chromium'
++    ? { args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] } : {});
++  const errors = [];
++  try {
++    const context = await browser.newContext({ viewport: { width: 1100, height: 800 }, permissions: engine === 'chromium' ? ['microphone'] : [] });
++    const page = await context.newPage();
++    page.on('pageerror', e => errors.push(e.message));
++    const loaded = new Set();
++    page.on('response', r => { if (/\.(wasm|jbp)$/.test(r.url()) && r.ok()) loaded.add(r.url().split('/').pop()); });
++    await page.goto(URL + '#play=462jazz-60');
++    const $ = s => page.locator(s);
++    const text = s => $(s).textContent();
++    const button = name => page.getByRole('button', { name, exact: true });
++    await $('#player .bar').first().waitFor();
++
++    // 1. the band downloads before anyone presses Play
++    await page.waitForFunction(() => true); await page.waitForTimeout(1500);
++    assert.equal(loaded.size, 5, 'engine and four instruments preloaded: ' + [...loaded]);
++
++    // 2. tempo from the quick row, remembered for this tune
++    const base = +(await text('.tempo-now'));
++    await button('Faster').click(); await button('Faster').click();
++    assert.equal(+(await text('.tempo-now')), base + 10);
++    await page.reload(); await $('#player .bar').first().waitFor();
++    assert.equal(+(await text('.tempo-now')), base + 10, 'tempo remembered per tune');
++    await page.goto(URL + '#play=462jazz-83'); await page.reload(); await $('#player .bar').first().waitFor();
++    assert.notEqual(await text('.song-head h2'), 'Autumn Leaves');
++    await page.goto(URL + '#play=462jazz-60'); await page.reload(); await $('#player .bar').first().waitFor();
++
++    // 3. count-in shown big, then gone
++    await $('.in-role-q').selectOption('lead');
++    await button('▶ Play').click();
++    await $('.pl-cue.count').waitFor({ timeout: 30000 });
++    assert.match(await text('.pl-cue'), /^[1-4]$/);
++    await page.waitForFunction(() => document.querySelector('.pl-status')?.textContent.includes('Chorus'));
++    await page.waitForFunction(() => document.querySelector('.pl-cue').hidden);
++
++    // 4. keys: tempo, pause, stop
++    await page.locator('body').click({ position: { x: 5, y: 5 } });
++    const t0 = +(await text('.tempo-now'));
++    await page.keyboard.press('ArrowUp'); assert.equal(+(await text('.tempo-now')), t0 + 5);
++    await page.keyboard.press('Shift+ArrowDown'); assert.equal(+(await text('.tempo-now')), t0 + 4);
++    await page.keyboard.press('PageDown'); await button('Resume').waitFor();
++    await page.keyboard.press('ArrowRight'); await button('Pause').waitFor();
++    await page.keyboard.press('PageUp'); await button('▶ Play').waitFor();
++
++    // 5. a two-bar loop that speeds up each pass, and the tempo coming back at Stop
++    await button('Setup').click();
++    await $('.in-pass').selectOption('8'); await $('.in-tempo').fill('300'); await $('.in-tempo').press('Enter');
++    await button('Score').click();
++    await $('.bar[data-src="4"]').click(); await $('.bar[data-src="5"]').click({ modifiers: ['Shift'] });
++    await button('Loop').click();
++    await button('▶ Play').click();
++    await page.waitForFunction(() => /Loop pass 3/.test(document.querySelector('.pl-status')?.textContent), null, { timeout: 30000 });
++    assert.equal(+(await text('.tempo-now')), 316, 'two passes at +8');
++    await button('Stop').click();
++    assert.equal(+(await text('.tempo-now')), 300, 'tempo restored after the loop');
++    await button('Loop on').click(); await button('Clear selection').click();
++
++    // 6. "Solos next" a bar before the melody drops out (3 choruses: head, solos, head)
++    await button('Setup').click(); await $('.in-chor').selectOption('3'); await $('.in-tempo').fill('320'); await $('.in-tempo').press('Enter'); await button('Score').click();
++    await button('▶ Play').click();
++    await page.waitForFunction(() => document.querySelector('.pl-cue')?.textContent === 'Solos next', null, { timeout: 60000 });
++    assert.match(await text('.pl-status'), /Chorus 1 of 3/);
++
++    // 7. stage view: big chart, the line being played at the top
++    const h0 = (await $('.bar.now').boundingBox()).height;
++    await button('Stage').click();
++    assert.ok(await page.evaluate(() => document.body.classList.contains('stage')));
++    await page.waitForFunction(() => document.querySelector('.bar.now'));
++    await page.waitForTimeout(700);
++    const now = await $('.bar.now').boundingBox(), view = await $('.pl-view').boundingBox();
++    assert.ok(now.height > h0 * 1.15, `stage bars are larger (${h0} -> ${now.height})`);
++    assert.ok(Math.abs(now.y - view.y) < 12, 'current line at the top of the stage');
++    assert.ok(await $('.song-head').isHidden());
++    await page.keyboard.press('s');
++    assert.ok(!(await page.evaluate(() => document.body.classList.contains('stage'))));
++    await button('Stop').click();
++
++    // 8. record a take (band + microphone), listen back in Setup
++    await button('● Rec').click();
++    await button('■ Save take').waitFor({ timeout: 30000 });
++    await page.waitForFunction(() => document.querySelector('.pl-status')?.textContent.includes('Chorus'));
++    await page.waitForTimeout(2500);
++    await button('■ Save take').click();
++    await button('● Rec').waitFor();
++    await button('Stop').click();
++    await button('Setup').click();
++    const size = await page.evaluate(async () => (await (await fetch(document.querySelector('.take audio').src)).blob()).size);
++    assert.ok(size > 4000, 'a take was recorded: ' + size + ' bytes');
++    assert.match(await $('.take a').getAttribute('download'), /Autumn Leaves take 1\./);
++
++    // 9. room control and speaker delay are kept
++    await button('Mixer').click();
++    await $('.in-room').fill('30');
++    await button('Setup').click(); await $('.in-latency').fill('120'); await $('.in-latency').press('Enter');
++    assert.deepEqual(await page.evaluate(() => { const s = JSON.parse(localStorage['playalong.settings']); return [s.room, s.latency, s.passStep]; }), [30, 120, 8]);
++    await $('.in-latency').fill('0'); await $('.in-latency').press('Enter'); await $('.in-pass').selectOption('0');
++
++    // 10. my list: star two tunes, play the list in order
++    await $('.in-chor').selectOption('1'); await button('Score').click();
++    await button('Add to my list').click();
++    await button('Songs').click();
++    await page.getByPlaceholder('Song title or composer…').fill('blue bossa'); await $('.play-badge').first().click();
++    await $('#player .bar').first().waitFor();
++    await button('Add to my list').click();
++    await button('Songs').click();
++    assert.deepEqual(await $('#my-list .ml-title').allTextContents(), ['1. Autumn Leaves', '2. Blue Bossa']);
++    await $('#auto-next').check();
++    await $('#my-list .ml-title').first().click();
++    assert.equal(await text('.song-head h2'), 'Autumn Leaves');
++    await button('▶ Play').click();
++    await page.waitForFunction(() => document.querySelector('.song-head h2')?.textContent === 'Blue Bossa'
++      && /Count-in|Chorus/.test(document.querySelector('.pl-status')?.textContent), null, { timeout: 120000 });
++    await button('Stop').click();
++
++    // 11. offline: the app, the library and the band come from the service worker
++    await page.evaluate(() => navigator.serviceWorker.ready);
++    await page.waitForFunction(async () => (await caches.keys()).length && (await (await caches.open((await caches.keys())[0])).keys()).length >= 15, null, { timeout: 60000 });
++    await context.setOffline(true);
++    await page.reload(); await $('#player .bar').first().waitFor({ timeout: 30000 });
++    await button('▶ Play').click();
++    await page.waitForFunction(() => document.querySelector('.pl-status')?.textContent.includes('Chorus'), null, { timeout: 30000 });
++    await button('Stop').click();
++    await context.setOffline(false);
++
++    // 12. phone widths: nothing wider than the screen, quick controls reachable
++    for (const size of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
++      await page.setViewportSize(size); await page.waitForTimeout(300);
++      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no sideways scroll at ' + size.width);
++      const dock = await $('.dock').boundingBox();
++      assert.ok(dock.y + dock.height <= size.height + 1, 'dock on screen at ' + size.width + 'x' + size.height);
++    }
++    assert.deepEqual(errors, []);
++    console.log(`${engine}: preload, tune memory, cues, keys, loop speed-up, stage, recording, my list, offline and phone widths passed.`);
++  } finally { await browser.close(); }
++})().catch(err => { console.error(err); process.exitCode = 1; });
+diff --git a/icons/icon-180.png b/icons/icon-180.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..b06d13012b611760a96a13daba2a41418169ecb7
+GIT binary patch
+literal 4966
+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
+b{XIR7ocxwgU^)f%&*;oeY>XSP-Ani%>YJ<#
+
+literal 0
+HcmV?d00001
+
+diff --git a/icons/icon-192.png b/icons/icon-192.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..32a46bdf4b7b1794cc48d432448c26a107797076
+GIT binary patch
+literal 7834
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/icons/icon-512.png b/icons/icon-512.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..f32914f5af8e1d4b82c736a9c58596e0928810f2
+GIT binary patch
+literal 20123
+zcmd>mWmuHq_vX+j-Q6f6AX3sHl2R&4Nl7Xw-8G;{hoI6SQX*Z_B~lVYcXtjkz>qWh
+zjKBZxwI6oB?6v!8KPm6~K6%b_pL6bWo(X@Vtx9r}@g@WUAyHRTdIo`Dga2Yf2=T!`
+z$6lis5Qw&gy3)hvUTJ%C-f703-W!)NgmnH-pZx@@f@;G^x}HuVEXzvOb;eMBaz*-z
+zSxt6sEaA^RO;#)wTHRK4Q=ccS;%`{pCMP8RWJPFB8D_}O{<ag}lIi8Ix9aZ<Q>%~X
+zO<rtVWn6X@*i~Dpj}L3OPav-=-nx6bZ~bU6fgzDs36|Y{LhP-ieDkx(I01PCr|)KK
+zg$pX@73<|9iE%4a*`=KDY+i=L1MAA?%H}%}lfSRTl$0`_9x{H6O|B$zdd~p&4ea7D
+zaBJZqA@=PfUA;vb1z&((@x!dkxOf8^MuNHxO{Ld{e}wh1@CED<Mzc*{9TOZoPFMZ5
+z-})Nlm7Z$y@Oa}@k?6+b1398Bm!pEk<4kYQYk79g;{M&^3YYDj<Sqj|CifMgv=!XT
+zlsb9V8)Qb3zHhBwZ~kG(c)*LVE1mjEK`_Ks0c&v>S37`2hxcq}d~Q^XBG$}t(%mM2
+zi`6V@YAlI_8vTJ@^rp|#NfvFCISjRwaV>ijaf~FVNak}M-`9Z(*k4tAe%MBQu<SnQ
+zPmfeBKX8PfYIU*glJc=hcpYT)jG&^d#u2Kk-|s+-YX{G0Bu@wgw_Y}!)Y%+%gfxw&
+zZzNCUC9}C8*9n^sadzg<dK~3=HZM6id(A|sMNQ>xO^I;KZ5|+oH#>ILKQWlOULoL1
+z3o2xLb&0wJ#<sp%3AW$fy9T7lr{(ALe`P9}PTDx6<!Yu}!84yoVUUoRXP)jFfwt0Z
+zl(KUUA7!9Y-q`4glBCQHhdMRy2200t`<<M9Za~5=uGZ~~#!1o$XtG`He<j-tum2@s
+zda!QjBTd^(b~SFEMV2l3+w-9D@WTxM87HU9A!ElZ3qS9Xg3w?Dt7;qk_lo?jHy#^@
+zJeg@M_!*}c0{PD%UiCIh8S0-3_1^9GYm7}uoEjaxd_?Hq5o;N|9NH^66+%f7cRup=
+zgy~Zf-u<w0LYxq^<+D=1v&nK3%jhooJu#D;Hz7P?L|)^5T@fd#rmI5dLI?Z8L`+Lx
+zzAs!c`;#au(RS^=nc^gdz@6nMTMW7v{Fhq?>1<`?l<o0set4zxFH0&QQ;I*V{b`v<
+zXA`NUdo^yH{`0#a=WxAt2v%i|LF`)XC0)Olr$9}tHuIEg?cpSD)rW8CM25eM5(XpM
+zq9>$t#m!OKw7<=>JN6eTG?mSithSQ8_Z|?11a*1Q*B}{BT4bHQ&^XauV)+EqF6j!=
+zwAH%tW<%>_@>o~CL|MB-K}j&9YC%p;4Sh@fhid%vtd=Ba(nN>Q{uEY;T&mf7)4Y(h
+zBNF(_nv>H-RHTiEw2fC(pso3hy%To|iZ=xPCPoDx2h&(<MN+PpHrr%9AFz(->Ei4?
+z+0=e>cw9Q=miqA^vwzp4OeHllZ2eSOX}Yb?zS*#>lQ-DYC#pr>#cFdTx+_gsxzSi)
+z<GttOB{QMgL!X-Cjr+dYG#^{e`?Us6xH&m1-mV2Ee;kx(+%s99%Iq`ZDl7WX>Oum!
+z(f{K5gMN{EKeYd#hT8Q?ge!n1fPy0EyD2VFn@nel<$m{Ufba6biYg;pW&v++j|&l`
+zQuR7Fs7*j#d2yoecS>iVykp;CWLQ{Q-VX{|Z1^Ez+ybjyBeFD5s<(`(EDgI=Q;~1|
+z{PRM&IZW{Mpv(B>xsuYV4E0Mw0dAWRRdhtxmA=kPwle;Dtllhk#tw1rm*vY5D1*a=
+zo1HL-m$O&w&6cn*<2wZ34Tr>H1~Nl`USEV$#l}8KyE7?+AJAj8{n7b$_(}21QN-ev
+zIMJ)ruF2WoS^if*iFr8#Ka$IIs(wF2N3qUc_H=e7xQUzd5(It`iMg=EPq=qf9Uj(Q
+zv7BtEwiGoNxI3FUlagQoc^$Kzt#S?aEO20)gs@V+`8j{J#gy?!27+;i^Jv`5;N*9R
+zB->4oMov!Q7Ho2v_2lGt8f7}fMRP|?X^riR@zd77zDPlMKbd$;<+&TCH1;Zbee5#M
+z2K#DA9POY$DbuNwXNc;|Rt+Vs2+qSzP=u6qma6nF%v;;+MAQX{P5^a^<P{+*Xkd$4
+zcT5wzwODm_FG!C~QoJRs96GmNb9<8K{&-y%GYu4U=~v*}Cp3O*lILRLT>u{s8L{0K
+z<IG={K-_Nq;_3O+#Gg<bj&tW&?*V{SN=iyb%DA(N@m_uC+XedbKD(18LPlPN=7soy
+z)ZO*>W~xfkf@2NhXLp50PUV1pI%gQF>B0~V_TGLcRz#&luR9>0uniZcqs0jxvkmzH
+z$?yyDOyE6%o@{1adyc&4_%>#=rF>{svqlp%%)``ShQMs(mmIi|c%?gdaykCa8&CPr
+zvA}3t5zAclrq%V%uSQ-DKWu}g4uPwL(dNe#6cp@lM$2e!EKy<J-RNelF1c0JP2Czp
+z?P2rpYx4Oi`V;%|Ofa^4$Fc&EI(M`8>f(Hh!+2vya~Ulm#Figb{{i!wE?S!CmmZ<P
+zD#fn|%v62xagj*`zojF$0@EYqSjxh%6gte5l%`dBKL#q_gxp1Oat?bK-NofsY10Zc
+z{`YE>VH}tLDm;j24ofYl5gLu@r>a<28q5AyWBB(o!Ph+I97K-gFlc{XVkmc$?!QK}
+zJ=zKxb8_Hp>hdpwwlDms*!P)ceKhW)7z~DLHNKyoM~10MM@B#M<CI#E_3?t~8-Cjg
+z{74AF3Y!DRk(Yw4%)D?;_WLr>1Z?ttey`*F?cg0AQu%;jmAy2Wyjyc*8CKEDnvz1L
+z#&$)6J$U~(m{*vB6LMD3z=U(Y++nW1r1Nsa{gd3nM+vNDD}HqDt)BkqhKsGYKxg7~
+zZ^4Bsx$C@z6VUM%$MU5oE^;^umO~5cH6h&oAG#W~Bj;|YD=FoC%wa|Ns11t)AiC09
+zKPP>U7&E;?dtF?2b;_-d9-B+$f)=0AQBX)q6S#<IAY?9MhPZTQdt?M|rp3NzhU}YG
+zx@+;C`J3Cfvh-hKFd~-FW>Ix}C_~oS3Pus(Bby(Iy^(!~X)%|4!JZcXAs<RvN$H*f
+zB-Z9t8TGO+Z#}lFoO$NT@5XG2Ek`HBi~x5{!-ml@4>;UQlt`J%PqXv#wdZ>ZauZ16
+zq+X?`X@@N~BkwrW;cs_O^bf(r>b&ZbKPGL|#4<Bnh`QFYnwMY)V*RokJB2qszphU<
+zDQFJ>XX2irv)ZRiOZBFsG|MgzttXl{&T{1rjcGP<!wikCWr>y^vz&5))6SC;iffXb
+zJGNj+3L{90ByHUtN9Qwkm=$C8wC;1NAtmB!%~g!XsQ_#7cpOawpFRRp74G_;oZKKU
+zr>~2ZX!HXo{})PZAIMc0`M#lRBoF&u!My2X0(PvUAorJMb_bHxm_1lGaj*$*uOVZb
+zMR?zPb$8KX<O9|K>9g->LoU_LBr`DFxwSd@HEi<X-&@R-Zsl0)5a-1uEyr?hnF(3D
+zF`x|HS44238g3a+%;P0WFwSi;dIfZz7LFcKY|zPv8D+Udpfbkv1g-}Zf?a&7At50;
+z&FCu=O*_Is-O2@FB0fg(i>H`PG^EFe+q}XPyA+7{4Q)HQQY7+(G<seqyi;Ed>YQP`
+z27=`;TBmJIA}C>#E<;k>JBSIQOQ9z|_;gvC^znH%W_Of_cCm9fkY-Dqv^b{SA0ppD
+z?Q3@LSL)DhT)&>l1k>gG+fVG-^6qSKKHa$WS1ZvLM3j!Mkwx<(IG{PV46qxU4m-UC
+zab*@DpCIK>Cq%K0hrQ)YreYvyyZm_8(!r+Yl+2;|D^acC;5j~o;C=FSNZu9LN~7qf
+zqnn-DO^Ayq+XP6t<KCM1t%Uhv1ZJC!v_&gF`FbEWvv}ZHKSnl;iJazH0u_!%q8put
+zJXtBh#J!iysjGb)q##%aU+u-ssLCB7xri$n08@q%{ol>V&T3fXtM*@IEExydZbEhm
+z166A>tH}Q@N@CE2v$(U>l_-mOE`ahtg+zXWC+*Twc4xf!anlj|<hDxd69_o~S=o7s
+z(*1(IpA*q+GG4o@mzi+mEp{xK9=_6Y@^OWzA7@~LtL}cF7YG(pH}xh_UXtHQXm!O4
+zB*YbgQq619fN_TFiJ8R_;!j7<h)i(?CogJFZWArtMtTiUbAY!39L}*09J8Y}9y?lT
+zE9T!^?~xP!5x4Xh!2S33mIW>LVgH8DVDiNU{@M0eq3^c(gahG+`W=j5;+M?v51n{3
+z8@CJcGZ^!q&e+Ot60-!d+)$9+^Q$(b5B^aM1!HK0KJ4rNZ4REfAC|D_q~c3Ff=n`C
+z$%L@+Za3Ru6mt04=>GSFN0q-|9zKx!>>lst8);WM-~oAEKo8aIiQuH2kqr+VO*P6B
+z_P<bEzv*atP4Ok~e1Kdra~h2qA^u?>@Go=UG*@~}6pTRf@d9lkTTSyHp}`SO5VmJs
+zysTf|)6K{FT@cG%Qh#-HLNECA5~z=ry1h0|qt)12V(CWJo4_eNIf&Jmlg9m>k!UEU
+zsVENYgQ1xoNsZ{dxGvHbFYx;#^R{L>5k_A$&=IR1m#(58dkU4~?FC$ZD?bbW;#i(I
+zTJ-$t?1zftu><qwrc8(hV`G2|%yq-(#2EQ-QosoF;-*b)eI@TV|A~*^9qW7Q)C>QW
+zF{V2a(7<HQ7A}YZu^>nAU=kXfu((?=S4BeFc8!P{&puKJungF39-_a9Ums#5P+=Y-
+zZYMKXbRJ~Eq97+BF}XL;KaB#&Qc;BK*_ED3KtRwC#9U?rF_(J&i@>rNe)aDieJz3I
+zp4*SNj?IFi8`xo|Zxz*AGd<cN7}fnNL#e1(WlQI{Pl(kSIn;dku3uH)FK~y#y8U?V
+zE;WnUY9PqfSvTFDS<_(y$d7Z(8Mf}gCS5<Jbf_=DMXq9nU8}}=G@QSP#tTfrtijN<
+zZ_XJ}coECGhi_4imaptr*&N1Jz_jaWog*|!n6i2O7K!M~wB*P!g4_YKH}<X~e+Ijf
+z9F!p)eESlS9qC~L#4MZ{@gaawtfhPrR_f@69z$XJPUwp;+MmF|%{VElXir&JrQ81v
+zBxl9S5ZKNLp1BwZ$<Bql=4P`%Ko7l1lB5G)`SS9mal{@-j(=Roh%rIhvnY}=RWYN>
+zowkT59SbA4GzPdqS&2;S4t88nM>8j8V-(_o$ir$3gbpSc{&n?IG)kfI7X5>|Nqt}e
+zIElK-dKNo9s&EtlDzVT@IJ_l;zct$}1Wn^Ut_+--KY6)J^zRSLCqzl7Xw1o_Y1a+4
+zcgF`nrS|f^XV=oSxq%}hJ<>-Vv)F~Av&0j8H{3Gtw&5^P1p^v;oxd&2g218Rm%#(l
+zihGa)0ka(rp@x7pPk+M3^u+Y+A9OsriJ9d)H7v}0NO&QjQ5DDkNuw;cazO<ps{#=b
+zMM|fZNf?1A&$_dNpynzwX4HE@$#G*Mc{-ZZU#~c8rQh)8R^~IcOj2{W1pRv*pZv6R
+zjA6DhgDzly&+0_VBZ#AQj`ynu^So!Ep#QP<@H2G|1=?UR^KNBfk?k?YLP4`GvgW<~
+zB-YH<-ya2vBZP+MCfX<DuW!jA$<Ufc_gsfuZ*bBnfOV~MCNXf}4nKRGp{f#_@l8t7
+z`zaQC;aD;=OUoiWs5=*fq2Bm5_%_kldtPqa)r@2Owk}p*F5JH6d?AlteUAgN;eMm2
+zR>iA9n}C_XTRrNl?~_cdT;2(v$LvOT+~4E<Wueh?H13)fV5+;CF06I#5*RI{lS2zu
+zB!SiC6!%kKS_rawC+L<=blaU+1exY)!Xg63-`1z_IW&eu&-|)@|LiZCtB=bF3IOwL
+zGRl4+=0DT`QKJ0-2CRzKeR)ofNGr+!d(^$dpq?@;GT1d;%)~HTA6J;+%97~V@?I=;
+ze5A$a7R#K8SCo~Zc9W5%ogemWB)M}|F*Hs&56Hh)?`aZKv0v=!Nm`K}Pw#f%(9qb!
+z1#6tQwRS|Qr8Avt6UJ@pwkBHW?XPYp9+n)U(`ff2pY-yTcAm_da>6H81wdoste3v%
+z$#oR?oESy>RBQLSK4zi0&^vXV>U1w^aiP**aKqUto&96YG%-|Dk@-v&xK5*m?iD`i
+z;c?Ebwo>>VZ=gLEXffsWD6lYo*~$oE(O<)3I~{7Wz2)Sa+k5L3B=%ERMTL=Z*X}cu
+zPGht_`XqxxV_5WtdVbpOKmQ)DQa^DcPEoy#;I{>uJA7nQa}@c}hoRaon!op8)6LCu
+zsKtlI{z37^(Vo83m}`lp(~gQ>vDqV-0-JhDy!ggNW!mA=Q1V9Z;cSQsa@Z6jpWL+R
+zzoAKMqxNE8qDiXpqFJ`zGPNd5J1z<zRKA+gE2%wX9Di%117!C2t1#TO?_^>}Glquf
+zWb`kc<X6l>SVba?%&KPQxC{lj?4w47HsL$gCwcC~4)fjPOus7EF5VG4Om%}@c?SPM
+z&i|xzqQ_3mZsf(!e!XVe?eMhEm_Cw3_UlS@OUEH<y|?hkjXQyWr<_jo?zPzPy>zS%
+z`MRSwGPj@+pZBLxLaN5J@M&fVR>0p=xsgrN)y6xJu<k~QnZvsNk3Rjf$PX_cl$~_i
+z*ZN)RJuq(iTK!U7xNKc`*yTo`PxWiGPPEPghj>?)tc+VyUaG4W;Lvxcy{28Wm67w@
+zS$jMC>uYamlZy?^-_uNxUL;dDJ<Z0)qQc9RC@D*?xtm!RXaSK&o-DGuVEddcGd1rI
+zedLh8o~@r(&iNk^K2-HxGphhhpOUgGhjr?TsycK`H70F~2_(iRvj}N9<ftt2?kOjc
+z7C4&P&RJa>4ztZ)-SyvEI3e(*eCyr(O1detAne1P>+5H;%hb(2)p;wf$_eCnkT?&a
+z%&v_G_4rb9`c_-u*c#@6ufx(Ju>-q>zk!cd6~VatV&JvXdLVY7TI9%K9j7oGkg-u%
+z42&l3<97&qMVPjvoTm+}3G?7QA3RVP@bPo7%rY&=RxHIl!~<UmvuQ85LdREJBXy4-
+zI4t=5&A1$3Wy$2@L}*|sSdpgL!>&bGGG~THl;gR1kh2r6|K4e1DXe0rU!Tn~3aJc>
+zrcb%Hz-3}!>7!s46@*|G18Y^XNSK!&yjs7)c}8#Cp~(+SWb4eB;>|;#&6P4uUl%4_
+z%?i`ehjr1?OEkXlLJ?RYSXj>2I}o)QpY;`2-TF&k+tXRcTAyA#w#-5t52c(Jybv|t
+zGDEzU@(omD3~a73j^;z*=Jrkp@%D*k*G5El#Wx6huaR23Ve!?nlB}mZdc~CqaSikY
+zvr!2|co4&1v+0LaT*2IfB7?C14lJ3jEKD_K&JVjb>|Qj7@r&PtRO}`(2&n+9bGSq<
+zbYT>GYr1gLtSP=^-hm$%vjgvRuoMz*#l}6$?L%JoF@Z@~`&h)w^d?F8!<zKgBGpo#
+zK|Wa*O5!b&3atl|S8bRo<vc76sVMr$&B6U@T@x@Iyg--#%Lc`1EW&FqEzCl?@kSUS
+z6mdk0a4)x%Nc9oXTk5*o)zcPcDcyKa0eVYDCJ*^r2D8NnKg-oLx=RtS(C4ZWOCoYK
+z>a1th>=0L~xB45?Eu>a=^n#FjLosLVOO^3$bt<PMW|ozLtPjldHJMFhGQXP%*sNjK
+zWR<9&0$0lo=ucbW>Y5vB|MZdb-PV_(CIG%q?tZ=V;xELiTB=<&#^p6EAj8j%OlNnx
+zJ;PD1@9=|;kdUxShILNv7o+OV&OLqpqXm`K-<b1IF~NT<w-dJUtPYr`xSSi_2|{u*
+zf0vqcDmGA|-pfm}GUuDDq<d4agSc$ad#mPUOJzP$A7R@;++oLcZ@4ixu*-%XG7ln~
+zEIB^q+;~%`S@4|GC+C65TER7eWYxxvQ~8Qe9#)?y{{^2farrSKLQ?nxeH+i~r8YO=
+zcQYm|SIi40&py2OfON;_0*jzAT|jga^$GWHIt{=Ek!;gqp#Y0uu1B#)XX0$@J*uZp
+z=14irgw75K4HGC7@2DW(gl7by)~R4cXP!sO*U}Mv1eiHVr6_xk|GcXD^6YM+`eR=2
+z3=vtm9u#QrwIATIaLKN->yyUyh=AUE+siV}wA{V)Iq%5S2#HM~%#FmN#6ocIA;1Eo
+z@hxBYXVF|^-p_fwi<&yxB0g?OJf8d33m;<3pcAa5a&mu`{B?xI<ifiqU#}&qJ-+3m
+zPnzauiu_#c_a7HWU`ez13T$t|v)jQ63D!|$vG<P$9Z2OK{K-bn!h*U&B<j)Z*<GqX
+zbo6hiv%f1^-G}dE?S3f<QbBU^U_|s=`W?)lP<hFr<S&vwnK^ZF^K<AVvRKu7Ijd_D
+z-3_GU{XYAW>}hJrvcwxBKkeK~MOA$sCzpA-b;h|!3=oC&HRRVEG5NxKt@-Iks6I!@
+zxJQAdds$4Z?4mA!qE%*E62#n>lX;wBE%KkqW(y-4UuR`>D+5)Ilf)d^b;Hg--IIM8
+zmpp7!y(<fTNtn%(7gB68YVQNqVfa~i$$Y0`lVP!+KA+iYJZ9z{h$+u@1VT#A6L#Go
+z(da1O9vUkoBo!k4<#ETx7wNmtfuXE^qGL6WF%{m@h{L+IWLe~ftDl2wmZ_0c-A2Hv
+zx<6P0KQR!fWHv%p4mp@{jhU`$3yS^HQx+8kfB@E{W{+`~7OPfV1wMTlK%dR_l!qJo
+z!ZVjJAa(<Q*t^XlfYG$uWBG+q>HCLuxx*vKS^F2wYQ4a47{c!@p3Q!UB`XI4J(WEp
+z)Pc|UPL{vQ>x6Bb8ArpF6Bq%^TdzL@sL7hi4Rei84*axvW*lez7{Kn0)SVUA1_1eL
+zGZ^r{ivj;W;H<{c<^qhgk^}ot1;M}&#<o~x{lir(FeL;A1=aX~`;z=9pEZ++_B{sX
+z6M$3fa$~^H&mmk?V5#=sBXBBQG6puzW`|a|nCGCMaH3_A1Z+&h0KkXiF#w)*r!S8D
+z-tO7#R?nMOcQAexKN!E#$rHG3s-ASZE1x%@ehw)BN5v7$MqdRvi-BjoN<5qXtnQEQ
+zCE4K?@|wzb9|{f`0ljn<X4c+dDUvvz`OkS>z4kx*?ZOrwAtSKjMTam(<1LU@nzHN7
+zZ@z1guO-?tFd#yugy^zKI`-keDSLjg&NhxMVcjkO;QwFy_y0#h!T&Ffp40=0a0;g;
+zrynA1mmzSTg^Uwl3Q2JcI6B$rQG1H?wOT%{Mab~LT>98M)$|H+Y>BY634^MPf3x(l
+z^X3Nj-z1IkJtVTmiPOcL&?`IYOPi-LLOg}QRdlyt4fp02pc7PPk)1mxK8~9Zk@9I^
+zn61j7Ut!365ZpR?#;qDcN)F5(S9X{7B7D^_M3qOKDqi%Kz*n{59JLz~tR{2VZ+yX7
+z5Z>UYx4~lUsMRZu8{0|3yKBO7Tx!~}9c>SyuQ-|=y-HMsmfNYvP=g&F-?*`gUa2np
+z$6)1mHczM#Su1Zn;fY-|a1{&)|Hy1Ct~^>iScNx5vC6gu&0R_a91yBz%KZ7$En%p~
+z6Rc41EbsX}OO9^}?0ew!Dy;{93`|}UdY1b0S)rbKeDFLC&f8`Ork9SB10nBT0$0}t
+zgixx$#|H5B3IB+nAXKKeyOLOhOU2gCZ<(12Le4+fPyw~MX+BmjX70374C}goBxC7g
+z5kVCS?C?I-F4T%lN9LIRlGQI5VC<9hG*0dtYbB(^&kkMavokA76s+nnAxxx=jRB!o
+z)N`KvZaa5i`yM#V{H+%BBh?R>shm76Dm17L`1IJ8K*Gv!2vw@3U!bi`$K@w-ziip8
+z!&SHH9Cl$Vj!GS?Oh%5`pDc^_V>_r2292eTm&5;R$?VfCXlJZNWzw&=T0YvXgVM#$
+zUTd+QPhUqd%VNQw*GsEw+;WoNIsWjUGfT%G48cFyVjL@Y10svmOm{IDbgj2`TXLe@
+z`H}{RngWpq!mK8}Y&jFWr0O$R+3IZJ6|C!gm+^<b{b*jH=u5oZ7}63S_=z#%YU3b6
+z93@S<FWox$sG)9O#B7-<^O}-NHI^zqIHp8fF@90VE<z!J1%vR895-s|iqGlO+xnTj
+z=J}e_ZCiHn-qyX6p7WO-wRg808Hr+H!!IglZ7t(AtlG(FBBW?Vq;3D<9*I^cbD6Un
+zcbMxISg8Kcewkr4p})UUh;IBG+Hyg1TeWLz6Q1+@9u*C)6$8ei**>QZ0B#nKy6!L8
+zeSFia>xCXyN9c{~#A5bR+voXt46<^XuQiE+mHE$LKc<3SHztp5kLKG$is+5|W7zy|
+z2?q4@(fhm>_w+wlnMEcG9*&|uxShH^{rM%l?tLJ?KTv8HJz8vh%@}R-w%Vl`$0Zs^
+zKbDE6vpViv$`LAEAdKW>dmW>?&CK@Qt*|1~{DAKfhKon`rK?>~B%Q>?Du*003%XuH
+zHs3aM9U8&@<Q^YxcRVI!w*8WG1N5-!J%8t_bnPN>HVV(u?ky$qjbhn2>y}yY)Cf&=
+z&)u<bULXBq#B}E64Uel<WEtWS+eQi5Y}*h{=+?_A=)lJa&SFhWutTB9-r3zfL}eV%
+z|J82+))++BxQ)gREjYX}8_A0$y@TJh*8ct#x7A71kY&3Y+413i0E)-E$G+ur>=hDu
+z&;hOgyw%fVP4_-W7K0H{+*(P@so$RSBCZ|%xk|lOb~ay%wVrj;_fexxEis%$hBZ*T
+zhiGd)Zv<OoG+on$2MR8ZW}<4(hIuVu$LVE*H5%M^qL+Qp_bb(LRW;xwe=4B2GMS#m
+z@~xL!&%hq6+J?M)+g(NHx%YTvMz3HC8s@dhxA09$c22_ZiPalmyWY5RsCWMqtKeU$
+zmPb-G9tohu-_-p9s|>c<y0@FEW1|w!tw|jF?B^G6jGAq)j#`){{BzsiSgNN8OG;_)
+z|HPU<CU9JltZ51hj}zKnIaywpbkXKe4-*2;URFn7#VS~CRROmay{ymscj61Jspw68
+z1J91zDzWM8>XeG#Ej*gF<*n4L3NZ6|#Gy{l#=0`&;LG8N$~MdLw3c6K=i)9frBs^!
+zXwj^e3b1F$lE-U`tR=$CZ-Q-jXs%~;GB~0|Ep-Te$oY<2oeIPbh$A+C6344_Gjlr&
+z%GjrulgiVdq=0wBsjjOML+ZLi)*R1<o-?!ZvG`s~Q%YMJUUlm_Q*anxG5)@!)WGRW
+zhgDTnFAQMN?`-?S6g4J{^Ruo<2tbE^wmvA+e`6o`%H0*3T+p}&`TD@;>FWy<qKt3V
+zxq=H0HGI$9c6;GFuB-(77|BX<aC|o0TMleW{Fhvl=vgLu0ywe3mhiviz|HIIJpVOg
+z+U<EYY0n@p^nK)7$tnaB4_hfj#R2|>?X07QTy{Cq|0(D2GvL7_aA-u#T)@wQ_Fo|?
+zOTJ49<$6OYBtM!`C?zn6a21XL@FOX`Dqzc!%AFaF=pNa6@z5%{oIHs!b9EdX#=`N^
+zEYspQEiGX((U?&z6f&%ji*`5G_h++)TEf!4nldOQP!I)eh4Ys9F1b$CzT>Md_^E>C
+zbWs84v^NaL=HUDOCF$%PBWzAiTi~`-XeKcjR(GcKGu2+??EtK`KNjS)1%4RjMfKL*
+zmnAbQK!L+f>Va>a2FR9fmscSTt|zXgU5bNk@|-T(n0|vBKI{E`I~#!Koj?<brKB{#
+zX|hZ7Dfg8J-+A)%U(!XMu1q*%<bb#cSLwu-$rNmH{bbZW86*WT&4t_hTBDZbm8GXx
+zX1NSy+lzke7#4R<+1FDkvI`_S3F2p|^WweLdw9f2UHiK&%|%UvSH0kmWb;E#&OmI1
+z%Zl&p;*l<Wu1EY_h1RRyDt#{Tq8*Ct#a}i}reeF))F{VIoh8-d)5^U<J9*vyH+Gsg
+zms?%f^+~kvpX{3x9rs1-su}HTjI|g3V*S+Bm4c`#4X9&%i#E95hb<c6Tx`TuIMIg9
+zGM5fOqTFtdJ@K7!FW^^-jO4q2p4fxv6cA6q7vQ*YTx|5zjZnfp)w`Tv4p<C;g>8!L
+z>yiX)Y}lcg*y?!m2I=m6SNVrf206c|!=<NyT7~33P6lzb8fEL@<~F%8Vd$sZ22Xa(
+zlroaBTZJe1FIc&%3+@8`j~u&+4}a2c?!mA5vUCzaVlHh96dBcoz=KTxrn7LXD@IYo
+z#?hx2>18Hk|IpTMHylrrCg-PS`Orz-`qSOMb+PkhX6&m~?@r*pth8s#h`9w`$L_vD
+zm&jrar)o%sm7f>2$Q}K=U+%71xcf%k#MyXc#zi5ia}(10DVb)bweijc(2%bKq=4l5
+zSS)VZP9oTp+*?`~|AGm>z|AA@kzVQNF%gRl5lP{g6?&DGOkKS%bX<KRvBIhQ{o7N0
+zm)q4ohp9Hs!d%=pa0>OEr$VZY(Zi{2={@B)Vu)GHVIT@d!4~?P9cBN<`4fZ*<qr=%
+zEXXES=v$c$X#2;cw+dUd5pp~!9ZyP0`fkiy30R#H-yVe5X|bSr@5u~cG&@<g$G~o-
+zU$|AD%_idos;J%bho3QclGJ`4+Zna5PBtfx4<^xfeAVl&U%3)$+Os)CCF29bnMF<s
+z9u6k93@rH*K=LaaB6Ge_y1L_O>$~}h;+0Y36;FM_%Y&2=i_Tn)_3-}G9RV_LB{Ds6
+zaX^)@ylpvGk@9Wmsf^lQ6$N`6*iU^^Bfg`-!Plq!r`8K_%&=5I;0p8Y(5O3?Zb^^J
+z=BeE;5p>;8H(SgS^iLnk=Golc1MVB0F3meu+}ZRh<K^x_tj?I&C-80d^}64!&la`S
+zC{N{&B)k*)i%Kby9dAN3CU<|Em5xvPtcW!(zNk68+V^GvOe{~KEe7@Eg`QQ-J$lVw
+zW^Y1EoL$=~152i7AV>p_mZ1Nh=ix9EX|me{r87fK=AZxVlJAYn!ugMtpK0bIe=j5}
+zqzqiq@_~+K<~oQ?=jvpzM_c#%XApz;DXv%jzgqysI*SU~-$>XGV3@mZ(u~#-_VKHI
+zy&)L%9r{2ybb0kb2e2)W2M#Uo+0K929<s=v8hHe4X4dU|@N{xRa{%U1t=C%S*8(G!
+zCr=LV=j;_`X|G_^7+;T@VBoDbVv7XV*ZZht^w<N^@`^HQNJ0{~)(@SDAKF@#=k<lQ
+zH=+7wWS~(LE7NW6AggfN>q=oR(ccR10A>A$T9)s^dk=PvD;==tJ9(ZJ>pDTOzc?Ax
+z?uI-W=#dJ^y&c@Tx=Byqv2Qt}HBtD9pMsV$@AhrUGGDeg>ViELPSg7@T*52J?~4Ed
+z3{Fk7$2MQ1*Cx;?!P*l7GrT8N=e*dzUD!?x@5hUB6xxD0<oSM!oj}dTB2LNBGz;e|
+zrCczV+p0VXZ#P!rC3c&USOdQ_9vNx4VWLi}1+17|--@KacI~7I{G=WIw}4H}<H?8A
+zo`jlp6rx9V3@hKrV%A0$OCFyi5SeaBfqTSnc|1vI;@{MW5{D*iv>ZJ^p~x0`0Dtzb
+zwBxxDu=Z1~=zG8!oH??!=n0Pl;co_khmhn0ZJ2_*5RC5fXO7k#NLAVT-ShG#3XBI%
+zhW@LANSiVJbNq*Ug=f0vAQS$D-N`SBFVkP3<v2rr9f3X&d{<2=R}TUb5Ow(PUXEwK
+z^_?ft)Y7!`HPjHXaDzAO^or!WMetMO1=3n`EP7kH_@yOYA0Uq&IbQPCU-;OrpS?KC
+z9OzSvx60d`yLeQZBPA(YS^bm6fN(Uw(C<7(2T?>Pr;3;Ru}=Eyz)c;wiqOzzH$ecj
+z@9F|y(8gjb5ZzQ)EOu6a#a^GnTrYRb+E>qTKWAHV7u-aPyovGR>AF4baJ(b*Yzw}+
+zlX=dmvnQ_vi$MLlsh|<wrB;{ydoFXbXY!B&5LZ901&Mw(nX)7Xa;pRDngiSv%rckP
+zN}(i{?b*>xhd<8D!aVp;PonN>tO=_k+18sIn!i7_CL&V*{imDW>^iaGj;F`wB{xyY
+zwJFC-gZMlkAeWBlne%8gLVohJk%?YfNb&V9pcmL!xz-*h!y3_Cnz1^R@i|SjkM3c4
+zXMlV{FJ?kiWb%N?$}T1=kMGEW406VcT3`Jk)Cc@<033>9^)J-BFZrPS>J-u2=<0db
+zBz@O^kpi5Z6%Zz_*a_4Sd-7=MhQu<jn4vZZcwbB-4(=NI-Gm6RtH<j`Kmq*^@QDUm
+z_nMUpKsEfV5Gmxh`Py0WyGoJ($GYSkj=$f<J}TUwOzyF&etxrf#T{x0t>NpwbJ#sp
+zb-|l{WbduRPAm}~QkFGK=!qOSsG@)0VhO28)i=;zj61;n_R(3s-*kx3Rzr6n{NKs3
+zL8A-((p6j3Q4Ihwy~9LFDnwdIGppRmJQ?Cd$3G5^GNnmX9+#O}xo$zwMX@k(sOv_f
+ztTD|gMYwu}K~4)bVs>>K*o6DClDW%*uD$G9y7MPH&_Crks&`)8m9q1QTQyVxIVHC1
+zNaRs8%rA}=PuS4vCM5FD`={w?>!Hwdd8d8>*!X+-WIEP#;D=f2ur8UjT&RAzYpqDg
+z=zgzErgyX9E#AUeAKiI36iOzG<G*?rRnZOB{xF^!Nb=~rehX0Eg@xYDaw_hE0jv0P
+z3Z|C>7#(lCoIoW#whh%LG*$po9Ghv+HuDYiMEyqROQY0#pFj-EZB*XX|FvcsKf-A_
+zrv3R@*MN!DfQzV*5X=8+rvV+O)4an5hQH;VAaH6e;41{%+T1nw^ZL?qalY_s_bklA
+zO0D<Fnjz?>$#jDNx+P%z>y<#YomS{o_xmt!?FDPTv)27<GPoa7ez=tUe(4c^{_Ip6
+zu;b8+JhS!gW}dC>z46ADDq_4qJZeRAm$&bkOnpQI&*l?F<b;2ELk$h!&!wcjCQ7e`
+zGJRm7hC;QBu}`^%B@=8VP5kG8k{<EMpFhA*$0o9KDagcx?~t;<G>gLpzWFn$rp3SC
+zojm)ZV&K}SQ*qQ6G8D?}>DD$k_rnI9b+wGO<D$)#@KDwjq!}6^a~kb9RH+z=$~ghj
+z{X~vEvO+a`uvg=Bt&!1n>~%R;pl$R>1Q$@`=YwpGpIfd4p^sDYfRJbkK=R=aJ;qrq
+zDV^<NYh0r9TF#ntLn7mCFX|ufJjFA*gD)f{c$uY78UHP{virM>r;LgoamljCKANxv
+zeUWLqJ9%IBx@pzBgmerq!dqJny9ucJwk+E^n3yXti9k7@9wsK_Ldqb0QQOZ!)~)Wn
+zeFmC2kLPyvk(rSqSPAJdqI+&(wZ;@Vg7F7NYFq+8aT^tRu+BD3u1`#8n8MC>&{voL
+z6hc%W?#tr~#>X1EG)9ndi6i7xO>^M<*XvconDJ|k!fr&`z&vYb3<)CN5k-SKoj?Z{
+z8QC+lFuRilRd!dVacgb86l%SeZu#xl1kXR;MWgNjJ8E#>e=cWjODO_x5rEqEVkZlX
+zr*Q1y3@WGNj|@-o7d76)@RoC5)~n&Bt3fD=H{-g3F5cEXk0-+NXSFqr1#7waamnt+
+zpRD{du)iO4T9BC$NRnfFmXG`lHzA0=z8@2I7`L_a-OB<k{S(f+0zH;O`wKO8f$hGT
+zt2zNkiQa964l9=d>nE6~Su;ip_*#VOuX{6>l2q@5{1OLD7=F>(b=IBP5(-GwP53^Z
+z2o2N_ggT(A_G#((l*`-$AH8D{u?HpR&^K>D4jz8Tl7*)EOb7k<gV`CQAoSXP@(^dC
+zA0%gilcD~uUWE{gs8=5FTU~vi|4z$Q6wLoC^xTYXHC4I=Kok$K=8<&)0%>1vsbHBm
+zCj*KG<cihfZ+FlZbu{0Ovt1l=PRpRV9?i=?50yt{&YrYMW9)QK4BMFlNJnLCkBW}<
+zyn!f|S&LP#4LQdKiwZc*ezu-P*EO84HlTtCnw`Yq+WQd!GAaVcpKobknP=32iV5qL
+zQ@#jG{luZj9DZoW>964C7dRlWJ|cr&$)C?IphaNljKstD`g5HLJ2flt(Y(B#?T(8C
+z^Pt=$m(-VB0+=)pAelh$?}uWOZ%dTB;AK7gJpq#DryiEyehX@3V7FqIaX<O_d~h9V
+z7%_Xj8iD+Z16ZJSOX#_$-zko#(;VOcB2E3J_2u{R0mO3KNLJf@Z8W7;B^s~a!JCcz
+zz8~{Zp}_e2?9(j0VrP&%f}c;oT#+ritKp$+?ePk>I^s4RMv&`L{@x($RvBRtP+!pe
+zg3qAAnyWg+;fhN`-xcN?pLcBX>wRN}Gm=NHYXWtGD4MTL*fH}V61<xKuaW>#$dgjN
+zf{E>D0cU0U`<2RD<f4(XaC4RTyf1v#kJl)H!HHq<i*WQmWNkhk(kb6>Qw7x?z}Xp*
+z9VCd>MLj>WmV62^fY_+0QMp5`3}1WT-p_7mAz%(6V_O;7zrLS|4u!rNyAU&W?X9fC
+zP)bMkC01i05AUY4c)5Whfg)2uxt6-u1KJ)p?uoI((#$vKy)Ksb$SDDLS!K+rPG!N$
+zAT8H7Si`zD<jc0&4D$=Wj)encz0bjoNyixu#Wt*;S)T*{^^Oq-fA5pN$aaTem+)t*
+zc(HMSyF8cz{LuiJe;Oc3i<*vHKm~$P$<;4=!-f+Vy<)bUhL+H(=XX`cgyP34k{33-
+zV_r!F3@BG>52;BoFh=Ek88Fr%%(`<b^bF+gR|_ne8KhcKCb5W3Su&6ivt*WbO4=TE
+z8zR~KK|OQM{GAr5&IF9c9lL8m^^^)pd3cQYO&iyHES`V`l=0aAuzT^>-+&OPNu`Ao
+z4G2pIFm(|gJ8MP8H7PH42rzu#@R+*3qqtD4GL~Ta<*mQjpRG?g@7IdB9OFWO=VEpB
+z=ME;*qpQPg4#GQ-SqUqr;u<X!<EO{Onjm54Ts*X*`3+oWxCtR@oeMW?=GIrKX^`oq
+zy`)S?n|jq6AN<&pj>RUB3em0mh(PjelHBZab%Rj-*{qVSvOI@6CJRktuLlZbw&45V
+zq!f4b_~zpYdGc`IpyIOJg|0fsb92C4No7&EtXv=<8vQAD<P(C&r4@M!t;<%-Eu=c=
+z)NA=Xad+4OAV*xo=P!?=Sf$&tnl23iA@aGpUgfJskTl?{Kt8d;h-F6zWQ^$hzn)gk
+zzxeru*Yo*(`(Nj;d|YnMV#E%-U@Q?CDYJ{s{DJdhpk(o#`y2v^SZc$;B^mJKftRj_
+znKzre)iG;Ds5KeAATTd*{-LE$cX>A<J$dY`k~^9+<IA%?DVy78k<}1ey<=(#Ykw_-
+zcT>5YnbLr^?eKsI;A(7l7fvM9Q|yEmDPP&F8g>FVP9=Wx^1(t%R;#6u))W5Ue6+Zo
+zl~*a}22mm{1Jw7FR{Ox>URsv8Y-V*u%s>jS7miX8y<j_-XDc(S;(z`CN$PCKeHchr
+z<^Gu`V0#7JKo0finnr02y4!bL4-R=i0+swtUD1AW7{4?Izd?;wFGig};GQ-6^r_Gr
+zcX&=NWy8LIAV9f?o{rRU)@r41iCPsw*;T)|XTZlQ<6%FSND(5dF~)_n-9)u&het{Y
+zyueKW_65GX2wdF0$-}tiU#)<#a#86({`}n>%4!M2Y53vh{#vXqj9=rQh7`Ezc`Yw>
+zd7tr_<!3h(I=fQ85d$B8C`BP`lbIPZr!4PrR?GsEPaR4g1q)b=S+=U|XlC_h^yCpp
+z^xh8t0Gxf;;8gav+nl|L0QbU$hKEM_uQM<2lKCy!yB)g~R?k|<fEc<S6R#mg2eFD#
+zbaB>NSmsy^9sL?|=Orx@-VlL2$qRXpMM6MLlSZSIt)_G#1`0wd^*#-CXoM$XEjAz`
+z110B@t}#yu`f8A_TPX!x3y!Mj1?Wo$%RHz~I`>&P8LCYh!$SY1p-JhW#ki`b&4+;J
+zE<gq(!JAp<h)k6dWWf%t!$BUG+5d=~?c#&yldbLNh29kZ41<eX8WIgRBUk*s#X#|f
+z2za6FFjpV^i?d}_xenU}^wSHy;z9ony6^^&b#EsK*oT&(<7C}lFSLYJ-M|Y}ULGoN
+zb3bT7x1ihF&6;9CHAgXlfw_0W5Qq=b_s>-^2Da+<Bc<sG>{d=^&tcJAIg_;(^s(dp
+ztI-=$^-^NUMuiIgY;*;UAEKo6pa#7L1H{LW5i!LZJ}{X(4`K*ey|*QxC^l$%LHP|p
+z4&B5;@WX@wYhJknzx3V^yt=m*b2AC#Z`ED`T($!K=<b#UvWe`U8<^L{Lxa8k6hky_
+zZj^UU_*%H7ReiDJ$P24t0fFA94M|{;b#7pR1Zlr2tQ<JjCX%gi0K2iNW*gc97gTYl
+zIUuS@;To|aq?h$jB*NJUYoM~s@mzzDLC=}4wo(HO(`hN*_&zA}h`cTLQVkH+F*?F!
+zHn-4Auz+-XvjgVNP*ow3J)IUpAr(bJx090tjBJqC<Cz$W@T=$%UEHrc$l!a$_$R3)
+z*auuKr<t|aC#A1k{D2+XI<2B(hq*}AOCN4F?$@BxbecBWK_BKEuLsPOrZcb=A}h!b
+zWB}FORxE#YH(>Lfyt2NTAb_o4?jKA}q(ZbcFX4tmFbsf;g9t+AYRwVkmqQ!ut6Rbd
+zL7Y`Qb;`!ZV7>CI`0AkaN)%SNr>v=?`K)w&lte<ywFFZ{(tdWla7~5YfX#QTZc3y#
+z&86(qQ6wv4ncq;058mqGg@Ck7>EalA>!fI^Dx+t}*&?IHpWMmQf|d8hUqHi@?-U{r
+zW1$z~G6x?^ho<J#pFIw*GXkZimAnwZR$$kP2nlyaR2O=WLC+{KNsz&zxsFu>U;H3l
+zA}CK6Df80GzL$LFbt?<V?0~f|3jJIY<aEIYq>*O)ZSV}_fu{WC#{LI|W8yEX858r_
+z_PoN3Yq9+GNuu;$P}}DWh#E}biE*hUJQnYpG|2{Yza9lWk%FE+CBNbTg!^~X;&Q+S
+zi9Gz)(2`his16D`ZBz(*SAP(ATJQ%v=QCl!gdW@BIJ;Ma^8c8aP1GZ>#<+yulpQ(>
+zNixt?5?=eR75V>~$%=Sii`yR9urh?jBk&cV()+ggOV7i#SpSq#zpF}MYJr<W2h3Vh
+z;T)J)GoXrsrXGHi66;@FCox7YZ#W}7_slQ*#fPV6v@)zg9Ke)qY44}KqebQAHp^uW
+z3Wpx+6WDZu49cwML}DFsK=5ENv3X$f@D*V60Ng6|BO=3$@8bnp|4|hBTdHpl2#}{G
+zUocer1c)|dF30K0!1_TA=L+eG-B+JtIal_W<TmWg2NIP$El(RC#XkWi>#K&6C#Z&9
+z9P(vdY=#Adhc;iigUlgBB7M$8gzxgjnX=No7{K?A8gnhO768f+BtqRh%1}T1-!>gG
+zI(TjMWBl==>HBKAl{m~8mnee*(RimwB4p@{zy|LF;>L|iB1GSQDq0M%tLpKe5;VBq
+zV8ej}?_{+J@ohf8kA$KePW^YD#_UQfL`i;)A$`nZ4H1A-Q6%F4g4fv9r_~aaHszWY
+zQYe1&?11c)%>KcYoPl~w4Bh);XM9k0P@}H$1Gjp_xKGrdO;9prqf7$ZVQ^Y!V<LEu
+z7ys<NZyeL(HDLpx-{Mg+FhH^ZLitO62q^~rb{DEcWs&=U)%*<RWRAb~_~Wx&Vw>p!
+z9&p`;8ZxaWLcFM*VGVqg3Lh4Jpw8-^P{G1+5|^pYYEaAB`t#&Nkx@$sD0Bm2{Ubve
+zudwiwCW%2iTY7MjdM?PPy7MfYf*;o+16WNCCodPIDQ34@;r@VDOj>I10x7Co(_$>@
+zJ@n%`=Zqlnah%OAT_r0yK#CQ1`avtx&8kqY6-Fu<wtx6R>XaXM_;L6=&9zrlF!!rH
+zn#9lCJq(eqgh4>R0aKkc6)Eqti#t!q!kW&lr8fK}=Sw`dx^p+hA}doNxTa#&%nRv`
+z`b>lsxj+|r9PvAC0+GxcSfsbIi{mQjQ1kL$za|!UE_G5<YgyeHS@Z$8H>-}RXeiFE
+z<3wxTk`ze4dI~gVBOqhBN4t4$vbXdZxFRb>4OwkWbAAD?X7C$o?7Wr$W$VdQARY66
+zrJnqMRXXwn;^yiJ>e)}1vC2A{Z(_>rpU^V1**9is2ZD<SN9!Fee*E+@RyHF0)R=1n
+zz5T==La|GDF*WeNmJOWl2%frw;==CV&UXkzJOoZZ{`*77QvbfKz9m=SIHvND-;p##
+zvf=%TNu<9RSV@Hw^Zw1agBODMXepW};KqPAQ4G}$GZNeox=TCE4FW8@kVo;sA6We<
+z)BoM&NRzbjI_}}VL4ac&LY%3jijBG4<Y{xpZ5{GEJSK)Ws!LNEWT=!9M8t`sy0qQg
+zH1V2Gic{L+)(PlNhA}-hO9Zx2fM-UQYb~-*im;qOz8-T2qUp!UDMa)aN*M|6(vC@C
+z9<KE)TJ@7b5~e3)JBc-Iu`u)3pq1(Ddv+-$iXE8W3=97(x{gJAa)If%L^4Uzd02OW
+zKp8^Fm1y$dl|zHpf7+-z*d)!s<9hF<LKFj2DdBbb@O87-ySP!2esN$Eg!5%A7T3)d
+zGkmw5bSb~((;rGNyq0-PgoU{lk@)==Z1jSatgMp$kf0@&-c<k>Y`&obKe?s$!6mql
+z(y3rM(88tXsl4%t7CQpWkdM@6NOF{-upwpN9zSsPV5yzTW_Hei@P|7_cX}U*iuBc9
+zVxB4}azP-{jJ;?-TTn*=(y!p{d+G5XhYFSJ`5jChQV_C3BBe<4o@L`4u=G9wjW8jf
+zFta=J_v`{(+sts^R^_|2H0+0%zh(s28>|W<$@}I!V^5#M^CwB19z!6ebdyaD5mPNR
+zmk>8rj0O#_4`G|1I_}P!e4OYXy*9*J+-D*?iKW$mXm0%5+&4D0bk!`c$9*JjL8t|S
+zswi6+=Tw<?AXW4j-FV|t#$6wq_w{V7^U|jNa%q%+GDi0B4_2DsYw2&G`*_-Z;xs{K
+z-{o)|YB8vdIdr-JD$VG4xsZK{4Q|fxznYhTOfvbSS@K7(MmEk#4odn{ClY@C>Md*T
+zOokYdfg-O8H&F-lPWDNJW9DqlK6y0bf?w;_21=UzHgZoo7~z<L4=#im#;5F|q4v~h
+z-D&i}F+`zK*_@-f)T=1(pW-Ea51^}N)^<d<C%?S>pRa5Er>$_~<X<+j#G{_V44>@+
+zXKj0QJA*W&qd$l-^FW9Q{}b$T4G6K@xSOf^(lXj8p!3}|D8(1yTuQI)vh_&=a;S<5
+z^o<Jk%(#4Ln}GA`cre3Prqj15jB*<r^YYg$e^QqhY%@z1`DFB5WPIN>dKZU$Zm(2G
+zGZLdvM(H13!A~cs8_oudHefUmm)4`4i&wFSgu(gmIKblK5|+r{cX@H^{A9~BIP)Bb
+zU)Ny=w#QgqEw*J#KyBNIjYlwwBGBVXWFr9;4>(wSI_W&%dm%G2-V8bWTb)`OJ}DkJ
+z>>ZGSIW1{6S)~M5Gcjz_$otC0ayzdAU{&?<*h^<w{$yDDj{NweJ%OON;#&{wjxU+S
+zqz{NsF8pechTP~#mDa&ca5*fenqC65Y?1Pp!(u0Rdpt;mtiLp|St@#Y6LaX=)@(Rx
+zFHN#TGinoU4X!5K=2;-@^_PxzTtMN}3Y{YuwX8^`A%hb1uU8M68yHOjaosUuqJ8N=
+zOX=BSk9jE3)h3_c@QEuRHGFw*niO1p8onz-FhB3L(g@PoYLM<AE6lY=p-v=?2?P%d
+z>`}*3ouQgV)IO73l_yV!7IdKDp4p~W0CQQ=<bHiuQSIC}T0G41?-Ph1lREwcB#O+!
+zk;%rdAz=#i(q*2BEBmi^2?y&i8%e~M@^SG@x|4KwuETrxQhu&ucS}4FrIm_bM9Ye^
+zLr@dxcMl+O-F?#aMK04A{TN~rl1xAJdBY&70)mW?>(L{ggR>o4O%n`YeWVgFXk96d
+zB_>J#=KL1@QLd*07xG#YkJwD)m=w0s6#XvfCKebJ0S5hp@Y+8Rd$hmEX@u6IV}dZ>
+z_lT$1EskCUB_WtkdLtW9(=VsgJC*rS_VtqxNdLPa0;Hdu3R;6midhZpJ?k2+B4svu
+z?VwFIa|65PIvxHD8zP#AJzRA3Aofs5q?iEcQ!>F&-}|mJgOnHZowuq`srSSn66Reo
+zdyEMBh2OWTIDsryi<s}n9tvO{T9R(><>Eu`Op|SO$7Si*-^BpSKz|iVHHO%qQ7!p{
+zlr$X{gi)L*MU3W~31%sY_fia9jCP>f_*1Sl5beyHPNFpI;Qny|^FiI)Yw`XU5J>kc
+zRm;2Vs0oX^t(B5~pa?$h!Ls4dMJ&4d_4R(z=W*zWAM-*g<h*sdA8nT~3ui@iUSg(o
+zwQ9rR4BKaxtJ;^Y{UZRi6;5OcyiHKV+8$fq)&8wG2n<ih{vHqMRSO;o>qzgeb3v5Y
+zHNh`gNOWGQ_Lp^DR^0{*Se<1KvoVM||MwdgNs^NY=xqcA<XgFz({VSIXQvDb)aT<>
+zvHtr~m`I%waaNhFno;{%a{9>gHo~81fx7#GK)gkody7eC-EhSp4D0e!<q(GQ0NTrz
+z{q)hs4q0j`se&$PaLJR)*o+O&)Q{d8!r(Iv0|(k?;O7Av6!+wXLocskHqGEHBsFZZ
+zHd<(fp9SK*+=IuRld)kweYlbah5pp84Z!@GL{h#tdW!Ztp(=Z_#MN0`SkrL2W%O)T
+zI@s}HI43=vIdYPZsRQ~@d&DFR3|!7?{-68xmCkYs28;HXTeCFLG-!@+Z;wliAcbHE
+zRHc9wlU#P~o56ew)`hpUDK}JSaFmsD=KAiU4*Q8ru3jx|EQzo)NLC<AxiDHfoS;n$
+zT~1Yv*}b-p_=SG&kZ2b5(W^rihx9HkINLLl)n{z8mlLl3o#=C;oUdonA|JsScq3xV
+zi;|{W`_`yD8<9^ARN-BAZiGDlg{dFrwc)8z$=Rdcw{3jQ<p2HG3MM&U^ZO`Z4jDJa
+zfgT@fP#6o6!HUg17!D*{VWnJVZc}A+7@BYsqF_m8wNNimO6Y)|>C+Rf$Lg^#O9E((
+z*WItU4CncNP8JJ($U>dgD-+}^tHF^WFY{RG4;ohOdz<b%YJv-V#e(iW#cenN*NJ{C
+z>oincK<_F`3<o0G{KO>josquwZ&iMEhtni$^M5<=8(g8!1M-|WI@|8aenjx5ZJDfC
+zx+MdvXLTs+gSuW_za>hXc6j~ajr#CU0Q^%3S80bw!87ox_~{khRd5Sp>?ccLUh)jb
+zY3a<>xWbt(fzw1iW}j#zZNjnQ&MLVGkk^JQ*N6a(1&yI?EJ%dCDEk9if@X~!Y=FMX
+zX=(p0i3N80?>B#AW3gYL*!$noXWA@<0ML{I*=3h)T9>8CyDWrPc+8v0s#T{lL_}nH
+ziU1ap;4ywO&GI)MZQ=R;Gg(Rj0E)JM4luBG%Ws(3+X0GhfEEafh{!_l%q*k;?*8`S
+zLwkR-@qw8dwG=G1001XP`;939{+orc&0|zIKtx35Q)AR0g2(tsH2$AiE&rL1FBMC%
+zSjNV$boAifPg*tH5~KgQnFTWo;7g+QA|fJ7iD%6^6QlpRRl_Z_4)<x+r6px4b^vCZ
+zX}72wAR;33;B2FQSYj>z(=GJ^*}Q4cS-Jt_wD>Aa5fN!g4&>(;^&3mL_`}lg0L(U%
+z#QN84y3IoJI~MHu?hYPvu)y;A`-+Ij+;i}Vg~ZJ8=wI=e|LVw*p-(qHzNAO}vn{uR
+z*t~^s4wME4xBL`=Uo#79JVwBCFdZNyA|hu{)Cda!_jrWJZx0{d`&U4nqVPwSQCE4n
+z1%RfRgw{QH#hTRo*9?D)g;4ewo#LCQARr<lP}GZHA(+QlbL<_N+iy=Ce*8$|<I85$
+zKihH*0B~wIfE9xquXjs-4zo8JhBsOQC<us%w5uF2vk)8y_jj3Re{$mR{s$T#Uv{JZ
+z*_LwvXgVbb6zc=Re>St*DS|+=BcL?`A|lJ*%xk_`FmT-cPLJ{TPn+jowuQf`oeEyF
+zz&ExHZoNIY|Du`Qjv0-HK-O3z&`w_$5s`M_jXD0*LI5uce>D5U(Sv*LY&<66WI$N<
+z+Og1`@(o_Ge$$IQhMxfbeX&NsftZ6eI|m{nvUEjohmcq>JjNREcNXIRI&om=i;c&e
+zGC*t>?HB->PHFM17~FWhQ+fmDKWZTi7Slno*bbsCgd!qK$;@lFSuhMd#>2S1*Qo#P
+ztU3Nurij~(irQ((uY1kb!E)l?>&}mv*^4lvI7`6u(;hD(BCX?O>)tFevu2zBi)OsL
+zmfJ@sj_f(ycx+p>`p-s%?4;26HFGb4VtOF?G4Ss)3mXC4Bb-c&3Iie{i)VHbPl^Lz
+z!9DH=`xguOyJxleVF{nxKOa=Qp03#vnwcJ0wQ75BUaG#vvDbp%8bau6OcB7z<A$37
+zLPSL7PqTm<&7yA*V;lv$%kY0p>Xi>4JGN`A@%X2`rb|Hq;M|&L1kB72t=zC-W1gkA
+zW8wS2Zw(guFq*BV<|<R;<PV*Qh+Moz;dTd0%*-$Yhv-Go$KyXGX?ExFC!gFu>+_!W
+z`YoqY060I*Vt&e;(aH^1ZOrp{ixFRm@dB`Gt?`4|I8>tXc=uVm3iLG>5jnG`zh)K{
+zAFTP3>JQ<3*$H<fN%-pVCwI>-`pwr^jrPxjiqVB@w)#(>M@stEZhfv<e6e9Kb?13z
+zw#lsVB`!Jy@bn+>=5vC+A0o2+H4Ag&_4CvLl9|oCG<xy6Ib_Dy9RIv~__xtRd+z1b
+zQT^FoljRwx;9Q#7Bl=U?OzYO&)HM;0UvJoTW_}|cUyRw+m<?EShM))p%~VU{Uo&qs
+z%>Eu}N<l<g-RvTK`fFL^moYOqGNW-CAGi<W{wNmy&E3A~_=DYH<pT!~-ZOdHpV4gZ
+zxBW`~OQ8TTcN#y~I|A%<&M@!PziHD7uccQ8;&pCz1<{{}vC^C?!TT(P%E_mK(>qv=
+z4uXhC%bF?dC*RZfZ)3m{V-;-FjmL0~6YOi|{&*xjXyxp&k)fdzXL#BKb{Onzw)XX6
+zI0qB}=1-%gwWIMh-r3wO@HBlJH?B<TthbP^&msfC>?Vi~T!GnEqB~%2Y&Wd8@jUw8
+ziAbv`UZe0ab9MnvFvEQh@HhmE?)RjDVUO8?yu^Xg{riuf<+%)YG)DM4n<IP`{CV*I
+Y19=n4otuq!NB{r;07*qoM6N<$f{(utSO5S3
+
+literal 0
+HcmV?d00001
+
+diff --git a/icons/icon-maskable-512.png b/icons/icon-maskable-512.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..7673e6bcd85c56849d7cb70b7d10b36b77817a7c
+GIT binary patch
+literal 10227
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/index.html b/index.html
+index 7558772..e735a75 100644
+--- a/index.html
++++ b/index.html
+@@ -4,6 +4,13 @@
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+   <title>Jazz Play-Along</title>
++  <link rel="manifest" href="manifest.webmanifest">
++  <meta name="theme-color" content="#101820">
++  <meta name="apple-mobile-web-app-capable" content="yes">
++  <meta name="mobile-web-app-capable" content="yes">
++  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
++  <link rel="apple-touch-icon" href="icons/icon-180.png">
++  <link rel="icon" type="image/png" href="icons/icon-192.png">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+   <style>
+@@ -347,6 +354,8 @@
+ <div id="lib-strip"><!-- Book chips injected here --></div>
+ <p style="text-align:center"><a style="color:var(--gold-soft)" href="practice.html">Open practice room · Add a PDF</a></p>
+ 
++<section id="my-list" aria-label="My list" hidden></section>
++
+ <div id="search-wrap">
+   <div class="search-outer">
+     <div class="search-inner">
+@@ -617,6 +626,15 @@ async function init() {
+     }
+   } catch (err) { console.warn('lead sheets not loaded', err); }
+   player = new Player(document.getElementById('player'), books);
++  player.onfavs = drawMyList;
++  // my list in order: when the band has played a tune's ending, the next one on the list starts
++  player.onended = () => {
++    const list = favs(), k = list.indexOf(player.song?.id);
++    if (!autoNext() || k < 0 || k + 1 >= list.length || !leadsById[list[k + 1]]) return;
++    openSong(list[k + 1]);
++    player.play();
++  };
++  drawMyList();
+   player.onbrowse = () => {
+     document.body.classList.add('browsing');
+     document.getElementById('q').focus({preventScroll:true});
+@@ -650,6 +668,25 @@ async function init() {
+     </div>`;
+ }
+ 
++// ── My list: starred tunes, in the order to practise or perform them ──────────
++function favs() { try { return JSON.parse(localStorage.getItem('playalong.favs') || '[]'); } catch { return []; } }
++function autoNext() { try { return localStorage.getItem('playalong.autoNext') === '1'; } catch { return false; } }
++function drawMyList() {
++  const el = document.getElementById('my-list'), list = favs().filter(id => leadsById[id]);
++  el.hidden = !list.length;
++  if (!list.length) return;
++  el.innerHTML = `<h2>My list</h2>` + list.map((id, i) => `<div class="ml-row">
++      <button type="button" class="ml-title" data-id="${esc(id)}">${i + 1}. ${esc(leadsById[id].title)}</button>
++      <button type="button" class="ml-small" data-up="${i}" aria-label="Move ${esc(leadsById[id].title)} up" ${i ? '' : 'disabled'}>↑</button>
++      <button type="button" class="ml-small" data-del="${i}" aria-label="Remove ${esc(leadsById[id].title)} from my list">✕</button>
++    </div>`).join('') + `<label><input type="checkbox" id="auto-next" ${autoNext() ? 'checked' : ''}> Play the list in order: after a tune's ending, start the next</label>`;
++  const put = (l) => { try { localStorage.setItem('playalong.favs', JSON.stringify(l)); } catch {} drawMyList(); player?.showFav?.(); };
++  el.querySelectorAll('.ml-title').forEach(b => b.onclick = () => openSong(b.dataset.id));
++  el.querySelectorAll('[data-up]').forEach(b => b.onclick = () => { const l = favs(), i = +b.dataset.up; [l[i - 1], l[i]] = [l[i], l[i - 1]]; put(l); });
++  el.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { const l = favs(); l.splice(+b.dataset.del, 1); put(l); });
++  document.getElementById('auto-next').onchange = (e) => { try { localStorage.setItem('playalong.autoNext', e.target.checked ? '1' : '0'); } catch {} };
++}
++
+ function openSong(id) {
+   const L = leadsById[id];
+   if (!L || !player) return;
+@@ -671,6 +708,8 @@ function route() {
+   }
+ }
+ init().then(() => { if (player) route(); }).finally(() => document.body.classList.remove('starting'));
++// installable, and usable without a connection once it has been opened (sw.js)
++if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
+ </script>
+ </body>
+ </html>
+diff --git a/manifest.webmanifest b/manifest.webmanifest
+new file mode 100644
+index 0000000..7d5b430
+--- /dev/null
++++ b/manifest.webmanifest
+@@ -0,0 +1,16 @@
++{
++  "name": "Jazz Play-Along",
++  "short_name": "Play-Along",
++  "description": "A jazz band and the melody for 462 standards: practise the head, your solos or the comping.",
++  "start_url": "./",
++  "scope": "./",
++  "display": "standalone",
++  "orientation": "any",
++  "background_color": "#101820",
++  "theme_color": "#101820",
++  "icons": [
++    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
++    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
++    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
++  ]
++}
+diff --git a/player.js b/player.js
+index c5c327e..c15fa36 100644
+--- a/player.js
++++ b/player.js
+@@ -27,8 +27,48 @@ const store = {
+ };
+ 
+ // ---------------------------------------------------------------------------------------------- the engine
+-let ctx = null, node = null, gain = null, engineReady = null, packsOk = [0, 0, 0, 0];
+-let onPos = () => {};
++let ctx = null, node = null, gain = null, room = null, engineReady = null, packsOk = [0, 0, 0, 0];
++let onPos = () => {}, onAudioState = () => {};
++
++// The engine and its instruments start downloading when the page opens, so the first Play does not wait for them.
++let assets = null;
++function preload() {
++  if (!assets) {
++    const get = (u) => fetch(u).then(r => { if (!r.ok) throw new Error(u + ' ' + r.status); return r.arrayBuffer(); });
++    assets = { wasm: get('engine/jazzband.wasm'), packs: PACKS.map(p => get(`engine/packs/${p}.jbp`).catch(() => null)) };
++    assets.wasm.catch(() => {});
++  }
++  return assets;
++}
++
++// A small room around the band: a short generated impulse response (early reflections, then a darkening tail).
++function makeRoom(ac) {
++  const input = ac.createGain(), output = ac.createGain(), wet = ac.createGain(), conv = ac.createConvolver();
++  const sr = ac.sampleRate, len = Math.round(sr * 1.1), ir = ac.createBuffer(2, len, sr);
++  let seed = 20261125;
++  const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 2147483648 - 1; };
++  for (let ch = 0; ch < 2; ch++) {
++    const d = ir.getChannelData(ch); let lp = 0, energy = 0;
++    const pre = Math.round(sr * (0.011 + 0.003 * ch));
++    for (let i = pre; i < len; i++) {
++      const t = (i - pre) / sr;
++      const k = Math.min(0.9, 0.25 + t * 1.6);                 // the tail loses its highs
++      lp += (1 - k) * (rnd() - lp);
++      d[i] = lp * Math.exp(-t * 6.2) * (t < 0.004 ? t / 0.004 : 1);
++    }
++    for (const [ms, g] of [[17, 0.5], [23, -0.4], [31, 0.3], [43, -0.22]]) d[Math.round(sr * (ms + 2 * ch) / 1000)] += g * 0.25;
++    for (let i = 0; i < len; i++) energy += d[i] * d[i];
++    const norm = 1 / Math.sqrt(energy);
++    for (let i = 0; i < len; i++) d[i] *= norm;
++  }
++  conv.normalize = false; conv.buffer = ir;
++  input.connect(output);
++  input.connect(conv).connect(wet).connect(output);
++  return { input, output, set(pct) {
++    const w = Math.max(0, Math.min(60, pct)) / 100 * 0.9;
++    wet.gain.value = w; output.gain.value = 1 / (1 + 0.3 * w);    // more room, a little less level: no clipping
++  } };
++}
+ async function ensureEngine(status) {
+   if (engineReady) return engineReady;
+   engineReady = (async () => {
+@@ -42,9 +82,12 @@ async function ensureEngine(status) {
+     node = new AudioWorkletNode(ctx, 'jazzband', { numberOfInputs: 0, outputChannelCount: [2] });
+     gain = ctx.createGain(); gain.gain.value = 0.9;
+     node.connect(gain);
++    room = makeRoom(ctx);
++    room.set(store.get('settings', {}).room ?? 18);
++    gain.connect(room.input);
+     const meter = ctx.createAnalyser();
+     meter.fftSize = 2048;
+-    gain.connect(meter).connect(ctx.destination);
++    room.output.connect(meter).connect(ctx.destination);
+     const samples = new Float32Array(meter.fftSize);
+     function updateMeter() {
+       const out = document.querySelector('.pl-output');
+@@ -58,6 +101,7 @@ async function ensureEngine(status) {
+       }
+     }
+     ctx.addEventListener('statechange', updateMeter);
++    ctx.addEventListener('statechange', () => onAudioState(ctx?.state));
+     setInterval(updateMeter, 160);
+     const ready = new Promise(res => {
+       node.port.onmessage = (e) => {
+@@ -67,16 +111,17 @@ async function ensureEngine(status) {
+         else if (d.t === 'packs') packsOk = d.ok;
+       };
+     });
+-    const wasm = await (await fetch('engine/jazzband.wasm')).arrayBuffer();
++    const files = preload();
++    assets = null;                                          // the buffers move into the audio thread
++    const wasm = await files.wasm;
+     node.port.postMessage({ t: 'wasm', bytes: wasm }, [wasm]);
+     await ready;
+     let got = 0;
+-    await Promise.all(PACKS.map(async (p) => {
+-      try {
+-        const b = await (await fetch(`engine/packs/${p}.jbp`)).arrayBuffer();
+-        node.port.postMessage({ t: 'pack', bytes: b }, [b]);
+-        got++; status(`Loading the band… ${got}/${PACKS.length} instruments`);
+-      } catch { /* that instrument plays its stand-in synth */ }
++    await Promise.all(files.packs.map(async (pack) => {
++      const b = await pack;
++      if (!b) return;                                       // that instrument failed to download
++      node.port.postMessage({ t: 'pack', bytes: b }, [b]);
++      got++; status(`Loading the band… ${got}/${PACKS.length} instruments`);
+     }));
+     // the engine checks each pack (a checksum, a few KB per audio block): wait for it, at most a few seconds
+     await ctx.resume();
+@@ -88,7 +133,7 @@ async function ensureEngine(status) {
+     status('');
+   })().catch(async error => {
+     await ctx?.close().catch(() => {});
+-    engineReady = null; ctx = null; node = null; packsOk = [0, 0, 0, 0];
++    engineReady = null; ctx = null; node = null; room = null; assets = null; packsOk = [0, 0, 0, 0];
+     throw error;
+   });
+   return engineReady;
+@@ -106,26 +151,81 @@ export class Player {
+     this.s = Object.assign({
+       tempo: null, key: 0, feel: 0, choruses: 3, intro: 0, ending: 0, role: 'none', guide: false, leadEvery: false,
+       players: [0, 0, 0, 0], levels: [100, 100, 100, 100], lead: 100, leadSound: 0, leadOct: 0, horn: 'C', view: 'chart',
++      room: 18, latency: 0, passStep: 0,
+     }, store.get('settings', {}));
+     this.s.tempo = null; this.s.key = 0;
++    this.takes = [];
++    preload();
+     onPos = (d) => this.position(d);
++    // a call, Siri or a route change stops the audio: hold the band at this beat, Resume carries on from it
++    onAudioState = (state) => {
++      if (state !== 'running' && this.state.playing && !this.paused && !this.starting) {
++        this.paused = true; post({ t: 'pause' }); this.updateTransport(); this.status('Paused: audio was interrupted');
++      }
++    };
++    document.addEventListener('visibilitychange', () => {
++      if (document.visibilityState === 'visible' && this.state.playing && !this.paused) { ctx?.resume().catch(() => {}); this.wake(true); }
++    });
+     let rt = 0;
+     window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => this.resized(), 150); });
++    // keys (and Bluetooth page-turner pedals, which send arrows or Page Up / Page Down)
+     document.addEventListener('keydown', (e) => {
+-      if (!document.body.classList.contains('playing-view')) return;
+-      if (e.code === 'Space' && !/INPUT|SELECT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) { e.preventDefault(); this.toggle(); }
++      const b = document.body.classList;
++      if (!b.contains('playing-view') || b.contains('browsing') || e.metaKey || e.ctrlKey || e.altKey) return;
++      const tag = document.activeElement?.tagName || '';
++      if (/INPUT|SELECT|TEXTAREA/.test(tag)) return;
++      const act = {
++        Space: () => { if (tag !== 'BUTTON') this.toggle(); else return false; },
++        ArrowRight: () => this.toggle(), PageDown: () => this.toggle(),
++        ArrowLeft: () => this.stop(), PageUp: () => this.stop(),
++        ArrowUp: () => this.setTempo(this.s.tempo + (e.shiftKey ? 1 : 5)), ArrowDown: () => this.setTempo(this.s.tempo - (e.shiftKey ? 1 : 5)),
++        KeyL: () => $('.btn-loop', this.root)?.click(), KeyS: () => this.setStage(!this.stage), KeyR: () => this.toggleRec(),
++        Escape: () => { if (this.stage) this.setStage(false); else return false; },
++      }[e.code];
++      if (act && act() !== false) e.preventDefault();
+     });
++    document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && this.stage) this.setStage(false); });
++  }
++  save() { const { tempo, key, feel, ...rest } = this.s; store.set('settings', rest); }
++  // what you last used for this tune
++  saveTune() { if (this.song) store.set('tune.' + this.song.id, { tempo: this.trainBase || this.s.tempo, key: this.s.key, feel: this.s.feel }); }
++  setTempo(v, remember = true) {
++    const s = this.s, r = this.root;
++    v = Math.max(40, Math.min(320, Math.round(+v || 120))); s.tempo = v;
++    for (const [sel, prop] of [['.in-tempo', 'value'], ['.in-tempo-r', 'value'], ['.tempo-now', 'textContent']]) { const el = $(sel, r); if (el) el[prop] = v; }
++    post({ t: 'tempo', bpm: v });
++    if (remember) { this.trainBase = null; this.saveTune(); }
++  }
++  async wake(on) {
++    try {
++      if (on && !this.wakeLock && navigator.wakeLock) {
++        this.wakeLock = await navigator.wakeLock.request('screen');
++        this.wakeLock.addEventListener('release', () => { this.wakeLock = null; });
++      } else if (!on && this.wakeLock) { const w = this.wakeLock; this.wakeLock = null; await w.release(); }
++    } catch { /* the screen may sleep: not fatal */ }
++  }
++  setStage(on) {
++    this.stage = !!on;
++    document.body.classList.toggle('stage', this.stage);
++    const b = $('.btn-stage', this.root); if (b) { b.setAttribute('aria-pressed', String(this.stage)); b.textContent = this.stage ? 'Exit stage' : 'Stage'; }
++    try {
++      if (this.stage && !document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {});
++      else if (!this.stage && document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
++    } catch { /* phones without fullscreen: the stage layout still applies */ }
++    if (this.panel !== 'score') $('[data-panel=score]', this.root)?.click();
++    this.drawChart();
++    if (this.state.playing && this.lastSrc != null) this.highlight(this.lastSrc, this.lastBeat);
+   }
+-  save() { const { tempo, key, ...rest } = this.s; store.set('settings', rest); }
+ 
+   open(song) {
+     if (this.state.playing) this.stop();
+     this.loadRequest = (this.loadRequest || 0) + 1;
+     this.starting = false;
+     this.song = song;
+-    this.s.tempo = song.tempo || defaultTempo(song);
+-    this.s.key = 0; this.startSrc = -1; this.loop = null;
+-    this.s.feel = song.feel ?? guessFeel(song);
++    const mine = store.get('tune.' + song.id, {});
++    this.s.tempo = mine.tempo || song.tempo || defaultTempo(song);
++    this.s.key = mine.key || 0; this.startSrc = -1; this.loop = null; this.sel = null; this.picking = false; this.trainBase = null;
++    this.s.feel = mine.feel ?? song.feel ?? guessFeel(song);
+     document.body.classList.add('playing-view');        // visible first: the chart lays out by its width
+     this.render();
+     this.reprep();
+@@ -184,7 +284,9 @@ export class Player {
+       return;
+     }
+     this.paused = !this.paused;
++    if (!this.paused) await ctx?.resume().catch(() => {});
+     post({ t: this.paused ? 'pause' : 'resume' });
++    this.wake(!this.paused);
+     this.updateTransport();
+   }
+   async play() {
+@@ -208,9 +310,16 @@ export class Player {
+     const from = this.loop ? this.prep.form.indexOf(this.loop[0]) : this.startSrc >= 0 ? this.prep.form.indexOf(this.startSrc) : -1;
+     post({ t: 'play', from });
+     this.state.playing = true;
++    this.passes = 0; this.lastBarIdx = null; this.lastBeatIdx = 0;
++    this.wake(true);
+     this.updateTransport();
+   }
+-  stop() { this.paused = false; post({ t: 'stop' }); this.state.playing = false; this.state.bar = -1; this.updateTransport(); this.highlight(-1); }
++  stop() {
++    this.paused = false; post({ t: 'stop' }); this.state.playing = false; this.state.bar = -1;
++    if (this.trainBase) this.setTempo(this.trainBase, false);
++    this.trainBase = null;
++    this.wake(false); this.cue(''); this.updateTransport(); this.highlight(-1);
++  }
+   finish() { post({ t: 'finish' }); }
+ 
+   position(d) {
+@@ -218,14 +327,80 @@ export class Player {
+     this.state = { playing: d.state !== 0, bar: d.bar, beat: d.beat, chorus: d.chorus, kind: d.kind, state: d.state };
+     if (!this.state.playing) this.paused = false;
+     if (was !== this.state.playing) this.updateTransport();
+-    if (!this.state.playing) { this.highlight(-1); this.status(''); return; }
++    if (!this.state.playing) {
++      this.highlight(-1); this.status(''); this.cue(''); this.wake(false);
++      if (this.trainBase) { this.setTempo(this.trainBase, false); this.trainBase = null; }
++      if (was) this.onended?.();                         // the band played its ending (Stop never gets here)
++      return;
++    }
+     const src = d.state === 2 ? (this.prep.pickup ? 'pickup' : -1) : d.kind === 0 ? this.prep.form[d.bar] : -2;
+-    const delay = Math.max(0, ((ctx.outputLatency || 0) + (ctx.baseLatency || 0)) * 1000);
+-    setTimeout(() => this.highlight(src, d.beat), delay);
+-    const n = this.s.choruses;
++    const n = this.s.choruses, mask = this.leadMask(), has = (c) => !!((mask >>> (Math.min(32, c) - 1)) & 1);
++    // what is coming: the count, and a bar's notice before the melody leaves or returns
++    let cue = '';
++    if (d.state === 2) cue = String(d.beat + 1);
++    else if (d.kind === 0 && !this.loop && d.bar === this.prep.form.length - 1 && !(n && d.chorus >= n) && has(d.chorus) !== has(d.chorus + 1)) cue = has(d.chorus + 1) ? 'Melody next' : 'Solos next';
++    // a loop gets a little faster each pass (the tune's own tempo comes back at Stop)
++    if (this.loop && d.state === 3 && d.kind === 0) {
++      const wrapped = this.lastBarIdx != null && (d.bar < this.lastBarIdx || (d.bar === this.lastBarIdx && d.beat < this.lastBeatIdx));
++      this.lastBarIdx = d.bar; this.lastBeatIdx = d.beat;
++      if (wrapped) {
++        this.passes++;
++        if (this.s.passStep > 0 && this.s.tempo < 320) { this.trainBase = this.trainBase || this.s.tempo; this.setTempo(this.s.tempo + this.s.passStep, false); }
++      }
++    }
++    const delay = Math.max(0, ((ctx.outputLatency || 0) + (ctx.baseLatency || 0)) * 1000 + (this.s.latency || 0));
++    setTimeout(() => { if (this.state.playing) { this.highlight(src, d.beat); this.cue(cue, d.state === 2); } }, delay);
+     const what = d.state === 2 ? 'Count-in' : d.kind === 5 ? 'Intro' : d.kind === 0 ? `Chorus ${d.chorus}${n ? ' of ' + n : ''}` : 'Ending';
+-    const solo = d.kind === 0 && !((this.leadMask() >>> (Math.min(32, d.chorus) - 1)) & 1);
+-    this.status(`${what}${d.kind === 0 ? ' · bar ' + (this.prep.form[d.bar] + 1) : ''}${solo ? ' · solos' : d.kind === 0 ? ' · head' : ''}`);
++    const solo = d.kind === 0 && !has(d.chorus);
++    const where = this.loop && d.kind === 0 ? `Loop pass ${this.passes + 1} · ${this.s.tempo} BPM` : what;
++    this.status(`${where}${d.kind === 0 ? ' · bar ' + (this.prep.form[d.bar] + 1) : ''}${this.loop ? '' : solo ? ' · solos' : d.kind === 0 ? ' · head' : ''}`);
++  }
++  cue(text, big) {
++    const el = $('.pl-cue', this.root); if (!el) return;
++    if (el.textContent !== text) el.textContent = text;
++    el.hidden = !text; el.classList.toggle('count', !!big);
++  }
++
++  // ------------------------------------------------------------------------------------------ recording a take
++  async toggleRec() {
++    if (this.rec) { this.rec.stop(); return; }
++    try { await ensureEngine((m) => this.status(m)); await ctx.resume(); }
++    catch (err) { this.status('Audio could not start. ' + (err.message || err)); return; }
++    if (!window.MediaRecorder) { this.status('This browser cannot record.'); return; }
++    const dest = ctx.createMediaStreamDestination();
++    // the band reaches the recorder straight away, your playing only after it left the speaker and came back through
++    // the microphone: hold the band back by that much so the take lines up
++    const hold = ctx.createDelay(1);
++    hold.delayTime.value = Math.min(1, (ctx.outputLatency || 0) + (ctx.baseLatency || 0) + (this.s.latency || 0) / 1000);
++    room.output.connect(hold).connect(dest);
++    let mic = null, micNode = null;
++    try {
++      mic = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
++      micNode = ctx.createMediaStreamSource(mic); micNode.connect(dest);
++    } catch { this.status('No microphone: recording the band only'); }
++    const chunks = [], rec = new MediaRecorder(dest.stream), song = this.song;
++    rec.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
++    rec.onstop = () => {
++      this.rec = null;
++      room?.output.disconnect(hold); micNode?.disconnect(); mic?.getTracks().forEach(t => t.stop());
++      const blob = new Blob(chunks, { type: rec.mimeType || 'audio/webm' });
++      const ext = /mp4|aac/.test(blob.type) ? 'm4a' : /ogg/.test(blob.type) ? 'ogg' : 'webm';
++      this.takes.unshift({ url: URL.createObjectURL(blob), name: `${song.title} take ${this.takes.length + 1}.${ext}`, title: song.title, at: new Date() });
++      this.drawTakes(); this.updateRec();
++      this.status('Take saved: open Setup to listen');
++    };
++    this.rec = rec; rec.start(); this.updateRec();
++    if (!this.state.playing && !this.starting) this.play();
++  }
++  updateRec() {
++    const b = $('.btn-rec', this.root); if (!b) return;
++    b.textContent = this.rec ? '■ Save take' : '● Rec'; b.setAttribute('aria-pressed', String(!!this.rec));
++  }
++  drawTakes() {
++    const el = $('.takes', this.root); if (!el) return;
++    el.innerHTML = this.takes.length ? this.takes.map(t => `<div class="take"><span>${esc(t.title)} · ${t.at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
++      <audio controls preload="metadata" src="${t.url}"></audio><a download="${esc(t.name)}" href="${t.url}">Save file</a></div>`).join('')
++      : '<p class="takes-empty">No takes yet. Press ● Rec, play along, then press it again: your microphone and the band are recorded together. Takes stay until you close the page; use Save file to keep one.</p>';
+   }
+   status(m) { const el = $('.pl-status', this.root); if (el) el.textContent = m; }
+   updateTransport() {
+@@ -248,7 +423,8 @@ export class Player {
+     this.root.innerHTML = `
+       <div class="song-head">
+         <div><h2>${esc(song.title)}</h2><p>${esc(song.composer || book.title)} · ${song.time[0]}/${song.time[1]} · ${song.bars.length} bars</p></div>
+-        <button class="pl-back" type="button">Songs</button>
++        <span class="head-buttons"><button class="pl-fav" type="button" aria-pressed="false" aria-label="Add to my list" title="Add to my list">☆</button>
++        <button class="pl-back" type="button">Songs</button></span>
+       </div>
+       <div class="pl-transport">
+         <span class="pl-status"></span>
+@@ -256,6 +432,8 @@ export class Player {
+       </div>
+       <section class="mix-sheet panel" aria-label="Band mixer" hidden>
+         <h3>Band mixer</h3>
++        <section class="channel room-channel"><h4>Room</h4><span class="room-note">Reverb around the band</span>
++          <label class="fader"><input type="range" aria-label="Room level" class="in-room" min="0" max="60" value="${s.room}"><output>${s.room}%</output></label></section>
+         ${[...INST, 'Melody'].map((name,i) => {
+           const lead = i === INST.length;
+           const choices = lead ? ['Horn', 'Piano', 'Guitar', 'Vibes'] : PLAYERS[i];
+@@ -289,14 +467,27 @@ export class Player {
+           <label>Count-in<select class="in-intro"><option value="0">One bar count</option><option value="1">Last 4 bars</option><option value="2">Turnaround intro</option></select></label>
+           <label>Ending<select class="in-ending"><option value="0">Final chord</option><option value="1">Tag (3 times)</option></select></label>
+           <label>Chords for<select class="in-horn">${HORNS.map(([v, , t]) => `<option value="${v}">${t}</option>`).join('')}</select></label>
+-        </div></section>
+-      <section class="score-panel panel">${song.problems?.length ? '<small>Some measures may be misread. Check the original page.</small>' : ''}<div class="pl-tabs">
++          <label title="Each time a loop comes round it gets a little faster. Stop brings the tempo back.">Loop speed-up<select class="in-pass"><option value="0">Same tempo each pass</option><option value="2">+2 BPM each pass</option><option value="4">+4 BPM each pass</option><option value="8">+8 BPM each pass</option></select></label>
++          <label title="Bluetooth speakers and headphones play late. Raise this until the moving bar matches what you hear.">Speaker delay (ms)<input type="number" class="in-latency" min="0" max="500" step="10" value="${s.latency}" inputmode="numeric"></label>
++        </div>
++        <h3>Your takes</h3><div class="takes"></div>
++        <h3>Keys and pedals</h3>
++        <p class="keys-help">Space, → or Page Down: play / pause · ← or Page Up: stop · ↑ ↓: tempo (Shift: by 1) · L: loop · S: stage view · R: record. A Bluetooth page-turner pedal works as play / pause and stop.</p>
++        </section>
++      <section class="score-panel panel">${song.problems?.length ? '<small>Some measures may be misread. Check the original page.</small>' : ''}
++      <div class="quick" aria-label="Practice controls">
++        <label>You play <select class="in-role-q" aria-label="You play">${ROLES.map(([v, t]) => `<option value="${v}" ${s.role === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
++        <span class="tempo-step"><button type="button" class="tempo-down" aria-label="Slower">−</button><output class="tempo-now" aria-label="Tempo">${s.tempo}</output><button type="button" class="tempo-up" aria-label="Faster">+</button></span>
++        <button type="button" class="btn-rec" aria-pressed="false" title="Record yourself with the band">● Rec</button>
++        <button type="button" class="btn-stage" aria-pressed="false" title="Large chart for a music stand">Stage</button>
++      </div>
++      <div class="pl-tabs">
+         <span class="pl-seg seg-view"><button type="button" data-v="chart">Chart</button><button type="button" data-v="page">Original page</button></span>
+         <button class="pl-btn btn-loop" type="button" title="Loop the bars you selected">Loop</button>
+         <button class="pl-btn btn-clear" type="button">Clear selection</button>
+         <label class="follow-control"><input type="checkbox" class="in-follow" checked> Follow score</label><span class="pl-hint">Tap a bar to start there · to loop: tap the first bar, Loop, then the last bar (or Shift-click) · Space plays / stops</span>
+       </div>
+-      <div class="pl-view"></div></section>
++      <div class="pl-stagewrap"><div class="pl-view"></div><div class="pl-cue" hidden aria-live="polite"></div></div></section>
+       <nav class="dock" aria-label="Playback controls">
+         <button class="pl-play" type="button">▶ Play</button>
+         <button type="button" class="pl-stop" disabled>Stop</button>
+@@ -328,22 +519,42 @@ export class Player {
+       select.selectedIndex = (select.selectedIndex + Number(button.dataset.step) + select.length) % select.length;
+       select.dispatchEvent(new Event('change'));
+     });
+-    const setTempo = (v) => {
+-      v = Math.max(40, Math.min(320, Math.round(+v || 120))); s.tempo = v;
+-      $('.in-tempo', r).value = v; $('.in-tempo-r', r).value = v; post({ t: 'tempo', bpm: v });
+-    };
++    const setTempo = (v) => this.setTempo(v);
+     $('.in-tempo', r).onchange = (e) => setTempo(e.target.value);
+     $('.in-tempo-r', r).oninput = (e) => setTempo(e.target.value);
+     $('.in-tempo-r', r).onchange = () => { if (!this.state.playing) this.reprep(); };
+-    $('.in-key', r).onchange = (e) => { s.key = +e.target.value; post({ t: 'transpose', semis: s.key }); this.drawChart(); };
+-    $('.in-feel', r).onchange = (e) => { s.feel = +e.target.value; this.save(); this.reprep(); };
+-    $('.seg-role', r).onclick = (e) => {
+-      const b = e.target.closest('button'); if (!b) return;
+-      s.role = b.dataset.v; this.save();
+-      r.querySelectorAll('.seg-role button').forEach(x => x.classList.toggle('on', x === b));
++    $('.tempo-down', r).onclick = () => { setTempo(s.tempo - 5); if (!this.state.playing) this.reprep(); };
++    $('.tempo-up', r).onclick = () => { setTempo(s.tempo + 5); if (!this.state.playing) this.reprep(); };
++    $('.in-key', r).onchange = (e) => { s.key = +e.target.value; post({ t: 'transpose', semis: s.key }); this.saveTune(); this.drawChart(); };
++    $('.in-feel', r).onchange = (e) => { s.feel = +e.target.value; this.saveTune(); this.reprep(); };
++    const setRole = (v) => {
++      s.role = v; this.save();
++      r.querySelectorAll('.seg-role button').forEach(x => x.classList.toggle('on', x.dataset.v === v));
++      $('.in-role-q', r).value = v;
+       $('.lbl-guide', r).style.display = s.role === 'lead' ? '' : 'none';
+       this.sendLevels();
+     };
++    $('.seg-role', r).onclick = (e) => { const b = e.target.closest('button'); if (b) setRole(b.dataset.v); };
++    $('.in-role-q', r).onchange = (e) => setRole(e.target.value);
++    $('.btn-rec', r).onclick = () => this.toggleRec();
++    $('.btn-stage', r).onclick = () => this.setStage(!this.stage);
++    $('.in-pass', r).value = s.passStep;
++    $('.in-pass', r).onchange = (e) => { s.passStep = +e.target.value; this.save(); };
++    $('.in-latency', r).onchange = (e) => { s.latency = Math.max(0, Math.min(500, Math.round(+e.target.value || 0))); e.target.value = s.latency; this.save(); };
++    $('.in-room', r).oninput = (e) => { s.room = +e.target.value; e.target.nextElementSibling.textContent = s.room + '%'; room?.set(s.room); this.save(); };
++    const fav = $('.pl-fav', r), showFav = () => {
++      const on = store.get('favs', []).includes(song.id);
++      fav.textContent = on ? '★' : '☆'; fav.setAttribute('aria-pressed', String(on));
++      fav.setAttribute('aria-label', on ? 'Remove from my list' : 'Add to my list'); fav.title = fav.getAttribute('aria-label');
++    };
++    fav.onclick = () => {
++      const list = store.get('favs', []), k = list.indexOf(song.id);
++      if (k >= 0) list.splice(k, 1); else list.push(song.id);
++      store.set('favs', list); showFav(); this.onfavs?.();
++    };
++    showFav(); this.showFav = showFav;
++    this.drawTakes(); this.updateRec();
++    if (this.stage) { document.body.classList.add('stage'); $('.btn-stage', r).textContent = 'Exit stage'; $('.btn-stage', r).setAttribute('aria-pressed', 'true'); }
+     $('.in-guide', r).onchange = (e) => { s.guide = e.target.checked; this.save(); this.sendLevels(); };
+     $('.in-chor', r).onchange = (e) => { s.choruses = +e.target.value; this.save(); this.sendAll(); };
+     $('.in-every', r).onchange = (e) => { s.leadEvery = e.target.checked; this.save(); post({ t: 'leadmask', mask: this.leadMask() }); };
+@@ -412,7 +623,7 @@ export class Player {
+     // rows: the lines of the printed page when there is room; else 4 (or 2) bars a line, a new line at each section
+     const rows = [];
+     const bodyStart = song.pickup ? 1 : 0;
+-    const per = chartPerLine(view.clientWidth);
++    const per = this.stage ? (view.clientWidth >= 560 ? 4 : 2) : chartPerLine(view.clientWidth);
+     this.chartMode = per;
+     if (per) {
+       let cur = [];
+@@ -455,11 +666,14 @@ export class Player {
+     view.querySelectorAll('.bar').forEach(bar => {
+       const spans = [...bar.querySelectorAll('.chords span')];
+       spans.forEach(sp => { sp.style.fontSize = ''; });
++      // one size for every chord in the bar: the size at which the tightest of them fits
++      let scale = 1;
+       spans.forEach((sp, k) => {
+         const end = k + 1 < spans.length ? spans[k + 1].offsetLeft : bar.clientWidth;
+         const room = end - sp.offsetLeft - 3, need = sp.scrollWidth;
+-        if (need > room && room > 0) sp.style.fontSize = Math.max(0.5, room / need).toFixed(3) + 'em';
++        if (need > room && room > 0) scale = Math.min(scale, room / need);
+       });
++      if (scale < 1) spans.forEach(sp => { sp.style.fontSize = Math.max(0.42, scale).toFixed(3) + 'em'; });
+     });
+   }
+   resized() {
+@@ -467,7 +681,7 @@ export class Player {
+     const view = $('.pl-view', this.root); if (!view) return;
+     if (this.s.view === 'page') {
+       if (Math.abs((this.pageWidth || 0) - view.clientWidth) > 40) this.drawChart();
+-    } else if (chartPerLine(view.clientWidth) !== this.chartMode) { this.drawChart(); if (this.state.playing && this.lastSrc != null) this.highlight(this.lastSrc, this.lastBeat); }
++    } else if ((this.stage ? (view.clientWidth >= 560 ? 4 : 2) : chartPerLine(view.clientWidth)) !== this.chartMode) { this.drawChart(); if (this.state.playing && this.lastSrc != null) this.highlight(this.lastSrc, this.lastBeat); }
+     else this.fitChords();
+   }
+   barClick(src, shift) {
+@@ -516,7 +730,10 @@ export class Player {
+     if (!this.state.playing || this.panel !== 'score' || !$('.in-follow', this.root).checked) return;
+     const view = $('.pl-view', this.root);
+     const target = bar.getBoundingClientRect(), bounds = view.getBoundingClientRect();
+-    if (target.top < bounds.top || target.bottom > bounds.bottom) {
++    if (this.stage && this.s.view !== 'page') {           // the line being played stays at the top, the next ones below it
++      const dy = (bar.closest('.chart-row') || bar).getBoundingClientRect().top - bounds.top;
++      if (Math.abs(dy) > 3) view.scrollTop += dy;
++    } else if (target.top < bounds.top || target.bottom > bounds.bottom) {
+       view.scrollTop += target.top - bounds.top - Math.max(0, (view.clientHeight - target.height) / 2);
+     }
+   }
+diff --git a/studio.css b/studio.css
+index 1eecf7d..59d4a62 100644
+--- a/studio.css
++++ b/studio.css
+@@ -24,3 +24,29 @@ body.browsing #songs header{display:none}body.browsing #lib-strip,body.browsing
+ .dock{grid-template-columns:1.2fr repeat(4,minmax(0,1fr))}
+ #player .dock .pl-stop:disabled{opacity:.4}
+ @media(max-width:360px){#player .dock button{font-size:14px}}
++
++/* practice controls above the chart; the count and "what's next" over it */
++.quick{flex:none;display:flex;align-items:center;gap:6px;overflow-x:auto;margin:0 0 6px}.quick>*{flex-shrink:0}.quick label{display:flex;align-items:center;gap:6px;color:var(--muted);font:13px system-ui;white-space:nowrap}
++#player .quick select{padding:0 6px}.tempo-step{display:inline-flex;align-items:center;gap:2px}.tempo-step output{min-width:3.2ch;text-align:center;font:600 17px system-ui;font-variant-numeric:tabular-nums;color:var(--cream)}
++#player .tempo-step button{width:44px;padding:0;font-size:22px}#player .btn-rec[aria-pressed=true]{background:#b3261e;border-color:#b3261e;color:#fff}#player [aria-pressed=true].btn-stage{box-shadow:inset 0 -3px var(--gold);color:var(--gold)}
++.head-buttons{display:flex;gap:6px;flex:none}#player .pl-fav{width:44px;padding:0;font-size:22px;color:var(--gold)}
++.pl-stagewrap{position:relative;display:flex;min-height:0;flex:1}.pl-stagewrap .pl-view{flex:1;min-width:0}
++.pl-cue{position:absolute;top:8px;right:8px;z-index:5;pointer-events:none;padding:6px 14px;border-radius:999px;background:var(--gold);color:#10262a;font:600 16px system-ui;box-shadow:0 4px 18px rgba(0,0,0,.5)}
++.pl-cue.count{top:50%;left:50%;right:auto;transform:translate(-50%,-50%);padding:0;width:min(42vw,220px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;font:600 min(24vw,130px)/1 Georgia,serif;background:rgba(16,24,32,.88);color:var(--gold);border:3px solid var(--gold)}
++.room-channel .room-note{font:13px system-ui;color:var(--muted)}
++.takes{padding:0 12px 8px}.take{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 0;border-bottom:1px solid var(--border);font:14px system-ui;color:var(--text)}.take audio{flex:1 1 240px;height:40px;min-width:0}.take a{color:var(--gold)}
++.takes-empty,.keys-help{padding:0 12px 12px;font:14px/1.5 system-ui;color:var(--muted)}.setup-sheet .pl-grid input[type=number]{width:90px}
++/* stage: only the chart, large, with the transport underneath */
++body.stage.playing-view #player{grid-template-rows:auto 0 minmax(0,1fr) auto;max-width:none;padding-inline:max(10px,env(safe-area-inset-left))}
++body.stage .song-head,body.stage .pl-tabs,body.stage .pl-transport label,body.stage .quick label,body.stage .btn-rec,body.stage .score-panel>small{display:none!important}
++body.stage .pl-transport{justify-content:center}body.stage .pl-status{font-size:15px}body.stage .quick{justify-content:flex-end;margin:0 0 4px}
++body.stage .chart{gap:.5rem}body.stage .chart .bar{height:clamp(104px,19svh,210px)}
++body.stage .bar .chords{height:auto;top:6px}body.stage .bar .chords span{font-size:clamp(1.45rem,4.4vw,3rem);line-height:1.05}
++body.stage .bar .roll{top:46%;height:calc(54% - 8px)}body.stage .chart-row .sec{font-size:1.5rem;width:1.7rem}
++body.stage .bar.now{outline-width:3px}
++@media(max-height:480px){.quick{display:none}body.stage .quick{display:flex}}
++/* my list, on the songs screen */
++#my-list{max-width:680px;margin:1.2rem auto 0;padding:0 1rem}#my-list h2{font:normal 1.5rem Georgia,serif;color:var(--cream);margin-bottom:.4rem}
++#my-list .ml-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border)}#my-list .ml-title{flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
++#my-list button{min-height:44px;font:500 16px system-ui;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--cream);padding:0 12px}#my-list .ml-small{width:44px;padding:0}
++#my-list label{display:flex;align-items:center;gap:8px;min-height:44px;color:var(--muted);font:14px system-ui}#my-list input{width:20px;height:20px;accent-color:var(--gold)}
+diff --git a/sw.js b/sw.js
+new file mode 100644
+index 0000000..de41e3a
+--- /dev/null
++++ b/sw.js
+@@ -0,0 +1,30 @@
++// Service worker: the app, the song library and the instruments are kept on the device, so Jazz Play-Along opens
++// from the home screen and plays without a connection. The book PDFs (the "Original page" view) are large and are
++// not kept: that view needs a connection.
++const VERSION = 'play-along-v1';
++const SHELL = ['./', 'index.html', 'player.js', 'songform.js', 'studio.css', 'app/player.css', 'manifest.webmanifest',
++  'icons/icon-192.png', 'songs.json', 'books.json', 'leads/462jazz.json', 'engine/worklet.js', 'engine/jazzband.wasm',
++  'engine/packs/jbdrums.jbp', 'engine/packs/jbbass.jbp', 'engine/packs/jbpiano.jbp', 'engine/packs/jbguitar.jbp'];
++const BINARY = /\.(wasm|jbp|png|woff2?)$|\/vendor\//;        // never change under the same name within a version
++
++self.addEventListener('install', (e) => {
++  e.waitUntil(caches.open(VERSION).then(c => Promise.allSettled(SHELL.map(u => c.add(u)))).then(() => self.skipWaiting()));
++});
++self.addEventListener('activate', (e) => {
++  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
++});
++self.addEventListener('fetch', (e) => {
++  const req = e.request, url = new URL(req.url);
++  if (req.method !== 'GET' || url.origin !== location.origin || req.headers.has('range') || url.pathname.includes('/books/')) return;
++  e.respondWith((async () => {
++    const cache = await caches.open(VERSION);
++    const keep = (res) => { if (res.ok && res.status === 200) cache.put(req, res.clone()); return res; };
++    if (BINARY.test(url.pathname)) return (await cache.match(req)) || keep(await fetch(req));
++    try { return keep(await fetch(req)); }                    // pages, code and data: the newest when online
++    catch (err) {
++      const hit = await cache.match(req, { ignoreSearch: req.mode === 'navigate' }) || (req.mode === 'navigate' && await cache.match('./'));
++      if (hit) return hit;
++      throw err;
++    }
++  })());
++});
+-- 
+2.43.0
+
