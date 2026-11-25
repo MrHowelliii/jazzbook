@@ -8,6 +8,9 @@ on:
       - 'books.json'
       - 'index_books.py'
       - 'index.html'
+      - 'app/**'
+      - 'engine/**'
+      - 'leads/**'
   workflow_dispatch:
 
 permissions:
