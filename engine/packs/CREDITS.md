@@ -10,3 +10,4 @@ notes and dynamics, trimmed, faded, level-matched; 16-bit PCM.
 | jbguitar | Shinyguitar (black archtop, pickup + microphone blended) | Karoryfer Samples | CC0 1.0 |
 | jbdrums | Virtuosity Drums (jazz kit, sticks; overhead, room and close mics mixed) | Versilian Studios | CC0 1.0 |
 | jblead | Weresax (alto saxophone, condenser microphone, soft and loud takes) | Karoryfer Samples | CC0 1.0 |
+| jbgtrlead | Shinyguitar (black archtop, pickup only, medium and firm picking; for melody) | Karoryfer Samples | CC0 1.0 |
