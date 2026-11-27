@@ -159,6 +159,8 @@ def to_song(meas, title, composer, book, page, pages):
     bars = []
     for i, m in enumerate(meas):
         o = {'c': m['c'], 'n': m['n'], 'box': None}
+        if m.get('ca'):
+            o['ca'] = m['ca']
         for k in ('rs', 're', 'e', 'db', 'sg', 'ds', 'dc', 'fn'):    # the last five only from overrides
             if m.get(k):
                 o[k] = 1 if m[k] is True else m[k]

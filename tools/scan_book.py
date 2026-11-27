@@ -139,6 +139,11 @@ def apply_override(meas, ov):
             for i, tok in enumerate(toks):
                 if tok != '.' and chord_tok(tok):
                     m['c'].append([i * unit, tok, chord_tok(tok)])
+    for bar, line in ov.get('alt', {}).items():            # a second set of changes (a book's alternatives), same format
+        k = int(bar) - 1
+        if 0 <= k < len(meas):
+            toks = line.split(); unit = meas[k]['len'] // max(1, len(toks))
+            meas[k]['ca'] = [[i * unit, tok, chord_tok(tok)] for i, tok in enumerate(toks) if tok != '.' and chord_tok(tok)]
     for bar, flags in ov.get('bars', {}).items():           # repeats and endings the notes reader missed
         k = int(bar) - 1
         if 0 <= k < len(meas):
