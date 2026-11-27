@@ -22,6 +22,12 @@ import pymupdf as fitz
 
 TPQ = 48                                    # ticks per quarter note (3 and 16 divide it)
 
+# Engraving profile: Finale's Maestro (the 462 book) by default; --font inkpen for Finale's Jazz/Inkpen2 (the Django
+# Fakebook): the same glyph codes, but thicker stems and barlines, and chord symbols in plain ASCII (- for minor,
+# 0 for diminished) in a font whose name ends in "Chords".
+PROFILE = {'stem_max': 0.6, 'bar_min': 0.6, 'thick': 1.5, 'chord_font': None, 'ascii_chords': False, 'tuplet_max': 12,
+           'title_font': None}
+
 # Maestro glyphs (Mac Roman byte -> meaning)
 G = lambda b: 0xF000 + b
 HEAD_FILLED, HEAD_HALF, HEAD_WHOLE = G(0xCF), G(0xFA), G(0x77)
@@ -43,6 +49,10 @@ BRACKET_ALT = re.compile(r'\[[^\]]*\]')
 
 def chord_text(raw):
     t = raw
+    if PROFILE['ascii_chords']:                 # Inkpen2Chords: C-7, C#07 (dim), C07b5? -> Cm7, C#°7
+        t = re.sub(r'^([A-G][b#]?)-', r'\1m', t)
+        t = re.sub(r'^([A-G][b#]?)(m?)0', r'\1\2°', t)
+        return t.strip()
     for a, b in CHORD_MAP:
         t = t.replace(a, b)
     t = BRACKET_ALT.sub('alt', t)
@@ -132,6 +142,8 @@ def page_items(page):
                 run = []
                 for c in s['chars']:
                     o = ord(c['c'])
+                    if o >= 0xF000 and PROFILE['ascii_chords'] and 'Special' in s['font'] and o not in (DOT, CODA, SEGNO):
+                        continue                 # Inkpen2Special: articulations and boxes share Maestro's codes
                     if o >= 0xF000:
                         glyphs.append(Glyph(o, c['origin'][0], c['origin'][1], s['size']))
                     else:
@@ -275,7 +287,7 @@ def analyse_staff(st, glyphs, texts, vl, fills, curves, hl, warn):
     # ---- barlines (thin and thick), repeat dots
     bars = []
     for x, y0, y1, w in vl:
-        if w >= 0.6 and y0 <= top + 1.0 and y1 >= bot - 1.0 and y1 - y0 < (bot - top) * 1.6 + 2 and st['x0'] - 2 <= x <= st['x1'] + 2:
+        if w >= PROFILE['bar_min'] and y0 <= top + 1.0 and y1 >= bot - 1.0 and y1 - y0 < (bot - top) * 1.6 + 2 and st['x0'] - 2 <= x <= st['x1'] + 2:
             bars.append((x, w))
     bars.sort()
     groups = []
@@ -287,7 +299,7 @@ def analyse_staff(st, glyphs, texts, vl, fills, curves, hl, warn):
     dots = [g for g in big if g.code == DOT]
     for gr in groups:
         gr['x0'], gr['x1'] = min(gr['xs']) - 0.5, max(gr['xs']) + 0.5
-        gr['thick'] = any(w > 1.5 for w in gr['ws'])
+        gr['thick'] = any(w > PROFILE['thick'] for w in gr['ws'])
         gr['double'] = len(gr['xs']) >= 2
         rd_left = [d for d in dots if gr['x0'] - 9 < d.x < gr['x0'] and abs(d.y - mid) < sp * 1.2]
         rd_right = [d for d in dots if gr['x1'] < d.x < gr['x1'] + 9 and abs(d.y - mid) < sp * 1.2]
@@ -364,7 +376,7 @@ def analyse_staff(st, glyphs, texts, vl, fills, curves, hl, warn):
         return base + steps
 
     # ---- stems
-    stems = [(x, y0, y1) for x, y0, y1, w in vl if w < 0.6 and y1 - y0 > sp * 1.8 and top - sp * 8 < y0 and y1 < bot + sp * 8]
+    stems = [(x, y0, y1) for x, y0, y1, w in vl if w < PROFILE['stem_max'] and y1 - y0 > sp * 1.8 and top - sp * 8 < y0 and y1 < bot + sp * 8]
     head_w = 0.333 * 19.8
     for h in heads:
         h.used = True
@@ -501,7 +513,7 @@ def analyse_staff(st, glyphs, texts, vl, fills, curves, hl, warn):
                 b.tie_end = True
 
     # ---- tuplets: a small "3" over a bracket or a beam
-    tup_marks = [t for t in texts if t.text in ('3', '6', '5') and t.size < 12 and top - sp * 9 < t.y < bot + sp * 9 and t.x > st['x0'] + 20]
+    tup_marks = [t for t in texts if t.text in ('3', '6', '5') and t.size < PROFILE['tuplet_max'] and top - sp * 9 < t.y < bot + sp * 9 and t.x > st['x0'] + 20]
     for t in tup_marks:
         n = int(t.text)
         tx = (t.x + t.x1) / 2
@@ -557,7 +569,8 @@ def build(pdf, first, last, debug=False, only_pages=None):
         if not staves:
             continue
         # titles: the biggest plain text above the first staff
-        tops = [t for t in texts if t.size >= 17 and t.y < staves[0]['top'] - 10]
+        tops = [t for t in texts if t.size >= 17 and t.y < staves[0]['top'] - 10 and
+                (not PROFILE['title_font'] or (PROFILE['title_font'] in t.font and t.size > 30))]
         title_y = None
         if tops:
             ty = min(t.y for t in tops)
@@ -589,6 +602,8 @@ def build(pdf, first, last, debug=False, only_pages=None):
             meas_no = [t for t in stx if t.x < st['x0'] + 12 and t.text.isdigit() and st['top'] - 30 < t.y < st['top'] + 2]
             chords, other = [], []
             for t in above:
+                if PROFILE['chord_font'] and PROFILE['chord_font'] not in t.font:
+                    other.append(t); continue
                 c = parse_chord(chord_text(t.text))
                 if c and t.size >= 9:
                     c['x'] = t.x
@@ -885,9 +900,17 @@ def main():
     ap.add_argument('--out')
     ap.add_argument('--book', default='462jazz', help='book id in books.json')
     ap.add_argument('--debug', action='store_true')
+    ap.add_argument('--font', choices=['maestro', 'inkpen'], default='maestro')
+    ap.add_argument('--titles', help='JSON [[page, title], ...]: song titles by first page (when the title font is not text)')
     args = ap.parse_args()
     only = [int(p) - 1 for p in args.pages.split(',')] if args.pages else None
+    if args.font == 'inkpen':
+        PROFILE.update(stem_max=1.3, bar_min=1.4, thick=2.5, chord_font='Chords', ascii_chords=True, tuplet_max=13.5, title_font='Script')
     songs = build(args.pdf, args.first - 1, args.last, args.debug, only)
+    if args.titles:                              # titles (and no composer) from a list by first page
+        names = {int(p): t for p, t in json.load(open(args.titles))}
+        for s in songs:
+            s['title'] = names.get(s['page'], s['title']); s['composer'] = None
     res, clean = [], 0
     for s in songs:
         warns = []

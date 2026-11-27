@@ -21,5 +21,13 @@
     "offset": 34,
     "format": "songlist",
     "index_pages": 22
+  },
+  {
+    "id": "djangofake",
+    "title": "Django Fakebook",
+    "file": "books/djangofake.pdf",
+    "offset": 0,
+    "format": "lead",
+    "index_pages": 3
   }
 ]

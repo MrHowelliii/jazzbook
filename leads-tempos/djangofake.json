@@ -1,0 +1,1244 @@
+{
+ "djangofake-4": {
+  "title": "After you've gone",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-5": {
+  "title": "Ain't misbehavin'",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: medium swing"
+ },
+ "djangofake-6": {
+  "title": "Alemberts",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-7": {
+  "title": "Alors?...voila!",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-8": {
+  "title": "Anniversary song",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-9": {
+  "title": "Anouman",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-10": {
+  "title": "Appel indirect",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-11": {
+  "title": "Are you in the mood",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "book: slow swing"
+ },
+ "djangofake-12": {
+  "title": "Artillerie lourde",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: medium swing"
+ },
+ "djangofake-13": {
+  "title": "Avalon",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-14": {
+  "title": "Babik",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: bebop"
+ },
+ "djangofake-15": {
+  "title": "Bei dir war immer so schön",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-16": {
+  "title": "Bei mir bist du schön",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-17": {
+  "title": "Belleville",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-18": {
+  "title": "Belleville rendez-vous",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-19": {
+  "title": "Black and white",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-20": {
+  "title": "Blue drag",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "book: slow swing"
+ },
+ "djangofake-21": {
+  "title": "Blues en mineur",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-22": {
+  "title": "Blues for Ike",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-23": {
+  "title": "Blue skies",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-24": {
+  "title": "Body and soul",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-25": {
+  "title": "Bossa Dorado",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "book: bossa"
+ },
+ "djangofake-26": {
+  "title": "Boum!",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-27": {
+  "title": "Brazil",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-28": {
+  "title": "Brise Napolitaine",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-30": {
+  "title": "Cantina band",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-31": {
+  "title": "Caravan",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-32": {
+  "title": "Cavalerie",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-33": {
+  "title": "C'est si bon",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-34": {
+  "title": "Charleston",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-35": {
+  "title": "Chez Jacquet",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-37": {
+  "title": "Chicago",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-38": {
+  "title": "China boy",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-39": {
+  "title": "Chinatown, my Chinatown",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-40": {
+  "title": "Clair de lune",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-41": {
+  "title": "Confessin'",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-42": {
+  "title": "Continental",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-43": {
+  "title": "Coquette",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-44": {
+  "title": "Crazy rhythm",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-45": {
+  "title": "Crépuscule",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-46": {
+  "title": "Danse Norvégienne",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-47": {
+  "title": "Danse Nuptiale",
+  "tempo": 260,
+  "feel": "swing",
+  "basis": "book: bebop"
+ },
+ "djangofake-48": {
+  "title": "Daphné",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-49": {
+  "title": "Dark eyes",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-50": {
+  "title": "Destinée",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-51": {
+  "title": "Desvairada",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-53": {
+  "title": "Dicty glide",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-55": {
+  "title": "Diminishing",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-56": {
+  "title": "Dinah",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-57": {
+  "title": "Dinette",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-58": {
+  "title": "Ding-dong! the witch is dead",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-59": {
+  "title": "Djangology",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-60": {
+  "title": "Django's tiger",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-61": {
+  "title": "Douce ambiance",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-62": {
+  "title": "Eel's nephew",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-63": {
+  "title": "Embraceable you",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-64": {
+  "title": "Exactly like you",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-65": {
+  "title": "Festival 48",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: bebop"
+ },
+ "djangofake-66": {
+  "title": "Fleur d'Ennui",
+  "tempo": 112,
+  "feel": "latin",
+  "basis": "book: bolero"
+ },
+ "djangofake-67": {
+  "title": "For Sephora",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "book: bossa"
+ },
+ "djangofake-68": {
+  "title": "Frolic",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: circus swing"
+ },
+ "djangofake-69": {
+  "title": "Good old days",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-70": {
+  "title": "Gypsy dreams",
+  "tempo": 92,
+  "feel": "ballad",
+  "basis": "book: waltz ballad"
+ },
+ "djangofake-71": {
+  "title": "Gypsy fire",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-72": {
+  "title": "H.C.Q. strut",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-73": {
+  "title": "Honeysuckle rose",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-74": {
+  "title": "Honeysuckle rose",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-75": {
+  "title": "Hungaria",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-76": {
+  "title": "I can't believe that you're in love with me",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: medium swing"
+ },
+ "djangofake-77": {
+  "title": "I can't give you anything but love",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-78": {
+  "title": "If I had you",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-79": {
+  "title": "If I only had a brain",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-80": {
+  "title": "I'll never be the same",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-81": {
+  "title": "I'll see you in my dreams",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-82": {
+  "title": "I'll see you in my dreams",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-86": {
+  "title": "I'm forever blowing bubbles",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-87": {
+  "title": "Indifférence",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-89": {
+  "title": "Insensiblement",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-90": {
+  "title": "I saw stars",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-91": {
+  "title": "I surrender, dear",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-92": {
+  "title": "It don't mean a thing",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-93": {
+  "title": "It had to be you",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-94": {
+  "title": "It's only a paper moon",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-95": {
+  "title": "I've found a new baby",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-96": {
+  "title": "I've got my love to keep me warm",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-97": {
+  "title": "I wanna be loved by you",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-99": {
+  "title": "I wonder where my baby is tonight",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-101": {
+  "title": "I won't dance",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-103": {
+  "title": "Japanese sandman",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-104": {
+  "title": "J'attendrai",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-105": {
+  "title": "Jeepers creepers",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-106": {
+  "title": "Jitterbug waltz",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-107": {
+  "title": "Joseph, Joseph",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-108": {
+  "title": "Just one for Babik",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-109": {
+  "title": "Just one of those things",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-111": {
+  "title": "Keepin' out of mischief now",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-112": {
+  "title": "La camarde",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-114": {
+  "title": "Lady, be good",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-115": {
+  "title": "La folle",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-117": {
+  "title": "La foule",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-119": {
+  "title": "La javanaise",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-120": {
+  "title": "La mer",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-121": {
+  "title": "La vie en rose",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-122": {
+  "title": "Les feuilles mortes",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: rubato"
+ },
+ "djangofake-123": {
+  "title": "Les feuilles mortes (ballad or swing)",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-124": {
+  "title": "Limehouse blues",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-125": {
+  "title": "Little white lies",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-126": {
+  "title": "Love me tender",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-127": {
+  "title": "Lover man",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-128": {
+  "title": "Lulu swing",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-129": {
+  "title": "Manah manah",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "book: bossa"
+ },
+ "djangofake-130": {
+  "title": "Man I love",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-131": {
+  "title": "Manoir de mes rêves",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-132": {
+  "title": "Ma première guitare",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-133": {
+  "title": "Marie",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-134": {
+  "title": "Mélodie au Crépuscule",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-135": {
+  "title": "Ménilmontant",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-136": {
+  "title": "Micro",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: bebop"
+ },
+ "djangofake-137": {
+  "title": "Midnight in Moscow",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-138": {
+  "title": "Milko",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-139": {
+  "title": "Mimosa",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-140": {
+  "title": "Minor Swing",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-141": {
+  "title": "Mister Sandman",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-142": {
+  "title": "Mon Dieu",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-143": {
+  "title": "Montagne Ste-Geneviève",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-145": {
+  "title": "Muppet Show theme",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-147": {
+  "title": "My blue heaven",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-148": {
+  "title": "My melancholy baby",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-149": {
+  "title": "Mystérieuse",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-151": {
+  "title": "Ne me quitte pas",
+  "tempo": 92,
+  "feel": "ballad",
+  "basis": "book: waltz ballad"
+ },
+ "djangofake-152": {
+  "title": "Night and day",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-153": {
+  "title": "Night and day",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-154": {
+  "title": "Noto swing",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-155": {
+  "title": "Nuages",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-156": {
+  "title": "Nuits de Ste-Germain des Prés",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-157": {
+  "title": "Oriental shuffle",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "book: slow swing"
+ },
+ "djangofake-158": {
+  "title": "Où es-tu, mon amour?",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-159": {
+  "title": "Out of nowhere",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-160": {
+  "title": "Padam...padam",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-162": {
+  "title": "Panique",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-164": {
+  "title": "Passion",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-166": {
+  "title": "Pèche a la mouche",
+  "tempo": 220,
+  "feel": "swing",
+  "basis": "book: bebop"
+ },
+ "djangofake-167": {
+  "title": "The penguin",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-169": {
+  "title": "Pennies from heaven",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-170": {
+  "title": "Petite fleur",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-172": {
+  "title": "Place de Brouckère",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-173": {
+  "title": "Powerhouse",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-175": {
+  "title": "Quand refleuriront les lilas blancs?",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-176": {
+  "title": "Que reste-t-il de nos amours?",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-178": {
+  "title": "Rose room",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-179": {
+  "title": "Rosetta",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-180": {
+  "title": "Russian lullaby",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-181": {
+  "title": "R vingt-six",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-182": {
+  "title": "September song",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-183": {
+  "title": "Seul ce soir",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-184": {
+  "title": "The sheik of Araby",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-185": {
+  "title": "Shine",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-186": {
+  "title": "Sing, sing, sing",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-188": {
+  "title": "Si tu savais",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "book: slow swing"
+ },
+ "djangofake-189": {
+  "title": "Smile",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-190": {
+  "title": "Somebody loves me",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-191": {
+  "title": "Someone's rocking my dreamboat",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-192": {
+  "title": "Somewhere over the rainbow",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-193": {
+  "title": "Songe d'Automne",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-194": {
+  "title": "Sous le ciel de Paris",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: waltz"
+ },
+ "djangofake-196": {
+  "title": "Spivy",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: medium swing"
+ },
+ "djangofake-198": {
+  "title": "Stompin' at Decca",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-199": {
+  "title": "Stranger in paradise",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-200": {
+  "title": "Stumbling",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-201": {
+  "title": "Svetlana",
+  "tempo": 92,
+  "feel": "ballad",
+  "basis": "book: waltz ballad"
+ },
+ "djangofake-202": {
+  "title": "Sweet Georgia Brown",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-203": {
+  "title": "Sweet Sue",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-204": {
+  "title": "Swing 39 (guitar part)",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: medium swing"
+ },
+ "djangofake-205": {
+  "title": "Swing 39 (violin part)",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: medium swing"
+ },
+ "djangofake-206": {
+  "title": "Swing 42",
+  "tempo": 140,
+  "feel": "swing",
+  "basis": "book: medium swing"
+ },
+ "djangofake-207": {
+  "title": "Swing 48",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-208": {
+  "title": "Swing de Paris",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-209": {
+  "title": "Swing Gitan",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-210": {
+  "title": "Swing guitars",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-211": {
+  "title": "Swing rhumba",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-213": {
+  "title": "Swingtime in springtime",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-214": {
+  "title": "Swing valse",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-216": {
+  "title": "Syracuse",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-217": {
+  "title": "Tchavolo swing",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-219": {
+  "title": "Tea for two",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-220": {
+  "title": "Tears",
+  "tempo": 100,
+  "feel": "swing",
+  "basis": "book: slow swing"
+ },
+ "djangofake-221": {
+  "title": "Them there eyes",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-222": {
+  "title": "Them there eyes",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-223": {
+  "title": "Third Man theme",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-224": {
+  "title": "Three little words",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-225": {
+  "title": "Tico tico",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-227": {
+  "title": "Topsy",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-228": {
+  "title": "Topsy (part 2, Latin)",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-229": {
+  "title": "Troublant boléro",
+  "tempo": 112,
+  "feel": "latin",
+  "basis": "book: bolero"
+ },
+ "djangofake-230": {
+  "title": "Twilight in Turkey",
+  "tempo": 160,
+  "feel": "swing",
+  "basis": "book: (no marking)"
+ },
+ "djangofake-231": {
+  "title": "Two cigarettes in the dark",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-232": {
+  "title": "Two guitars",
+  "tempo": 66,
+  "feel": "ballad",
+  "basis": "book: rubato"
+ },
+ "djangofake-233": {
+  "title": "Ultrafox",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-234": {
+  "title": "Undecided",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-235": {
+  "title": "Une historie simple",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-236": {
+  "title": "Un homme et une femme",
+  "tempo": 130,
+  "feel": "latin",
+  "basis": "book: bossa"
+ },
+ "djangofake-237": {
+  "title": "Vendredi 13",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-238": {
+  "title": "Viper's dream",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ },
+ "djangofake-239": {
+  "title": "Vous et moi",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: ballad"
+ },
+ "djangofake-240": {
+  "title": "Vous qui passez sans me voir",
+  "tempo": 120,
+  "feel": "swing",
+  "basis": "book: easy swing"
+ },
+ "djangofake-241": {
+  "title": "When day is done",
+  "tempo": 230,
+  "feel": "swing",
+  "basis": "book: up swing"
+ },
+ "djangofake-242": {
+  "title": "Whispering",
+  "tempo": 180,
+  "feel": "swing",
+  "basis": "book: swing"
+ }
+}
