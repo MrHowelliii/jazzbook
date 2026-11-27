@@ -7,6 +7,8 @@ Supported formats (set per book in books.json):
   "dotleader" — entries like: Song Title .............. 42  (mixed case)
   "realbook"  — ALL CAPS, dot leaders, two columns (splits page in half for OCR)
   "auto"      — tries all parsers, uses whichever finds most songs
+  "leads"     — no index pages are parsed: the songs are the lead sheets read from the book (leads/<id>.json:
+                title, composer, page), for books whose index is not text or whose charts were read another way
 """
 
 import os, re, json, sys
@@ -347,6 +349,15 @@ def main():
                            'error': f'Not found: {bfile}'})
             continue
 
+        if fmt == 'leads':
+            lf = os.path.join(os.path.dirname(__file__), 'leads', bid + '.json')
+            leads = json.load(open(lf)) if os.path.exists(lf) else []
+            songs = [{'title': L['title'], 'composer': L.get('composer'), 'page': L['page'] - offset} for L in leads]
+            output.append({'id': bid, 'title': btitle, 'file': bfile, 'pageCount': book.get('pageCount', 0),
+                           'songs': songs, 'offset': offset})
+            total_songs += len(songs)
+            print(f"  {btitle}: {len(songs)} songs from leads/{bid}.json")
+            continue
         try:
             songs, pages = index_pdf(bfile, btitle, fmt=fmt, max_index_pages=max_index_pages)
             output.append({'id': bid, 'title': btitle, 'file': bfile,

@@ -27,15 +27,15 @@
     "title": "Django Fakebook",
     "file": "books/djangofake.pdf",
     "offset": 0,
-    "format": "lead",
-    "index_pages": 3
+    "format": "leads",
+    "pageCount": 242
   },
   {
     "id": "100tunes",
     "title": "100 Tunes Every Musician Should Know (Dick Hyman)",
     "file": "books/100tunes.pdf",
     "offset": 0,
-    "format": "scan",
-    "index_pages": 6
+    "format": "leads",
+    "pageCount": 127
   }
 ]
