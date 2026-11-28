@@ -27,6 +27,28 @@ export function parseToken(tok) {
   return { root: ((pc % 12) + 12) % 12, q: qq };
 }
 
+// a chord's colours, from the symbol as the chart prints it ('C7(b9)', 'Bb13(#11)', 'G7sus', 'Fm11', 'E7alt', 'C+'):
+// the tensions the band adds on top of the quality. Bits as in the engine's X_ flags.
+export const X = { B9: 1, S9: 2, S11: 4, B13: 8, SUS: 16, S5: 32, N9: 64, ALT: 128 };
+export function colorOf(sym, q) {
+  const m = /^[A-G][b#♭♯]?([^/]*)/.exec(sym || '');
+  if (!m) return 0;
+  const s = m[1].replace(/♭/g, 'b').replace(/♯/g, '#').replace(/Δ/g, 'maj');
+  const minor = /^(m(?!aj)|-|min|ø|h)/.test(s);
+  let x = 0;
+  if (/alt/.test(s)) x |= X.ALT;
+  if (/b9/.test(s)) x |= X.B9;
+  if (/#9/.test(s)) x |= X.S9;
+  if ((x & (X.B9 | X.S9)) === (X.B9 | X.S9)) x |= X.ALT;
+  if (/#11/.test(s) || (!minor && /b5/.test(s))) x |= X.S11;
+  if (/b13/.test(s)) x |= X.B13;
+  if (/sus/.test(s) || (minor && /11/.test(s)) || /^11/.test(s)) x |= X.SUS;
+  if (/#5|\+|aug/.test(s)) x |= X.S5;
+  if (/^\+?9|^(ø|h|m7\(b5\)|m7b5)\(?9/.test(s) || /^m7\(b5\)9/.test(s)) x |= X.N9;
+  if (x === X.B9 && q === Q.DOM7B9) x = 0;                      // plain 7b9: the quality says it already
+  return x;
+}
+
 // ---------------------------------------------------------------------------------------------- the form
 // Returns the indices of `bars` in the order they are played once through (the "head").
 export function unroll(bars) {
@@ -85,14 +107,14 @@ export function prepare(song, opts = {}) {
   const form = unroll(body);
   // chords: one per beat, carried over bar lines; the first chord also fills the start
   const firstChord = body.flatMap(b => b.c).find(c => parseToken(c[2]));
-  let cur = firstChord ? parseToken(firstChord[2]) : { root: 0, q: Q.MAJ6 };
+  let cur = firstChord ? { ...parseToken(firstChord[2]), x: colorOf(firstChord[1], parseToken(firstChord[2]).q) } : { root: 0, q: Q.MAJ6, x: 0 };
   let curSym = firstChord ? firstChord[1] : 'C6';
   const chordsBySrc = body.map(b => {
     const beatsOut = [];
     for (let k = 0; k < beats; k++) {
       for (const c of b.c) {
         const beat = Math.floor(c[0] / beatLen);
-        if (beat === k || (k === beats - 1 && beat > k)) { const p = parseToken(c[2]); if (p) { cur = p; curSym = c[1]; } }
+        if (beat === k || (k === beats - 1 && beat > k)) { const p = parseToken(c[2]); if (p) { cur = { ...p, x: colorOf(c[1], p.q) }; curSym = c[1]; } }
       }
       beatsOut.push({ ...cur, sym: curSym });
     }
@@ -108,7 +130,10 @@ export function prepare(song, opts = {}) {
   const barBytes = new Uint8Array(form.length * 9);
   form.forEach((src, j) => {
     const cs = chordsBySrc[src];
-    for (let k = 0; k < 4; k++) { const c = cs[Math.min(k, beats - 1)]; barBytes[9 * j + 2 * k] = c.root; barBytes[9 * j + 2 * k + 1] = c.q; }
+    for (let k = 0; k < 4; k++) {                          // root | colours' low nibble << 4, quality | high nibble << 4
+      const c = cs[Math.min(k, beats - 1)], x = c.x || 0;
+      barBytes[9 * j + 2 * k] = c.root | ((x & 15) << 4); barBytes[9 * j + 2 * k + 1] = c.q | (x & 0xF0);
+    }
     barBytes[9 * j + 8] = section[src] && (j === 0 || form[j - 1] !== src - 1 || section[src]) ? section[src] : 0;
   });
   // melody: ties joined (also across bar lines), swing on 8th notes, a little accent on strong beats

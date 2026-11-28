@@ -15,7 +15,7 @@ import argparse, glob, html, json, os, re, sys, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TPQ = 48
-FEEL = {'swing': 0, 'ballad': 1, 'latin': 2, 'shuffle': 5, 'samba': 6, 'even': 7}
+FEEL = {'swing': 0, 'ballad': 1, 'latin': 2, 'two': 3, 'shuffle': 5, 'samba': 6, 'even': 7}
 # iReal style -> (feel, tempo)
 STYLE = {
     'medium swing': ('swing', 140), 'ballad': ('ballad', 72), 'up tempo swing': ('swing', 230),
@@ -51,10 +51,12 @@ def songs_in(text):
         body = urllib.parse.unquote(link.split('://', 1)[1])
         for raw in body.split('==='):
             f = raw.split('=')
-            if len(f) < 7 or not f[6].startswith('1r34LbKcu7'):
-                continue                                      # the playlist's name, or an old-format entry
-            yield {'title': f[0], 'composer': f[1], 'style': f[3], 'key': f[4], 'music': unscramble(f[6][10:]),
-                   'bpm': int(f[8]) if len(f) > 8 and f[8].isdigit() else 0}
+            if len(f) >= 7 and f[6].startswith('1r34LbKcu7'):
+                yield {'title': f[0], 'composer': f[1], 'style': f[3], 'key': f[4], 'music': unscramble(f[6][10:]),
+                       'bpm': int(f[8]) if len(f) > 8 and f[8].isdigit() else 0}
+            elif len(f) >= 6 and f[4] == 'n' and re.search(r'[|\[{]', f[5]):
+                # the older irealbook:// format: title=composer=style=key=n=chords (not scrambled)
+                yield {'title': f[0], 'composer': f[1], 'style': f[2], 'key': f[3], 'music': f[5], 'bpm': 0}
 
 
 # ------------------------------------------------------------------------------------------- chords
@@ -295,9 +297,32 @@ def key_fifths(k):
     return MAJOR_FIFTHS[pc]
 
 
+def style_of(style):
+    """(feel, tempo) for an iReal style name, the many forum variants included ("Gypsy Bossa", "Dixieland", ...)"""
+    s = style.lower().strip()
+    if s in STYLE:
+        return STYLE[s]
+    has = lambda *w: any(x in s for x in w)
+    if has('samba'): return ('samba', 200)
+    if has('bossa'): return ('latin', 130)
+    if has('ballad', 'slow'): return ('ballad', 72) if not has('swing', 'waltz') else ('swing', 100) if has('swing') else ('ballad', 92)
+    if has('waltz', 'valse'): return ('swing', 170)
+    if has('dixie', 'trad', 'two-beat', 'two beat', '2 beat', 'march', 'ragtime', 'rag', 'new orleans', 'stomp'): return ('two', 180)
+    if has('latin', 'afro', 'calypso', 'rumba', 'mambo', 'bolero', 'tango', 'cha', 'cuban', 'son', 'salsa', 'reggae', 'ska'): return ('latin', 160)
+    if has('shuffle', 'blues'): return ('shuffle', 120)
+    if has('rock', 'pop', 'funk', 'hip', 'r&b', 'soul', 'fusion', 'groove', '8th', '16th', 'even', 'straight', 'gospel'): return ('even', 110)
+    if has('up', 'fast', 'bright', 'gypsy fire'): return ('swing', 230)
+    if has('gypsy', 'manouche', 'django'): return ('swing', 190)
+    if has('medium', 'swing'): return ('swing', 150)
+    return ('swing', 140)
+
+
 def nice_title(t):
-    m = re.match(r'^(.*), (The|A|An)$', t.strip())
-    return f'{m.group(2)} {m.group(1)}' if m else t.strip()
+    t = re.sub(r'\s*\((?:dixieland|trad)[^)]*\)$', '', t.strip(), flags=re.I)
+    t = re.sub(r'\s+-\s+[a-z]{1,3}$|\s{2,}[A-Z]{2,4}$', '', t.strip())                      # a poster's initials
+    t = re.sub(r'\s+\((?:[A-G][b#]?-?|w(?:ith)? intro)\)$|\s+\d$', '', t.strip())   # "(G)": the key; "Avalon 1"
+    m = re.match(r'^(.*), (The|A|An)$', t)
+    return f'{m.group(2)} {m.group(1)}' if m else t
 
 
 def nice_composer(c):
@@ -314,7 +339,7 @@ def norm(t):
     return re.sub(r'[^a-z0-9]+', ' ', t).strip()
 
 
-def convert(song, idx, book, tempos):
+def convert(song, idx, book, tempos, swing_feel='swing'):
     raw, meters, meter, _ = parse_chart(song['music'])
     meter = meter or '44'
     if any(METERS.get(x) is None for x in meters | {meter}):
@@ -375,15 +400,17 @@ def convert(song, idx, book, tempos):
     if not bars or not any(b['c'] for b in bars):
         return None, 'no chords'
     title = nice_title(song['title'])
-    st = STYLE.get(song['style'].lower().strip(), ('swing', 140))
+    st = style_of(song['style'])
     feel, tempo = st
     known = tempos.get(norm(title))
-    if song['bpm'] > 0:
+    if song['bpm'] > 0 and not (feel != 'ballad' and song['bpm'] < 80 and not re.search(r'slow|ballad', song['style'], re.I)):
         tempo = song['bpm']
     elif known:
         tempo = known['tempo']
         if known['feel'] != 'swing' or feel == 'swing':
             feel = known['feel'] if feel not in ('latin', 'samba', 'even') else feel
+    if feel == 'swing':
+        feel = swing_feel
     out = {'id': f'{book}-{idx}', 'book': book, 'title': title, 'composer': nice_composer(song['composer']),
            'page': 0, 'pages': [], 'key': key_fifths(song['key']), 'time': time, 'pickup': False,
            'bars': bars, 'problems': [], 'chordsOnly': True, 'style': song['style'],
@@ -396,6 +423,7 @@ if __name__ == '__main__':
     ap.add_argument('inputs', nargs='+')
     ap.add_argument('--book', default='ireal')
     ap.add_argument('--out', required=True)
+    ap.add_argument('--swing-feel', default='swing', choices=['swing', 'two'], help="'two' for a two-beat collection (Dixieland)")
     a = ap.parse_args()
     tempos = {}
     for f in glob.glob(os.path.join(ROOT, 'leads-tempos', '*.json')):
@@ -405,11 +433,11 @@ if __name__ == '__main__':
     songs, skipped, seen = [], [], set()
     for path in a.inputs:
         for s in songs_in(open(path, encoding='utf-8', errors='replace').read()):
-            key = norm(s['title'])
+            key = re.sub(r'\s+\d$', '', norm(s['title']))
             if key in seen:
                 continue
             seen.add(key)
-            out, why = convert(s, len(songs) + len(skipped) + 1, a.book, tempos)
+            out, why = convert(s, len(songs) + len(skipped) + 1, a.book, tempos, a.swing_feel)
             (songs.append(out) if out else skipped.append((s['title'], why)))
     json.dump(songs, open(a.out, 'w'), separators=(',', ':'), ensure_ascii=False)
     print(f'{len(songs)} charts written to {a.out}; {len(skipped)} left out')
