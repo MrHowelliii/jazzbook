@@ -1,0 +1,104 @@
+{
+ "djangofake-21": {
+  "notes": {
+   "15": "F#5/4 r/8 F#5/8~ F#5/2~",
+   "16": "~F#5/2. r/4"
+  }
+ },
+ "djangofake-53": {
+  "notes": {
+   "2": "Ab5/8 Ab5/8 r/8 Ab5/8~ Ab5/8 r/4.",
+   "4": "Ab5/8 Ab5/8 r/8 Ab5/8~ Ab5/8 r/4.",
+   "6": "Ab5/8 Ab5/8 r/8 Ab5/8~ Ab5/8 r/4."
+  }
+ },
+ "djangofake-62": {
+  "skip": "the B section is written on two staves (a bass line under the tune), which the reader runs together; needs laying out by hand"
+ },
+ "djangofake-79": {
+  "notes": {
+   "4": "Bb3/8 Bb3/8 Bb3/8 Bb3/8 Bb3/4. C5/8",
+   "5": "Bb4/8 G4/8 F4/8t Eb4/8t C4/8t Bb3/4 r/8 Bb3/8",
+   "12": "Bb3/8 Bb3/8 Bb3/8 Bb3/8 Bb3/4. C5/8",
+   "13": "Bb4/8 G4/8 F4/8t Eb4/8t C4/8t Bb3/4 r/8 Bb3/8",
+   "28": "Bb3/8 Bb3/8 Bb3/8 Bb3/8 Bb3/4. C5/8",
+   "29": "Bb4/8 G4/8 F4/8t Eb4/8t C4/8t Bb3/4 r/8 Bb3/8"
+  }
+ },
+ "djangofake-97": {
+  "notes": {
+   "8": "A4/8 A4/8 r/8 A#4/8 B4/4 r/4",
+   "24": "D4/8 D4/8 r/8 E4/8 G4/4 r/4"
+  }
+ },
+ "djangofake-241": {
+  "notes": {
+   "11": "A5/2 r/2",
+   "14": "r/2 E5/8t F#5/8t G5/8t A5/8t C6/8t D6/8t"
+  }
+ },
+ "djangofake-230": {
+  "notes": {
+   "3": "r/8 E5/16 G5/16 Eb5/8 r/8",
+   "5": "r/8 E5/16 G5/16 Eb5/8 r/8",
+   "8": "~C5/4 r/4",
+   "25": "r/4 Eb5/8 F5/8",
+   "36": "r/4 E5/8 F#5/8"
+  }
+ },
+ "djangofake-142": {
+  "notes": {
+   "39": "F5/1~",
+   "40": "~F5/1~",
+   "41": "~F5/1"
+  }
+ },
+ "djangofake-145": {
+  "notes": {
+   "4": "E5/8 r/8 r/4 r/2",
+   "8": "B5/4 r/4 r/2",
+   "47": "r/4 E4/4 E4/4 G4/4",
+   "48": "F4/4 E4/8 F4/8~ F4/8 C5/8 r/4"
+  }
+ },
+ "djangofake-149": {
+  "notes": {
+   "3": "B4/2.",
+   "37": "E5/2.",
+   "48": "F#4/8. F#4/8. F#4/8. E4/8.",
+   "56": "F#4/8. F#4/8. F#4/8. E4/8.",
+   "72": "F#4/8. F#4/8. F#4/8. E4/8."
+  }
+ },
+ "djangofake-129": {
+  "pickup": false,
+  "notes": {
+   "1": "F#4/4 D5/4 F5/4. D#5/8",
+   "2": "E5/8 C5/8 r/4 r/2",
+   "3": "r/2 r/8 A4/8 Ab4/8 G4/8",
+   "4": "F#4/4 D5/4 F5/4. D#5/8",
+   "5": "E5/8 C5/8 r/4 r/8 A4/8 Ab4/8 G4/8",
+   "6": "F#4/4 D5/4 F5/8 G5/8 r/8 E5/8",
+   "7": "r/2 r/8 A4/8 Ab4/8 G4/8",
+   "8": "F#4/4 D5/4 F5/4. D#5/8",
+   "12": "r/2 r/8 A4/8 Ab4/8 G4/8",
+   "16": "r/2 r/8 A4/8 Ab4/8 G4/8"
+  }
+ },
+ "djangofake-186": {
+  "notes": {
+   "26": "r/8 F4/8 r/8 F4/8 G4/4 A4/8t A#4/8t B4/8t",
+   "27": "C5/4 C5/4 C5/8 A4/8 r/8 Ab4/8",
+   "28": "G4/8 F4/8 D4/8 F4/8~ F4/4 r/8 F4/8",
+   "30": "r/8 F4/8 r/8 F4/8 G4/4 r/8 A4/8",
+   "31": "r/8 C5/8 r/8 A4/8 C5/8 C#5/8 D5/4",
+   "32": "A4/4 F4/8 F4/8 r/8 A4/8 r/4"
+  }
+ },
+ "djangofake-28": {
+  "skip": "barlines are not read, so whole lines run together into one bar; needs a full re-entry by hand"
+ },
+ "djangofake-167": {
+  "skip": "two voices and many tuplets; 13 bars do not add up, needs a full re-entry by hand"
+ }
+}

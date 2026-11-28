@@ -26,7 +26,7 @@ TPQ = 48                                    # ticks per quarter note (3 and 16 d
 # Fakebook): the same glyph codes, but thicker stems and barlines, and chord symbols in plain ASCII (- for minor,
 # 0 for diminished) in a font whose name ends in "Chords".
 PROFILE = {'stem_max': 0.6, 'bar_min': 0.6, 'thick': 1.5, 'chord_font': None, 'ascii_chords': False, 'tuplet_max': 12,
-           'title_font': None}
+           'title_font': None, 'stem_tol': 1.4}
 
 # Maestro glyphs (Mac Roman byte -> meaning)
 G = lambda b: 0xF000 + b
@@ -339,6 +339,10 @@ def analyse_staff(st, glyphs, texts, vl, fills, curves, hl, warn):
             times.append((g.x, 2, 2)); g.used = True
     times.sort()
 
+    if PROFILE['ascii_chords']:                     # Inkpen2: a few notes use the round "O" head; play them as filled
+        for g in big:
+            if g.code == G(0x4F): g.code = HEAD_FILLED
+            elif g.code == G(0xC0): g.code = G(0xCE)     # the old-style (Z) quarter rest
     heads = [g for g in big if g.code in (HEAD_FILLED, HEAD_HALF, HEAD_WHOLE)]
     accs = [g for g in big if g.code in ACC_ALTER]
     note_acc, keysig_acc = {}, []
@@ -391,9 +395,9 @@ def analyse_staff(st, glyphs, texts, vl, fills, curves, hl, warn):
             if y0 - 2 <= h.y <= y1 + 2:
                 dirn = 'up' if abs(h.y - y1) < abs(h.y - y0) else 'down'
                 # a head sits left of an up stem / right of a down stem, or on the other side in a second
-                if abs(x - (h.x + hw)) < 1.4:
+                if abs(x - (h.x + hw)) < PROFILE['stem_tol']:
                     cand.append((abs(x - (h.x + hw)) + (0 if dirn == 'up' else 0.5), k, dirn))
-                elif abs(x - h.x) < 1.4:
+                elif abs(x - h.x) < PROFILE['stem_tol']:
                     cand.append((abs(x - h.x) + (0 if dirn == 'down' else 0.5), k, dirn))
         if not cand:
             # a stemless filled/half head: slash or cue, keep it as a quarter / half
@@ -735,6 +739,8 @@ def voice_of(e, evs, mid):
 
 def bar_melody(evs, key, bar_len, pending_tie, st):
     """The top line of one bar: (notes, ticks filled, tie carried to the next bar)."""
+    if any(e.kind == 'note' for e in evs) and any(getattr(e, 'whole_rest', False) for e in evs):
+        evs = [e for e in evs if not getattr(e, 'whole_rest', False)]   # a bar rest in an upper voice over notes
     alter = {}
     for e in evs:                                   # accidentals hold to the bar line, in every voice
         if e.kind != 'note':
@@ -905,7 +911,7 @@ def main():
     args = ap.parse_args()
     only = [int(p) - 1 for p in args.pages.split(',')] if args.pages else None
     if args.font == 'inkpen':
-        PROFILE.update(stem_max=1.3, bar_min=1.4, thick=2.5, chord_font='Chords', ascii_chords=True, tuplet_max=13.5, title_font='Script')
+        PROFILE.update(stem_max=1.3, bar_min=1.4, thick=2.5, chord_font='Chords', ascii_chords=True, tuplet_max=13.5, title_font='Script', stem_tol=2.2)
     songs = build(args.pdf, args.first - 1, args.last, args.debug, only)
     if args.titles:                              # titles (and no composer) from a list by first page
         names = {int(p): t for p, t in json.load(open(args.titles))}
