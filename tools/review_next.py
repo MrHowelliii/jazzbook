@@ -34,13 +34,16 @@ if __name__ == '__main__':
     ap.add_argument('--book', default='Jazz-Fakebook'); ap.add_argument('--pdf', default='books/jazzfake.pdf')
     ap.add_argument('--ids', nargs='*', help='review these song ids instead of the next ones')
     ap.add_argument('--by-index', action='store_true')
+    ap.add_argument('--index', help='a JSON list of {title, composer, page} instead of songs.json')
     a = ap.parse_args()
     os.chdir(ROOT)
     ovf = os.path.join(ROOT, 'leads-overrides', a.book + '.json')
     ov = json.load(open(ovf)) if os.path.exists(ovf) else {}
     covered = {norm(l['title']) for l in json.load(open(os.path.join(ROOT, 'leads', '462jazz.json')))}
-    idx = next(b for b in json.load(open(os.path.join(ROOT, 'songs.json'))) if b['id'] == a.book)['songs']
-    songs = B.assemble(a.work, a.book, idx, -1, {}, by_index=a.by_index)
+    idx = json.load(open(a.index)) if a.index else \
+        next(b for b in json.load(open(os.path.join(ROOT, 'songs.json'))) if b['id'] == a.book)['songs']
+    off = next((b.get('offset', 0) for b in json.load(open(os.path.join(ROOT, 'books.json'))) if b['id'] == a.book), -1)
+    songs = B.assemble(a.work, a.book, idx, off, {}, by_index=a.by_index)
     todo, n_cov, n_done, n_wait = [], 0, 0, 0
     for s in songs:
         if a.ids is not None:

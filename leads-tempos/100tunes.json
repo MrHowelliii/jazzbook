@@ -1,0 +1,206 @@
+{
+ "100tunes-8": {
+  "title": "Ain't She Sweet",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "100tunes-9": {
+  "title": "Alone Together",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-10": {
+  "title": "Am I Blue?",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "100tunes-11": {
+  "title": "Angel Eyes",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-12": {
+  "title": "Anything Goes",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "100tunes-13": {
+  "title": "April in Paris",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-15": {
+  "title": "April Showers",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-17": {
+  "title": "Autumn in New York",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-19": {
+  "title": "Avalon",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright"
+ },
+ "100tunes-20": {
+  "title": "Begin the Beguine",
+  "tempo": 140,
+  "feel": "latin",
+  "basis": "book: Medium beguine"
+ },
+ "100tunes-22": {
+  "title": "The Birth of the Blues",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "100tunes-23": {
+  "title": "Blues in the Night",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "100tunes-25": {
+  "title": "Body and Soul",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-26": {
+  "title": "But Not for Me",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-27": {
+  "title": "Can't We Be Friends?",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-28": {
+  "title": "Can't We Talk It Over",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-29": {
+  "title": "Caravan",
+  "tempo": 160,
+  "feel": "latin",
+  "basis": "book: Medium latin"
+ },
+ "100tunes-30": {
+  "title": "Charleston",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright"
+ },
+ "100tunes-31": {
+  "title": "Crazy Rhythm",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright"
+ },
+ "100tunes-32": {
+  "title": "Dancing in the Dark",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-33": {
+  "title": "Day by Day",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-34": {
+  "title": "Days of Wine and Roses",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-35": {
+  "title": "Do It Again",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-36": {
+  "title": "Dream",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-37": {
+  "title": "Embraceable You",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-38": {
+  "title": "Fascinating Rhythm",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright"
+ },
+ "100tunes-39": {
+  "title": "Fine and Dandy",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright"
+ },
+ "100tunes-40": {
+  "title": "Fools Rush In",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-41": {
+  "title": "Get Happy",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "100tunes-42": {
+  "title": "Hallelujah!",
+  "tempo": 200,
+  "feel": "swing",
+  "basis": "book: Bright"
+ },
+ "100tunes-43": {
+  "title": "How Long Has This Been Going On?",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-45": {
+  "title": "I Can't Give You Anything but Love",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ },
+ "100tunes-46": {
+  "title": "I Cover the Waterfront",
+  "tempo": 72,
+  "feel": "ballad",
+  "basis": "book: Slowly"
+ },
+ "100tunes-47": {
+  "title": "I Get a Kick Out of You",
+  "tempo": 130,
+  "feel": "swing",
+  "basis": "book: Medium"
+ }
+}

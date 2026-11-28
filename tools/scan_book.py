@@ -94,7 +94,7 @@ def chord_tok(sym):
     if q.startswith('m(maj') or q.startswith('mmaj'):
         return root + '-^7'
     if q.startswith('m'):
-        return root + ('-6' if q in ('m', 'm6', 'm6/9') else '-7')
+        return root + ('-6' if q in ('m', 'm6', 'm6/9', 'm69') else '-7')
     if q.startswith('dim') or q.startswith('o'):
         return root + 'o7'
     if q in ('', '6', '69', '6/9', 'add9', '6add9'):
@@ -315,6 +315,7 @@ if __name__ == '__main__':
     ap.add_argument('--homr-jobs', type=int, default=2); ap.add_argument('--out')
     ap.add_argument('--publish', help='write the songs that pass the checks here (leads/<book>.json)')
     ap.add_argument('--by-index', action='store_true', help='song boundaries from the index pages (no readable titles)')
+    ap.add_argument('--index', help='a JSON list of {title, composer, page} to use instead of songs.json (a book with no index pages)')
     a = ap.parse_args()
     os.makedirs(a.work, exist_ok=True)
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -332,7 +333,8 @@ if __name__ == '__main__':
             for f in ex.map(homr_piece, imgs):
                 print('homr', f, flush=True)
     if '3' in a.phase:
-        idx = next(b for b in json.load(open(os.path.join(root, 'songs.json'))) if b['id'] == a.book)['songs']
+        idx = json.load(open(a.index)) if a.index else \
+            next(b for b in json.load(open(os.path.join(root, 'songs.json'))) if b['id'] == a.book)['songs']
         ovf = os.path.join(root, 'leads-overrides', a.book + '.json')
         ovs = json.load(open(ovf)) if os.path.exists(ovf) else {}
         songs = assemble(a.work, a.book, idx, binfo.get('offset', 0), ovs, by_index=a.by_index)
